@@ -1,0 +1,47 @@
+body {
+    background-color: #97AABD;
+}
+
+.d {
+    background-color: #5d5c61;
+    background-color: #314455;
+    background-color: #644E5B;
+    background-color: #9E5A63;
+    background-color: #C96567;
+    background-color: #97AABD ;
+}
+
+
+.right {
+    padding-top: 3px;
+    align-items: center;
+    /* justify-self: flex-end; */
+    margin-left: auto;
+}
+
+.menu-nav-button {
+    text-align: center;
+    /* background-color: #eb6e34; */
+    color: white;
+    /* border-radius: 5px; */
+    cursor: pointer;
+    border: 3px solid transparent;
+    transition: all 0.1s ease;
+    /* height: 3em; */
+    /* margin-left: 5px; */
+    outline: none;
+    /* box-shadow: 0px 1px 3px rgb(0 0 0 / 10%); */
+    font-size: x-large;
+    font-weight: bold;
+    /* line-height: 3em; */
+    text-decoration: none;
+}
+
+.navbar-nav > a {
+    align-self: center;
+}
+
+.login-btn {        
+    font-size: 15px;
+    font-weight: bold;
+}
