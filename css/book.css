@@ -1,0 +1,90 @@
+body {
+    background-color: #314455;
+}
+
+.main-page-books {
+    padding: 1em;
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-top: 1em;
+    background-color: #abbed1;
+    margin-bottom: auto;
+
+    /* background-color: #C96567; */
+}
+
+
+.test-colours {
+    background-color: #5d5c61;
+    background-color: #314455;
+    background-color: #644E5B;
+    background-color: #9E5A63;
+    background-color: #C96567;
+    background-color: #97AABD;
+}
+
+
+.book {
+    display: flex;
+}
+
+.book > div {
+    flex-grow: 1;
+}
+
+.book-img {
+    margin-left: auto;
+    margin-right: 1em;
+    max-width: 10em;
+    max-height: 13em;
+}
+
+/* .reserve-btn {
+    margin: 0 auto 0 auto;
+    background-color: #C96567;
+} */
+
+.reserve-btn{
+    display:block;
+    width: calc(10% + 5em);
+    height: 2em;
+    font-size: 25px;
+    text-align: center;
+    background-color: whitesmoke;
+    color: #C96567;
+    border-radius: 8px;
+    margin: 0 auto 0.5em auto;
+    cursor: pointer;
+    border: 3px solid #C96567;
+    transition: all 0.1s ease;
+    padding: 3px;
+    outline-color: #9E5A63;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    font-family: tahoma;
+}
+
+
+.reserve-btn:hover{
+    background-color: #C96567;
+    color: whitesmoke;
+    border: 3px solid #C96567;
+    box-shadow: 0px 7px 15px #9E5A63;
+    transform: translateY(-4px);
+    outline: none;
+}
+
+.reserve-btn:active {
+    background-color: #9E5A63;
+    border-color: #9E5A63;
+    transform: scale(0.99);
+    outline: none;
+}
+
+.test-colours {
+    background-color: #5d5c61;
+    background-color: #314455;
+    background-color: #644E5B;
+    background-color: #9E5A63;
+    background-color: #C96567;
+    background-color: #97AABD;
+}

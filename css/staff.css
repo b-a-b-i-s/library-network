@@ -1,0 +1,70 @@
+body {
+    background-color: #314455;
+}
+
+.main-page-staff {
+    padding: 1em;
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-top: 1em;
+    padding-top: 1.5em;
+    background-color: #abbed1;
+    margin-bottom: auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    row-gap: 1em;
+    /* background-color: #C96567; */
+}
+
+
+
+  .test-colours {
+    background-color: #5d5c61;
+    background-color: #314455;
+    background-color: #644E5B;
+    background-color: #9E5A63;
+    background-color: #C96567;
+    background-color: #97AABD;
+}
+
+
+.reserve-btn{
+    display:block;
+    width: calc(10% + 10em);
+    height: 2em;
+    font-size: 25px;
+    text-align: center;
+    background-color: whitesmoke;
+    color: #C96567;
+    border-radius: 8px;
+    margin: 0 auto 0.5em auto;
+    cursor: pointer !important;
+    border: 3px solid #C96567;
+    transition: all 0.1s ease;
+    padding: 3px;
+    outline-color: #9E5A63;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    font-family: tahoma;
+}
+
+
+.reserve-btn:hover{
+    background-color: #C96567;
+    color: whitesmoke;
+    border: 3px solid #C96567;
+    box-shadow: 0px 7px 15px #9E5A63;
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.reserve-btn:active {
+    background-color: #9E5A63;
+    border-color: #9E5A63;
+    transform: scale(0.99);
+    outline: none;
+}
+
+
+
+

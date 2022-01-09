@@ -1,41 +1,84 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Βιβλιοθήκες</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/main.css">
-    <!-- <link rel="stylesheet" href="css/home.css"> -->
-    
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Βιβλιοθήκες</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/libraries.css">
+  <!-- <link rel="stylesheet" href="css/home.css"> -->
+
 </head>
+
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-          <div class="navbar-nav" style="flex-grow: 1;">
-            <a class="nav-item nav-link active" href="./home.html">Αρχική</a>
-            <a class="nav-item nav-link" href="./libraries.html">Βιβλιοθήκες</a>
-            <a class="nav-item nav-link" href="./books.html">Βιβλία</a>
-            <div class="right">
-                <button class="menu-nav-button nav-item btn btn-success btn-block login-btn" id="signinbtn">Είσοδος</button>
-                <button class="menu-nav-button nav-item btn btn-success btn-block login-btn" id="signuplink">Εγγραφή</button>
-            </div>
-            <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav" style="flex-grow: 1;">
+        <a class="nav-item nav-link active" href="./home.html">Αρχική</a>
+        <a class="nav-item nav-link" href="./libraries.html">Βιβλιοθήκες</a>
+        <a class="nav-item nav-link" href="./books.html">Βιβλία</a>
+        <div class="right">
+          <button class="menu-nav-button nav-item btn login-btn" id="signinbtn">Είσοδος</button>
+          <button class="menu-nav-button nav-item btn login-btn" id="signuplink">Εγγραφή</button>
+        </div>
+        <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
+      </div>
+    </div>
+  </nav>
+  <div class="main-page-libraries">
+    <h1>Βιβλιοθήκες</h1>
+    <div>
+      Οι βιβλιοθήκες που μπορείτε να επισκεφτείτε.<div class=""></div>
+    </div>
+    <hr>
+    <!-- <br> -->
+
+    <div class="libraries">
+      <!-- <span>Όνομα :</span> -->
+      <div class="library">
+        <h3>Δανειστική Βιβλιοθήκη Πατρών</h3>
+        <h5>Διεύθυνση: <span class="address" style="font-size: medium;">Παλαιών Πατρών Γερμανού 25</span></h5>
+        <div style="display: flex;">
+          <h5>Τηλέφωνο/α:&nbsp;</h5>
+          <div style="display: grid;">
+            <h5><span class="phone" style="font-size: medium;">2610123456</span></h5>
+            <h5><span class="phone" style="font-size: medium;">6978945612</span></h5>
           </div>
         </div>
-      </nav>
-    <div class="main-page">
-        <h1>Βιβλιοθήκες</h1>
-        <div>
-            Οι βιβλιοθήκες μας παρέχουν μία πλούσια συλλογή βιβλίων ποικίλων θεματικών κατηγοριών που απευθύνοονται σε παιδιά εφήβους και ενήλικες.<div class=""></div>
+        
+        <h6>Συλλογή βιβλίων: <strong>26</strong> εκ των οποίων <strong>19</strong> είναι διαθέσιμα προς δανεισμό.</h6>
+      </div>
+      <hr>
+      <!-- <br> -->
+      <div class="library">
+        <h3>Δανειστική Βιβλιοθήκη Αθήνας</h3>
+        <h5>Διεύθυνση : <span class="address" style="font-size: medium;">Μεσογείων 37</span></h5>
+        <div style="display: flex;">
+          <h5>Τηλέφωνο/α:&nbsp;</h5>
+          <div style="display: grid;">
+            <h5><span class="phone" style="font-size: medium;">2610123456</span></h5>
+            <h5><span class="phone" style="font-size: medium;">6978945612</span></h5>
+          </div>
         </div>
-        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
+        <h6>Συλλογή βιβλίων : <strong>52</strong> εκ των οποίων <strong>50</strong> είναι διαθέσιμα προς δανεισμό.</h6>
+      </div>
+
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+    <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
 </body>
+
 </html>

@@ -1,0 +1,16 @@
+body {
+    background-color: #314455;
+}
+
+.main-page-libraries {
+    padding: 1em;
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-top: 1em;
+    background-color: #abbed1;
+    margin-bottom: auto;
+
+    /* background-color: #C96567; */
+}
+
+
