@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Βιβλιοθήκες</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/libraries-admin.css">
+  <!-- <link rel="stylesheet" href="css/home.css"> -->
+
+</head>
+
+<body>
+
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav" style="flex-grow: 1;">
+        <a class="nav-item nav-link active" href="./home.html">Αρχική</a>
+        <a class="nav-item nav-link" href="./libraries.html">Βιβλιοθήκες</a>
+        <a class="nav-item nav-link" href="./books.html">Βιβλία</a>
+        <div class="right">
+          <button class="menu-nav-button nav-item btn login-btn" id="signinbtn">Είσοδος</button>
+          <button class="menu-nav-button nav-item btn login-btn" id="signuplink">Εγγραφή</button>
+        </div>
+        <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
+      </div>
+    </div>
+  </nav>
+  <div class="main-page-libraries">
+    <h1>Δανειστική Βιβλιοθήκη Πατρών</h1>
+    <div>
+      <!-- Οι βιβλιοθήκες που μπορείτε να επισκεφτείτε.<div class=""></div> -->
+    </div>
+    <hr>
+    <!-- <br> -->
+
+    <form class="libraries" style="background-color: #abbed1;">
+      <!-- <span>Όνομα :</span> -->
+      <fieldset class="library-edit" style="background-color: #abbed1;">
+        <div>
+          <h4>
+            <label for="lib-name">Όνομα: </label>
+            <input type="text" name="lib-name" id="lib-name" value="Δανειστική Βιβλιοθήκη Πατρών" style="width: 20em;">
+          </h4>
+          <!-- <br> -->
+          <h5 style="display: flex;">
+            <label for="lib-address-street" style="margin-top: 0.7em;">Διεύθυνση:&nbsp</label>
+            <div class="address-edit">
+              <label for="lib-address-street">Οδός:&nbsp</label>
+              <input type="text" name="lib-address-street" id="lib-address-street" value="Παλαιών Πατρών Γερμανού 25" style="width: 20em;">
+              <label for="lib-address-town">Πόλη:&nbsp</label>
+              <input type="text" name="lib-address-town" id="lib-address-town" value="Πάτρα" style="width: 10em;">
+              <label for="lib-address-zip">ΤΚ:&nbsp</label>
+              <input type="text" name="lib-address-zip" id="lib-address-zip" value="26634" style="width: 4em;">
+
+            </div>
+            
+          </h5>
+          <h5 style="display: flex;">
+            <label for="lib-phone-1" style="margin-top: 0.7em;">Τηλέφωνα:&nbsp;</label>
+            <div id="phones" style="display: grid; row-gap: 0.2em;">
+              <input type="text" name="lib-phone-1" id="lib-phone-1" value="2610123456" style="width: 7.6em;">
+              <div class="extra-phone" id="phone-div-2">
+                <input type="text" name="lib-phone-2" id="lib-phone-2" value="6910123456" style="width: 7.6em;">
+                <i class="fas fa-times delete-phone" id="x2"></i>
+              </div>
+              <div class="extra-phone" id="phone-div-3">
+                <input type="text" name="lib-phone-3" id="lib-phone-3" value="6910123456" style="width: 7.6em;">
+                <i class="fas fa-times delete-phone" id="x3"></i>
+              </div>
+              <button class="reserve-btn" id="add-phone" style="width: 100%; font-size: medium; width: 9.45em">Προσθήκη</button>
+            </div>
+          </h5>
+          <!-- <div style="display: flex;">
+            <h5>Τηλέφωνο/α:</h5>
+            <div style="display: grid;">
+              <h5><span class="phone" style="font-size: medium;">2610123456</span></h5>
+              <h5><span class="phone" style="font-size: medium;">6978945612</span></h5>
+            </div>
+          </div> -->
+          
+
+        </div>
+        <div style="display: grid; margin-left: auto; margin-right: 5%; align-items: center;">
+          <button class="edit-btn reserve-btn" style="height: 5em; font-size: 1.3em; margin-right: 1em;">Αποθήκευση</button>
+          <!-- <button class="edit-btn reserve-btn">Διαγραφή</button> -->
+        </div>
+      </fieldset>
+
+
+    </form>
+    <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+    <script src="js/libraries-admin-1.js"></script>
+</body>
+
+</html>

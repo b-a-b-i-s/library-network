@@ -1,21 +1,28 @@
 body {
-    background-color: #97AABD;
+    /* background-color: #C96567; */
 }
 
-.d {
+.test-colours {
     background-color: #5d5c61;
     background-color: #314455;
     background-color: #644E5B;
     background-color: #9E5A63;
     background-color: #C96567;
-    background-color: #97AABD ;
+    background-color: #97AABD;
 }
 
+nav > div {
+    /* background-color: #97aabd4f !important; */
+}
+
+nav {
+    background-image: linear-gradient(#abbed1,#abbed1) ;
+    /* background-clip: content-box, padding-box; */
+}
 
 .right {
     padding-top: 3px;
     align-items: center;
-    /* justify-self: flex-end; */
     margin-left: auto;
 }
 
@@ -44,4 +51,42 @@ body {
 .login-btn {        
     font-size: 15px;
     font-weight: bold;
+}
+
+.main-page {
+    padding: 1em;
+}
+
+
+.login-btn {
+    background-color: #C96567;
+    margin-right: 0.5em;
+}
+
+
+.login-btn:hover{
+    background-color: #9E5A63;
+    color: white;
+    border: 3px solid #9E5A63;
+    box-shadow: none;
+    transform: scale(1.04);
+    outline: none;
+}
+
+.login-btn:active {
+    background-color: #9E5A63;
+    border-color: #9E5A63;
+    transform: scale(0.99);
+    box-shadow: none;
+    outline: none;
+}
+
+/* .login-btn:af */
+
+.login-btn:focus {
+    background-color: #9E5A63;
+    border-color: #9E5A63;
+    box-shadow: none;
+    transform: scale(0.99);
+    outline: none;
 }

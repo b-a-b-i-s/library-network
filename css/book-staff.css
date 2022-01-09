@@ -1,0 +1,57 @@
+.available {
+    color: green;
+}
+
+.not-available {
+    color: red;
+}
+
+
+
+
+table {
+    border-collapse: collapse;
+    border: 0;
+    width: 100%;
+    margin-top: 0.5em;
+}
+
+td, th {
+    font-size: larger;
+    border: 2px solid #C96567;
+    text-align: center;
+    padding: 8px;
+}
+
+.my-lib td, .my-lib th {
+    width: 15%;
+}
+
+.my-lib tr>td:nth-child(2), .my-lib tr>th:nth-child(2) {
+    width: 70%;
+}
+
+.other-libs td, .other-libs th {
+    width: 15%;
+}
+
+.other-libs tr>td:nth-child(2), .other-libs tr>th:nth-child(2) {
+    width: 35%;
+}
+
+.other-libs tr>td:nth-child(3), .other-libs tr>th:nth-child(3) {
+    width: 35%;
+}
+
+.lend-btn {
+    margin: auto;
+}
+
+.disabled {
+    visibility: hidden;
+}
+
+.add-new-lib-book {
+    width: calc(10% + 10em);
+    margin-top: 1em;
+}

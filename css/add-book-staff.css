@@ -1,0 +1,307 @@
+body {
+    background-color: #314455;
+}
+
+.main-page-add-book-staff {
+    padding: 1em;
+    margin-left: 15%;
+    margin-right: 15%;
+    margin-top: 1em;
+    background-color: #abbed1;
+    margin-bottom: auto;
+
+    /* background-color: #C96567; */
+}
+
+form , fieldset {
+    background-color: whitesmoke;
+}
+
+
+
+.reserve-btn{
+    display:block;
+    width: calc(10% + 8em);
+    height: 2em;
+    font-size: 20px;
+    text-align: center;
+    background-color: whitesmoke;
+    color: #C96567;
+    border-radius: 8px;
+    /* margin-left: auto; */
+    cursor: pointer;
+    border: 3px solid #C96567;
+    transition: all 0.1s ease;
+    padding: 3px;
+    outline-color: #9E5A63;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    font-family: tahoma;
+}
+
+
+.reserve-btn:hover{
+    background-color: #C96567;
+    color: whitesmoke;
+    border: 3px solid #C96567;
+    box-shadow: 0px 7px 15px #9E5A63;
+    transform: translateY(-2px);
+    outline: none;
+}
+
+.reserve-btn:active {
+    background-color: #9E5A63;
+    border-color: #9E5A63;
+    transform: scale(0.99);
+    outline: none;
+}
+
+.fa-times {
+    color: red;
+}
+
+.fa-times:hover {
+    cursor: pointer;
+    color: rgb(158, 0, 0);
+}
+
+.fa-times:active {
+    color: rgb(88, 0, 0);
+}
+
+.add-book-staff > fieldset {
+    display: flex;
+    /* align-items: center; */
+}
+
+
+.add-book-staff {
+    background-color: #abbed1;
+    /* display: flex; */
+    /* align-items: center; */
+}
+
+
+.add-book-staff h1 {
+    text-align: center;
+    /* margin: auto; */
+}
+
+.add-book-staff * {
+    /* color: #C96567; */
+}
+.add-book-staff>fieldset {
+    border: 0;
+    background-color: #abbed1;
+    /* margin: 1em auto;
+    background-color: white;
+    border-radius: 14px;
+    width: 60%;
+    text-align: center;
+    box-shadow: 20px 20px rgb(150, 66, 27); */
+}
+
+.add-book-staff>fieldset>h1 {
+    /* margin-top: 0; */
+    margin-top: 0.2em;
+    padding-bottom: 0.2em;
+}
+
+
+
+
+/* .new-library button{
+    display:block;
+    width: calc(10% + 7em);
+    height: 2em;
+    font-size: 30px;
+    text-align: center;
+    background-color: white;
+    color: #C96567;
+    border-radius: 20px;
+    margin: 1em auto 0.5em auto;
+    cursor: pointer;
+    border: 3px solid #C96567;
+    transition: all 0.1s ease;
+    padding: 3px;
+    outline-color: #9E5A63;
+    box-shadow: 0px 8px 15px rgba(0, 0, 0, 0.1);
+    font-family: tahoma;
+} */
+
+
+
+
+
+.add-book-staff hr {
+    border: 1px solid #C96567;
+    margin-bottom: 1.5em;
+}
+
+.modal-lib {
+    display: none;
+    position: fixed;
+    padding-top: 20px;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4);
+    z-index: 200005;
+}
+
+
+.modal-lib-content {
+    background-color: whitesmoke;
+    margin: auto;
+    padding: 20px;
+    border: 0;
+    width: 80%;
+    
+    border: 0;
+    margin: 1em auto;
+    background-color: white;
+    border-radius: 14px;
+    width: 60%;
+    text-align: center;
+    box-shadow: 10px 10px #9E5A63;
+}
+
+.modal-lib-content-up {
+
+    margin: auto;
+
+}
+
+.close-lib {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-sign {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-sign:hover,
+.close-sign:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.address-edit {
+    display: grid;
+    grid-template-columns: 1fr 100%;
+    grid-template-rows: 1fr 1fr 1fr;
+    align-items: center;
+    justify-items: start;
+}
+
+
+
+
+
+.add-book-staff input{
+    width: 80%;
+    padding: 0.5em;
+    margin: 0.2em 0 0.2em 0;
+    border: 2px solid #eb6e347a;
+    border-radius: 8px;
+    transition: all 0.1s ease;
+    background-color: white;
+}
+
+.add-book-staff input[type="checkbox"]{
+    width: initial;
+    padding: initial;
+    margin: initial;
+    border: initial;
+    border-radius: initial;
+    transition: initial;
+    margin-left: 5px;
+    /* background-color: white; */
+}
+
+.add-book-staff input:hover {
+    border: 2px solid #C96567;
+    /* box-shadow: 1px 1px #EB6E34; */
+}
+
+.add-book-staff input::placeholder {
+    color: #31170bd2;
+    transition: none;
+}
+
+.add-book-staff input:focus {
+    border: 0;
+    outline: 1px solid grey; 
+    box-shadow: 0;
+    border-radius: 0;
+}
+
+.add-book-staff input[type="checkbox"]:focus {
+    border: 0;
+    outline: none; 
+    box-shadow: 0;
+    border-radius: 0;
+}
+    
+.add-book-staff input:focus::placeholder {
+    color: rgba(0, 0, 0, 0.486);
+}
+
+
+.phones-add input {
+    margin-top: 0;
+    margin-bottom: 0.3em;
+}
+
+.add-tel-btn {
+    width: 100%; 
+    font-size: medium; 
+    width: 7.67em; 
+    background-color: white; 
+    /* margin-left: 0.5em; */
+}
+
+.save-btn {
+    margin: auto;
+    background-color: white;
+}
+
+
+#isbn {
+    width: 10em;
+}
+
+#title {
+    width: 27em;
+}
+
+#version {
+    width: 6em;
+}
+
+#year {
+    width: 3.4em;
+}
+
+#publisher {
+    width: 23em;
+}
+
+#page-num {
+    width: 6em;
+}
+
+#ddc {
+    width: 18em;
+}
+
+#cover {
+    width: 20.25em;
+}
