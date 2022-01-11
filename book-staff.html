@@ -38,6 +38,54 @@
             </div>
         </div>
     </nav>
+
+    <div id="borrow-available" class="modal-lib">
+  
+        <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="">
+          <span class="close-sign">&times;</span>
+          <fieldset>
+              <!-- <i class="fas fa-sign-in-alt fa-4x" id="sign-in-icon"></i> -->
+              <h1>Νέος Δανεισμός</h1> 
+              <hr>
+    
+              <div style="margin: auto; text-align: center;">
+                <label for="user-id"><strong>Κωδικός μέλους:&nbsp;</strong>
+                    <input type="text" name="user-id" id="user-id" style="width: 10em;" required>
+                </label>
+                  
+              </div> 
+    
+    
+            <br>
+    
+            <button class="reserve-btn save-btn1">Δανεισμός</button>
+          </fieldset>
+        </form>
+      </div>
+
+      <div id="delayed-return" class="modal-lib">
+  
+        <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="">
+          <span class="close-sign">&times;</span>
+          <fieldset>
+              <h1>Καθυστερημένη επιστροφή</h1> 
+              <hr>
+    
+              <h5>Ημέρες καθυστέρησης: <span class="address" style="font-size: medium;">10</span></h5>
+              <h5>Κόστος ανα ημέρα: <span class="address" style="font-size: medium;">0,5€</span></h5>
+              <h5>Σύνολο: <span class="address" style="font-size: medium;">5€</span></h5>
+    
+    
+            <br>
+    
+            <button class="reserve-btn save-btn1">Επιβεβαίωση</button>
+          </fieldset>
+        </form>
+      </div>
+
+
+
+
     <div class="main-page-books">
 
         <div class="book">
@@ -47,7 +95,7 @@
                 <h4>Electrical machines, drives, and power systems Theodore Wildi</h4><br>
                 <span><strong>Συγγραφείς: </strong></span><span>Wildi Theodore</span><br>
                 <span><strong>Έκδοση: </strong></span><span>3</span><br>
-                <span><strong>Έτος έκδοσης: </strong></span><span>10/2/1998</span><br>
+                <span><strong>Έτος έκδοσης: </strong></span><span>1998</span><br>
                 <span><strong>Εκδοτικός οίκος: </strong></span><span>Upper Saddle River Prentice-Hall 1997</span><br>
                 <span><strong>ISBN: </strong></span>0123456789012<span></span><br>
                 <span><strong>Αριθμός σελίδων: </strong></span>123<span></span><br>
@@ -63,7 +111,7 @@
                 <span><strong>Κατηγορίες: </strong></span><span>Αυτόματος έλεγχος | MATLAB</span>    <br><br>
                 
                 <div>
-                    <span><strong><u>Αντίτυπα Βιβλιοθήκης: 3</u></strong></span><br>
+                    <span><strong><u>Αντίτυπα Βιβλιοθήκης: 4</u></strong></span><br>
                     
                     <table class="my-lib">
                         <tr>
@@ -74,22 +122,32 @@
                         <tr class="available">
                             <td>Αντίτυπο 1</td>
                             <td>Διαθέσιμο για δανεισμό</td>
-                            <td><button class="reserve-btn lend-btn">Δανεισμός</button></td>
+                            <td><button class="reserve-btn borrow-btn available-btn" data-book-id="1" data-book-library-id="my">Δανεισμός</button></td>
                         </tr>
-                        <tr class="not-available">
+                        <tr class="keeped">
                             <td>Αντίτυπο 2</td>
-                            <td>Βιβλιοθήκη Πατρών</td>
-                            <td><button class="reserve-btn lend-btn disabled">Δανεισμός</button></td>
+                            <td>Κρατημένο για 3 μέρες από τον/την Γιαννης Παπάς [123456]</td>
+                            <td><button class="reserve-btn borrow-btn keeped-btn" data-book-id="2" data-book-lib-id="my">Δανεισμός</button></td>
                         </tr>
                         <tr class="not-available">
                             <td>Αντίτυπο 3</td>
                             <td>Βιβλιοθήκη Πατρών</td>
-                            <td><button class="reserve-btn lend-btn disabled">Δανεισμός</button></td>
+                            <td><button class="reserve-btn borrow-btn disabled">Δανεισμός</button></td>
                         </tr>
                         <tr class="not-available">
                             <td>Αντίτυπο 4</td>
-                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους (165)</td>
-                            <td><button class="reserve-btn lend-btn">Επιστροφή</button></td>
+                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους [165] <span style="color: green;">(Μέγιστη επιστροφή: 12 ημέρες)</span></td>
+                            <td><button class="reserve-btn borrow-btn to-return">Επιστροφή</button></td>
+                        </tr>
+                        <tr class="not-available">
+                            <td>Αντίτυπο 5</td>
+                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους [165] (Καθυστέρηση: 12 ημέρες)</td>
+                            <td><button class="reserve-btn borrow-btn to-return-delay">Επιστροφή</button></td>
+                        </tr>
+                        <tr class="not-available">
+                            <td>Αντίτυπο 6</td>
+                            <td>Σε μεταφορά</td>
+                            <td><button class="reserve-btn borrow-btn disabled">Επιστροφή</button></td>
                         </tr>
                     </table>
                     
@@ -101,12 +159,12 @@
                 <br>
                 
                 <div>
-                    <span><strong><u>Αντίτυπα άλλων βιβλιοθηκών: 3</u></strong></span><br>
+                    <span><strong><u>Αντίτυπα άλλων βιβλιοθηκών: 4</u></strong></span><br>
                     
                     <table class="other-libs">
                         <tr>
                             <th>Αντίτυπο</th>
-                            <th>Βιβλιοθήκη</th>
+                            <th>Ιδιοκτήτρια βιβλιοθήκη</th>
                             <th>Θέση</th>
                             <th>Δανεισμός</th>
                         </tr>
@@ -114,19 +172,25 @@
                             <td>Αντίτυπο 1</td>
                             <td>Βιβλιοθήκη Πατρών</td>
                             <td>Διαθέσιμο για δανεισμό</td>
-                            <td><button class="reserve-btn lend-btn">Δανεισμός</button></td>
+                            <td><button class="reserve-btn borrow-btn available-btn" data-book-id="2" data-book-lib-id="id-patras">Δανεισμός</button></td>
                         </tr>
                         <tr class="not-available">
                             <td>Αντίτυπο 2</td>
                             <td>Βιβλιοθήκη Θεσσαλονίκης</td>
-                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους (165)</td>
-                            <td><button class="reserve-btn lend-btn">Επιστροφή</button></td>
+                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους [165] <span style="color: green;">(Μέγιστη επιστροφή: 12 ημέρες)</span></td>
+                            <td><button class="reserve-btn borrow-btn to-return">Επιστροφή</button></td>
                         </tr>
                         <tr class="not-available">
                             <td>Αντίτυπο 3</td>
                             <td>Βιβλιοθήκη Πατρών</td>
                             <td>Βιβλιοθήκη Πατρών</td>
-                            <td><button class="reserve-btn lend-btn disabled">Δανεισμός</button></td>
+                            <td><button class="reserve-btn borrow-btn disabled">Δανεισμός</button></td>
+                        </tr>
+                        <tr class="not-available">
+                            <td>Αντίτυπο 4</td>
+                            <td>Βιβλιοθήκη Πατρών</td>
+                            <td>Κρατημένο για 3 μέρες από τον/την Γιαννης Παπάς [123456]</td>
+                            <td><button class="reserve-btn borrow-btn">Δανεισμός</button></td>
                         </tr>
                     </table>
                     
@@ -145,6 +209,8 @@
         })
 
     </script> -->
+
+    <script src="js/book-staff.js"></script>
 </body>
 
 </html>
