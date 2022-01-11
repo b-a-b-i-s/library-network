@@ -30,9 +30,9 @@ body {
     height: 2em;
     font-size: 25px;
     text-align: center;
-    background-color: #abbed1;
+    background-color: whitesmoke;
     color: #C96567;
-    border-radius: 20px;
+    border-radius: 8px;
     margin: 0 auto 0.5em auto;
     cursor: pointer;
     border: 3px solid #C96567;
@@ -46,7 +46,7 @@ body {
 
 .reserve-btn:hover{
     background-color: #C96567;
-    color: white;
+    color: whitesmoke;
     border: 3px solid #C96567;
     box-shadow: 0px 7px 15px #9E5A63;
     transform: translateY(-4px);

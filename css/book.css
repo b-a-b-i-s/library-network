@@ -9,6 +9,7 @@ body {
     margin-top: 1em;
     background-color: #abbed1;
     margin-bottom: auto;
+    margin-bottom: 2em;
 
     /* background-color: #C96567; */
 }
@@ -50,7 +51,7 @@ body {
     height: 2em;
     font-size: 25px;
     text-align: center;
-    background-color: whitesmoke;
+    background-color: white;
     color: #C96567;
     border-radius: 8px;
     margin: 0 auto 0.5em auto;
@@ -66,7 +67,7 @@ body {
 
 .reserve-btn:hover{
     background-color: #C96567;
-    color: whitesmoke;
+    color: white;
     border: 3px solid #C96567;
     box-shadow: 0px 7px 15px #9E5A63;
     transform: translateY(-4px);
@@ -87,4 +88,144 @@ body {
     background-color: #9E5A63;
     background-color: #C96567;
     background-color: #97AABD;
+}
+
+
+.new-library * {
+    color: #C96567;
+}
+.new-library>fieldset {
+    border: 0;
+    /* margin: 1em auto;
+    background-color: white;
+    border-radius: 14px;
+    width: 60%;
+    text-align: center;
+    box-shadow: 20px 20px rgb(150, 66, 27); */
+}
+
+.new-library>fieldset>h1 {
+    /* margin-top: 0; */
+    margin-top: 0.2em;
+    padding-bottom: 0.2em;
+}
+
+.new-library input{
+    width: 80%;
+    padding: 0.5em;
+    margin: 0.6em 0 0.6em 0;
+    border: 2px solid #eb6e347a;
+    border-radius: 8px;
+    transition: all 0.1s ease;
+    background-color: white;
+}
+
+.new-library input:hover {
+    border: 2px solid #C96567;
+    /* box-shadow: 1px 1px #EB6E34; */
+}
+
+.new-library input::placeholder {
+    color: #31170bd2;
+    transition: none;
+}
+
+.new-library input:focus {
+    border: 2px solid #C96567;
+    outline: none; 
+    box-shadow: 0 0 0 2px #C96567;
+    border-radius: 8px;
+}
+    
+.new-library input:focus::placeholder {
+    color: rgba(0, 0, 0, 0.486);
+}
+
+
+
+
+.new-library hr {
+    border: 1px solid #C96567;
+    margin-bottom: 1.5em;
+}
+
+.fa-times {
+    color: red;
+}
+
+.fa-times:hover {
+    cursor: pointer;
+    color: rgb(158, 0, 0);
+}
+
+.fa-times:active {
+    color: rgb(88, 0, 0);
+}
+
+
+form , fieldset {
+    background-color: whitesmoke;
+}
+
+.modal-lib {
+    display: none;
+    position: fixed;
+    padding-top: 20px;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto; 
+    background-color: rgba(0,0,0,0.4);
+    z-index: 200005;
+}
+
+
+.modal-lib-content {
+    background-color: whitesmoke;
+    margin: auto;
+    padding: 20px;
+    border: 0;
+    width: 80%;
+    
+    border: 0;
+    margin: 1em auto;
+    background-color: white;
+    border-radius: 14px;
+    width: 60%;
+    text-align: center;
+    box-shadow: 10px 10px #9E5A63;
+}
+
+.modal-lib-content-up {
+
+    margin: auto;
+
+}
+
+.close-lib {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-sign {
+    color: #aaaaaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close-sign:hover,
+.close-sign:focus {
+    color: #000;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+select * {
+    color: black !important;
+}
+select {
+    color: black !important;
 }

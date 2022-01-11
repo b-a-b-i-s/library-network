@@ -37,6 +37,37 @@
             </div>
         </div>
     </nav>
+
+    <div id="borrow-available" class="modal-lib">
+  
+        <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="">
+          <span class="close-sign">&times;</span>
+          <fieldset>
+              <!-- <i class="fas fa-sign-in-alt fa-4x" id="sign-in-icon"></i> -->
+              <h1>Κράτηση</h1> 
+              <hr>
+    
+              <div style="margin: auto; text-align: center;">
+                <label for="select-library">
+                    <h6>Βιβλιοθήκη:</h6>
+                </label>
+                <select id="select-library" name="select-library">
+                    <option value="" disabled hidden selected>Επιλέξτε βιβλιοθήκη</option>
+                    <option value="patra">Δανειστική Βιβλιοθήκη Πατρών</option>
+                    <option value="saab">Δανειστική Βιβλιοθήκη Αθήνας</option>
+                </select>
+                  
+              </div> 
+    
+    
+            <br>
+    
+            <button class="reserve-btn save-btn1">Δανεισμός</button>
+          </fieldset>
+        </form>
+      </div>
+
+
     <div class="main-page-books">
 
         <div class="book">
@@ -76,7 +107,7 @@
                         </span> -->
                     </div>
                 </div><br> 
-        <button class="reserve-btn" style="">Κράτηση</button>
+        <button class="reserve-btn hold-btn" style="">Κράτηση</button>
         <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
@@ -89,6 +120,7 @@
         })
 
     </script> -->
+    <script src="js/book.js"></script>
 </body>
 
 </html>

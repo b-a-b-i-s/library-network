@@ -8,7 +8,7 @@ body {
     margin-right: 15%;
     margin-top: 1em;
     background-color: #abbed1;
-    margin-bottom: auto;
+    margin-bottom: 2em;
 
     /* background-color: #C96567; */
 }
@@ -237,11 +237,17 @@ form , fieldset {
 }
 
 .add-book-staff input:focus {
-    border: 0;
-    outline: 1px solid grey; 
-    box-shadow: 0;
-    border-radius: 0;
+    border: 2px solid #C96567;
+    outline: none; 
+    box-shadow: 0 0 0 2px #C96567;
+    border-radius: 8px;
 }
+
+
+
+
+
+
 
 .add-book-staff input[type="checkbox"]:focus {
     border: 0;
@@ -304,4 +310,9 @@ form , fieldset {
 
 #cover {
     width: 20.25em;
+}
+
+
+textarea {
+    resize: both;
 }

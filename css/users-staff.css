@@ -3,13 +3,12 @@ body {
     color: black ;
 }
 
-.main-page-books {
+.main-page-users {
     padding: 1em;
     margin-left: 15%;
     margin-right: 15%;
     margin-top: 1em;
     background-color: #abbed1;
-    margin-bottom: auto;
     margin-bottom: 2em;
 
     /* background-color: #C96567; */
@@ -30,7 +29,7 @@ body {
     border: 1px solid grey;
     float: left;
     width: 80%;
-    /* background: #f1f1f1; */
+    background: #f1f1f1;
   }
   
   /* Style the submit button */
@@ -81,23 +80,23 @@ input[type="number"] {
     width: 4em;
 }
 
-.book-ref {
+.users-ref {
     color: #C96567;
 }
 
-.book-ref:link {
+.users-ref:link {
     text-decoration: none;
 }
 
-.book-ref:visited {
+.users-ref:visited {
     text-decoration: none;
 }
 
-.book-ref:hover {
+.users-ref:hover {
     text-decoration: underline;
 }
 
-.book-ref:active {
+.users-ref:active {
     text-decoration: underline;
 }
 
@@ -117,15 +116,15 @@ a:active {
     color: #5e353a;
 } 
 
-.book {
+.user {
     display: flex;
 }
 
-.book:first-child {
+.user:first-child {
     flex-grow: 1;
 }
 
-.book-img {
+.user-img {
     margin-left: auto;
     margin-right: 1em;
     max-width: 10em;
@@ -137,85 +136,16 @@ a:active {
 
 
 
-.dropdown-check-list {
-    display: inline-block;
-    /* background-color: white; */
-  }
-  
-  .dropdown-check-list .anchor {
-    position: relative;
-    cursor: pointer;
-    display: inline-block;
-    padding: 3px 50px 3px 4px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgb(118, 118, 118);
-    background-color: white;
-  }
-
-  .dropdown-check-list .anchor:hover {
-    border-color: #515457;
-  }
-  
-  .dropdown-check-list .anchor:after {
-    position: absolute;
-    content: "";
-    border-left: 2px solid black;
-    border-top: 2px solid black;
-    padding: 2px;
-    right: 10px;
-    top: 40%;
-    -moz-transform: rotate(-135deg);
-    -ms-transform: rotate(-135deg);
-    -o-transform: rotate(-135deg);
-    -webkit-transform: rotate(-135deg);
-    transform: rotate(-135deg);
-  }
-  
-  /* .dropdown-check-list .anchor:active:after {
-    right: 8px;
-    top: 21%;
-  } */
-
-  /* .dropdown-check-list ul {
-      border: 1px solid rgb(118, 118, 118);
-  } */
-  
-  .dropdown-check-list ul.items {
-    padding: 2px;
-    display: none;
-    margin: 0;
-    border: 1px solid rgb(118, 118, 118);
-    border-top: none;
-    background-color: white;
-  }
-  
-  .dropdown-check-list ul.items li {
-    list-style: none;
-  }
-  
-  .dropdown-check-list.visible .anchor {
-    color: black;
-  }
-  
-  .dropdown-check-list.visible .items {
-    display: block;
-  }
-
-.dropdown-check-list input {
-    margin-left: 5px;
-}
-
 .reserve-btn{
     display:block;
     width: calc(10% + 5em);
     height: 2em;
     font-size: 20px;
     text-align: center;
-    background-color: white;
+    background-color: whitesmoke;
     color: #C96567;
     border-radius: 8px;
-    margin: 0.5em auto 0 auto;
+    margin: auto 0 auto auto;
     cursor: pointer;
     border: 3px solid #C96567;
     transition: all 0.1s ease;
@@ -228,7 +158,7 @@ a:active {
 
 .reserve-btn:hover{
     background-color: #C96567;
-    color: #e7f3ff;
+    color: whitesmoke;
     border: 3px solid #C96567;
     box-shadow: 0px 7px 15px #9E5A63;
     transform: translateY(-2px);
@@ -240,4 +170,66 @@ a:active {
     border-color: #9E5A63;
     transform: scale(0.99);
     outline: none;
+}
+
+
+.modal-lib {
+  display: none;
+  position: fixed;
+  padding-top: 20px;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto; 
+  background-color: rgba(0,0,0,0.4);
+  z-index: 200005;
+}
+
+
+.modal-lib-content {
+  background-color: whitesmoke;
+  margin: auto;
+  padding: 20px;
+  border: 0;
+  width: 80%;
+  
+  border: 0;
+  margin: 1em auto;
+  background-color: white;
+  border-radius: 14px;
+  width: 60%;
+  text-align: center;
+  box-shadow: 10px 10px #9E5A63;
+}
+
+.modal-lib-content-up {
+
+  margin: auto;
+
+}
+
+.library {
+  display: flex;
+}
+
+.library * {
+  text-align: start;
+}
+
+.library button {
+  text-align: center;
+}
+
+.close-sign {
+  color: #aaaaaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close-sign:hover,
+.close-sign:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
 }
