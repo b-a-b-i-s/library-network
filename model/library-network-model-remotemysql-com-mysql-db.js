@@ -677,8 +677,8 @@ exports.getLibraries  = function(req, callback) {
 			console.log(err.stack)
 			callback(err.stack)
 		}
-		console.log('results')
-		console.log(res)
+		// console.log('results')
+		// console.log(res)
 		// console.log('rows')
 		// console.log(res.rows)
 		

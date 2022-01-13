@@ -20,8 +20,8 @@ exports.renderLibraries = (req, res) => {
         let indexOfLast = 0;
 
         for (let index = 0; index < libraries.length; index++) {
-            console.log(last);
-            console.log("🚀 ~ file: library-network-controller.js ~ line 25 ~ model.getLibraries ~ libraries[index].Κωδικός_Βιβλιοθήκης", libraries[index].Κωδικός_Βιβλιοθήκης);
+            // console.log(last);
+            // console.log("🚀 ~ file: library-network-controller.js ~ line 25 ~ model.getLibraries ~ libraries[index].Κωδικός_Βιβλιοθήκης", libraries[index].Κωδικός_Βιβλιοθήκης);
 
 			if (last==libraries[index].Κωδικός_Βιβλιοθήκης) {
                 libraries[indexOfLast].Τηλέφωνο_Βιβλ.push(libraries[index].Τηλέφωνο_Βιβλ);
@@ -35,8 +35,8 @@ exports.renderLibraries = (req, res) => {
                 libraries[index].multiple_numbers=0
             }
 		}
-        console.log('libraries')
-        console.log(libraries)
+        // console.log('libraries')
+        // console.log(libraries)
 
         res.render('libraries',{libraries: libraries, style: 'libraries'})
     });
