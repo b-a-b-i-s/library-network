@@ -27,8 +27,12 @@ function validateForm() {
   var pass1 = document.forms["signupform"]["UserPass"].value;
   var pass2 = document.forms["signupform"]["UserPass2"].value;
   
-  if (pass1 !== pass2) {
-    alert("Passwords do not match!");
+  if ((pass1 !== pass2) || pass1=='') {
+    alert("Δεν ταιριάζουν οι κωδικοί!");
+    return false;
+  }
+  if (document.forms["signupform"]["UserEmail"].value=='' && document.forms["signupform"]["LibPhone1"].value=='') {
+    alert("Εισάγεται email ή τηλέφωνο!");
     return false;
   }
 }

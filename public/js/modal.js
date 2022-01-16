@@ -7,18 +7,18 @@ window.addEventListener("load", () => {
     const spanupNav = document.querySelector("#close-sign-up");
 
 
-    const modalalertIndexNav = document.querySelector("#alert-modal-index");
+    // const modalalertIndexNav = document.querySelector("#alert-modal");
 
-    if (modalalertIndexNav) {
-        const alertbtnclose = document.querySelector("#close-sign-alert-index");
-        alertbtnclose.onclick = () => {
-            modalalertIndexNav.style.display = "none";
-        }
-        const alertbtnok = document.querySelector("#alert-btn-index");
-        alertbtnok.onclick = () => {
-            modalalertIndexNav.style.display = "none";
-        }
-    }
+    // if (modalalertIndexNav) {
+    //     const alertbtnclose = document.querySelector("#close-sign-alert");
+    //     alertbtnclose.onclick = () => {
+    //         modalalertIndexNav.style.display = "none";
+    //     }
+    //     const alertbtnok = document.querySelector("#alert-btn");
+    //     alertbtnok.onclick = () => {
+    //         modalalertIndexNav.style.display = "none";
+    //     }
+    // }
 
     const modalalertNav = document.querySelector("#alert-modal");
 
@@ -29,7 +29,7 @@ window.addEventListener("load", () => {
         }
         const alertbtnokNav = document.querySelector("#alert-btn");
         alertbtnokNav.onclick = () => {
-            modalalert.style.display = "none";
+            modalalertNav.style.display = "none";
         }
     }
 
@@ -49,10 +49,10 @@ window.addEventListener("load", () => {
     }
     window.onclick = function (event) {
         // console.log(event)
-        if (event.target == modalalertIndexNav) {
-            modalalertIndexNav.style.display = "none";
-            return;
-        }
+        // if (event.target == modalalertIndexNav) {
+        //     modalalertIndexNav.style.display = "none";
+        //     return;
+        // }
         if (event.target == modalalertNav) {
             modalalertNav.style.display = "none";
             return;
