@@ -34,7 +34,7 @@ router.post('/book/:ISBN', libraryController.newReservation)
 
 // router.get('/mymeetings', meetMeController.checkAuthenticated, meetMeController.showMyMeetings);
 
-router.get('/', (req, res) => res.render('home', {style: ["home"]}))
+router.get('/', libraryController.checkAuthenticated, (req, res) => res.render('home', {style: ["home"]}))
 
 
 //log in-------------------------------------------------------------------------------------------------
