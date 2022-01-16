@@ -16,6 +16,12 @@ const libraryController = require('../controller/library-network-controller.js')
 
 router.get('/libraries',  libraryController.renderLibraries)
 
+router.get('/subscriptions', libraryController.renderSubscriptions)
+
+router.get('/books', libraryController.renderBooks)
+
+router.get('/book/:ISBN', libraryController.renderBook)
+
 
 // router.get('/create-meetme',  meetMeController.checkAuthenticated, (req, res) => res.render('create_meetme',{partialContext: {name:req.session.loggedUserName}, loggedin:true}));
 
@@ -25,7 +31,7 @@ router.get('/libraries',  libraryController.renderLibraries)
 
 // router.get('/mymeetings', meetMeController.checkAuthenticated, meetMeController.showMyMeetings);
 
-router.get('/', (req, res) => res.render('home', {style: "home"}))
+router.get('/', (req, res) => res.render('home', {style: ["home"]}))
 
 
 //log in-------------------------------------------------------------------------------------------------
