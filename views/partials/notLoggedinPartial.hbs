@@ -24,7 +24,7 @@
 
   <div id="siginpmodalnew" class="modal-sign modal-sign-all">
   
-    <form class="signin modal-sign-form" method="POST" action="/login">
+    <form class="signin modal-sign-form" method="POST" action="/login" >
       <span class="close-sign" id="close-sign-in">&times;</span>
       <fieldset>
           <i class="fas fa-sign-in-alt fa-4x" id="sign-in-icon"></i>
@@ -33,7 +33,7 @@
 
           <div class='inputWithIcon'>
               <label for="email-signin"><strong>Email ή τηλέφωνο</strong> <br></label>
-              <input type="email" name="UserEmail" id="email-signin" placeholder="Enter Email" required>
+              <input type="text" name="UserEmailOrPhone" id="email-signin" placeholder="Enter Email" required>
               <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
               <br> 
           </div>
@@ -56,7 +56,7 @@
     </form>
   </div>
 
-<div id="signupmodalnew" class="modal-sign modal-sign-all">
+<div id="signupmodalnew" class="modal-sign modal-sign-all" margin-bottom: 2em;>
     
     <form  name="signupform" class="signup modal-sign-form modal-sign-content-up" method="POST" onsubmit="return validateForm()" action="/signup">
       <span class="close-sign" id="close-sign-up">&times;</span>
@@ -65,33 +65,50 @@
           <h1>Εγγραφή</h1>
           
           <p>Συμπληρώστε τις πληροφορίες για να φτιάξετε προφίλ</p>
+          <p>Χρειάζεται απαραίτητα να δώσετε είτε ένα email είτε ένα τηλέφωνο</p>
           <hr>
 
           <div class='inputWithIcon'>
               <label for="full-name-signup"><strong>Όνομα</strong> <br></label>
-              <input type="text" name="UserName" id="full-name-signup" placeholder="Εισάγετε όνομα" required>
+              <input type="text" name="UserName" id="full-name-signup" placeholder="Εισάγετε όνομα">
               <i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i>
           </div>
           
           <div class='inputWithIcon'>
             <label for="last-name-signup"><strong>Επίθετο</strong> <br></label>
-            <input type="text" name="LastName" id="last-name-signup" placeholder="Εισάγετε επίθετο" required>
+            <input type="text" name="LastName" id="last-name-signup" placeholder="Εισάγετε επίθετο">
             <i class="fa fa-user fa-lg fa-fw" aria-hidden="true"></i>
         </div>
 
         <div class='inputWithIcon'>
           <label for="email-signup"><strong>Email</strong> <br></label>
-          <input type="email" name="UserEmail" id="email-signup" placeholder="Εισάγετε email" required>
+          <input type="text" name="UserEmail" id="email-signup" placeholder="Εισάγετε email">
           <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i>
       </div>
 
 
-      <div style="display: flex; margin: 0.5em 0 0.5em 5.5em;">
+      <div style="display: flex; margin: 0.5em 0 0.5em 4.5em;">
         <label for="lib-phone-1" style="margin-top: 0.5em;"><strong>Τηλέφωνα:&nbsp;</strong></label>
         <div class="phones-add" id="phones" style="display: grid; row-gap: 0.2em;">
-          <input type="text" name="lib-phone-1" id="lib-phone-1" style="width: 7.6em;" placeholder="Τηλέφωνο" required>
+          <input type="text" name="LibPhone1" id="lib-phone-1" style="width: 7.6em;" placeholder="Τηλέφωνο">
           <button class="reserve-btn add-tel-btn" id="add-phone">Προσθήκη</button>
         </div>
+      </div>
+
+      <div class='inputWithIcon' style="display: flex; margin-left: 4.5em; margin-top:1em;">
+            <label for="lib-address-street" style="margin-top: 1.4em;"><strong>Διεύθυνση:&nbsp</strong> <br></label>
+            <!-- <input type="text" name="new-lib-name" id="new-lib-name" placeholder="Εισάγετε το όνομα της βιβλιοθήκης" required> -->
+            <div class="address-edit">
+              <label for="lib-address-street">Οδός:&nbsp</label>
+              <input type="text" name="Street" id="lib-address-street" style="width: 20em;" placeholder="Εισάγετε την οδό της βιβλιοθήκης">
+              <label for="lib-address-town">Πόλη:&nbsp</label>
+              <input type="text" name="Town" id="lib-address-town" style="width: 10em;" placeholder="Εισάγετε την πόλη">
+              <label for="lib-address-zip">ΤΚ:&nbsp</label>
+              <input type="text" name="Zip" id="lib-address-zip" style="width: 4em;" placeholder="Τ.Κ.">
+
+            </div>
+            <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
+            <br> 
       </div>
 
 

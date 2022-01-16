@@ -98,7 +98,7 @@
             <hr>
                 <div class="book" style="display: flex;">
                 <div>
-                    <a href="/book/{{this.ISBN}}" class="book-ref"><strong>{{this.Τίτλος}}</strong></a><br>
+                    <a href="/book-staff/{{this.ISBN}}" class="book-ref"><strong>{{this.Τίτλος}}</strong></a><br>
                     <span>Συγγραφ{{this.writers_end}}: </span>
                         {{#each this.Συγγραφείς}}
                             <span>{{this}}</span>
@@ -138,14 +138,6 @@
 
             {{/each}}
 
-        {{#if no_result}}
-        <hr>
-            <div class="book" style="display: flex;">
-                <span>Κανένα βιβλίο για την αναζήτηση : {{no_result}}</span>
-            </div>
-        {{/if}}
-
-            
 
     
 

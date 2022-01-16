@@ -21,7 +21,10 @@ router.get('/subscriptions', libraryController.renderSubscriptions)
 router.get('/books', libraryController.renderBooks)
 
 router.get('/book/:ISBN', libraryController.renderBook)
+router.get('/book/:ISBN/success', libraryController.renderBookSuccessfulReservation)
+router.get('/book/:ISBN/error', libraryController.renderBookErrorReservation)
 
+router.post('/book/:ISBN', libraryController.newReservation)
 
 // router.get('/create-meetme',  meetMeController.checkAuthenticated, (req, res) => res.render('create_meetme',{partialContext: {name:req.session.loggedUserName}, loggedin:true}));
 
@@ -35,8 +38,8 @@ router.get('/', (req, res) => res.render('home', {style: ["home"]}))
 
 
 //log in-------------------------------------------------------------------------------------------------
-// router.post('/login', meetMeController.doLogin);
-// router.post('/signup', meetMeController.doRegister);
+router.post('/login', libraryController.doLogin);
+router.post('/signup', libraryController.doRegister);
 // router.get('/login', (req, res) => res.render('index', {needtolog:true}));
 // router.get('/loggedin', (req, res) => res.render('index', {partialContext: {name:req.session.loggedUserName}, loggedin:true}))
 // router.get('/logout', meetMeController.doLogout)
