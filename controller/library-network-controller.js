@@ -455,7 +455,7 @@ exports.doLogin = function (req, res) {
                             await req.session.save()
                             // console.log(req.session)
                             const redirectTo = "/loggedin";               
-                            res.render('home', {partialContext: {name:req.session.loggedUserName}, loggedin:true}{alert: 'Επιτυχής σύνδεση', style: ["home"]})
+                            res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName}, loggedin:true})
 
                         }
                         saveit();
