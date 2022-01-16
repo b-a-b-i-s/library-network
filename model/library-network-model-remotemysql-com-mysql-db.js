@@ -202,177 +202,6 @@ exports.addMeeting = function (newData, loggedUserId, callback) {
 }
 
 
-exports.getDates = function (req, callback) {
-	// console.log(url)url, userId
-	const url = req.params.url 
-	const userId = req.session.userId
-
-	// let meetingId;
-	const data = [];
-	let meetingInfo;
-	let meetingId;
-
-	new Promise( (resolve) => {
-		getMeetingIdFromUrl(url, (err, result) => {
-			if (err) {
-				callback(err);
-			}
-			meetingId = result.rows[0].MeetingId
-			resolve(meetingId)
-		})
-	})
-	.then( (meetingId) => {
-		return new Promise((resolve) => {
-			const query = {
-				text: `SELECT * FROM public."Date" WHERE "MeetingId" = $1;`,
-				values: [meetingId],
-			}
-		
-			sql.query(query, (err, res) => {
-				if (err) {
-					console.log(err.stack)
-					callback(err.stack)
-				}
-				else {
-					// res()
-					res.rows.forEach((el) => {
-						let endTime;
-						if (el.EndDate.getHours() == 0 && el.EndDate.getMinutes()==0) endTime = '24:00';
-						else {
-							let endHour = el.EndDate.getHours()<10 ? '0'+el.EndDate.getHours() : el.EndDate.getHours()
-							let endMinutes = el.EndDate.getMinutes()<10 ? '0'+el.EndDate.getMinutes() : el.EndDate.getMinutes()
-							endTime = `${endHour}:${endMinutes}`
-						}
-						let startHour = el.StartDate.getHours()<10 ? '0'+el.StartDate.getHours() : el.StartDate.getHours()
-						let startMinutes = el.StartDate.getMinutes()<10 ? '0'+el.StartDate.getMinutes() : el.StartDate.getMinutes()
-						data.push({
-							date : el.StartDate.toLocaleString("en-US", {day: "2-digit", month: "2-digit", year: "numeric"}),
-							startTime : `${startHour}:${startMinutes}`,
-							endTime : endTime,
-							dateId : el.DateId
-						})
-					})
-					resolve(meetingId)
-					// callback(null, data, votes)
-				}
-			})
-		})
-	})
-	.then( (meetingId) => {
-		return new Promise((resolve) => {
-			const query = {
-				text: `SELECT * FROM public."Meeting" WHERE "MeetingId" = $1;`,
-				values: [meetingId],
-			}
-		
-			sql.query(query, (err, res) => {
-				if (err) {
-					console.log(err.stack)
-					callback(err.stack)
-				}
-				else {
-					// res()
-					meetingInfo = 	{
-						description : res.rows[0].MeetingDescription,
-						singleVote : res.rows[0].MeetingSingleVote,
-						state : res.rows[0].MeetingState,
-						title : res.rows[0].MeetingTitle,
-						createdTime : res.rows[0].MeetingDateCreated.toLocaleDateString()
-					}
-					resolve(res.rows[0].MeetingCreator)
-					// callback(null, data, votes)
-				}
-			})
-		})
-	})
-	// .then( (MeetingCreatorId) => {
-	// 	return new Promise((resolve) => {
-	// 		const query = {
-	// 			text: `SELECT "SignedUserId" FROM public."User" WHERE "UserId" = $1;`,
-	// 			values: [MeetingCreatorId],
-	// 		}
-		
-	// 		sql.query(query, (err, res) => {
-	// 			if (err) {
-	// 				console.log(err.stack)
-	// 				callback(err.stack)
-	// 			}
-	// 			else {
-	// 				// res()
-	// 				resolve(res.rows[0].SignedUserId)
-	// 				// callback(null, data, votes)
-	// 			}
-	// 		})
-	// 	})
-	// })
-	.then( (CreatorId) => {
-		return new Promise((resolve) => {
-			const query = {
-				text: `SELECT "UserName" FROM public."Signed User" WHERE "SignedUserId" = $1;`,
-				values: [CreatorId],
-			}
-		
-			sql.query(query, (err, res) => {
-				if (err) {
-					console.log(err.stack)
-					callback(err.stack)
-				}
-				else {
-					// res()
-					meetingInfo["creatorName"] = res.rows[0].UserName
-					resolve()
-					// callback(null, data, votes)
-				}
-			})
-		})
-	})
-	.then( () => {
-		const query = {
-			text: `SELECT * FROM public."Vote" WHERE "MeetingId" = $1;`,
-			values: [meetingId],
-		}
-	
-		  sql.query(query, (err, res) => {
-			if (err) {
-				console.log(err.stack)
-				callback(err.stack)
-			}
-			else {
-
-				const userIds = []
-				res.rows.forEach((el) => {
-					userIds.push(el.UserIdVote)
-				})
-				userIds.push(userId)
-				let uniqueIds = [...new Set(userIds)];
-				let userIdToName;
-
-				getNamesById(uniqueIds, (err, result) => {
-					if (err) {
-						callback(err);
-					}
-					userIdToName = result
-					const votes = [];
-
-					res.rows.forEach((el) => {
-						votes.push({
-							UserIdVote : el.UserIdVote,
-							VoteDateId : el.VoteDateId,
-							Name : userIdToName[el.UserIdVote].name
-						})
-					})
-					let userName = userIdToName[userId].name
-					callback(null, data, votes, meetingInfo, userName)
-				})
-			}
-		})
-	})
-	.catch(e => {
-		console.error(e)
-		callback(e)
-	})
-
-}
 
 exports.addVotes = function (req, callback) {
 	const url = req.params.url;
@@ -557,12 +386,6 @@ exports.chooseFinalOption = function(req, callback) {
 
 
 
-
-
-
-
-
-
 //// LOGIN REGISTER ////
 
 
@@ -664,6 +487,23 @@ exports.registerUser = function (username, email, password, callback) {
     })
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 exports.getLibraries  = function(req, callback) { 
 
 	const query = {
@@ -687,46 +527,299 @@ exports.getLibraries  = function(req, callback) {
 
 };
 
-exports.addTempUser = function(req, callback) {
-
-	let user = {}
+exports.getSubscriptions  = function(req, callback) { 
 
 	const query = {
-		text: `INSERT INTO public."Temporary User" ("TempName") 
-		VALUES('') RETURNING "TempId";`
+		sql: `SELECT *
+		FROM Επιλογές_Συνδρομής
+		ORDER BY Διάρκεια`
 	}
 
-	  sql.query(query, (err, res) => {
+	sql.query(query, (err, res) => {
 		if (err) {
 			console.log(err.stack)
 			callback(err.stack)
 		}
-		else {
-			user.id = res.rows[0].TempId;
-			user.tempName = '';
-			getId(res.rows[0].TempId)
-			
+		// console.log('results')
+		// console.log(res)
+		// console.log('rows')
+		// console.log(res.rows)
+		
+		callback(null, res)
+	})
+};
+
+exports.getBooks  = function(req, callback) { 
+
+	const query = {
+		sql: `SELECT * FROM Έντυπο LEFT OUTER JOIN Συγγραφείς USING(ISBN)`
+	}
+
+	sql.query(query, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
 		}
+
+		// console.log('books model')
+
+		console.log(res)
+		
+		callback(null, res)
 	})
 
-	function getId(TempId) {
-		const query = {
-			text: `SELECT "UserId" FROM public."User" WHERE "TempId" = $1;`,
-			values: [TempId]
-		}
-	
-		  sql.query(query, (err, res) => {
-			if (err) {
-				console.log(err.stack)
-				callback(err.stack)
-			}
-			else {
-				user.userId = res.rows[0].UserId;
-				callback(null, user)
-			}
-		})
+};
+
+// exports.getWriters  = function(req, callback) { 
+
+// 	const query = {
+// 		sql: `SELECT *
+// 		FROM Συγγραφείς`
+// 	}
+
+// 	sql.query(query, (err, res) => {
+// 		if (err) {
+// 			console.log(err.stack)
+// 			callback(err.stack)
+// 		}
+
+// 		callback(null, res)
+// 	})
+
+// };
+
+exports.getLocations  = function(req, callback) { 
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// TODO Replace with VIEW μεταξυ των μεγαλων κενών
+	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+	const query = {
+		sql: `SELECT new_t.ISBN, new_t.Βιβλιοθήκη_τώρα, Όνομα, COUNT(*) as Ποσότητα
+		FROM
+
+
+
+
+		(SELECT all_books.ISBN, all_books.Αριθμός_αντιτύπου, all_books.Κωδικός_Βιβλιοθήκης,
+		CASE 
+			WHEN (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NULL) THEN Κωδικός_Βιβλιοθήκης
+			WHEN (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NULL) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής
+		--    	CASE 
+		--        	WHEN (Βιβλιοθήκη_καταχώρησης_επιστροφής IS NULL) THEN NULL
+		--        	WHEN (Βιβλιοθήκη_καταχώρησης_επιστροφής IS NOT NULL) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής
+		--        END
+			WHEN (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NOT NULL) THEN 
+				CASE 
+					WHEN (Κατάσταση_παραλαβής=0) THEN NULL
+					WHEN (Κατάσταση_παραλαβής=1) THEN Κωδικός_Βιβλιοθήκης_προορισμού
+				END
+			WHEN (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NOT NULL) THEN 
+				CASE 
+					WHEN (Ημερομηνία_που_επιστράφηκε>=date_moved) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής
+					WHEN (Ημερομηνία_που_επιστράφηκε<date_moved) THEN Κωδικός_Βιβλιοθήκης_προορισμού
+				END
+		END AS Βιβλιοθήκη_τώρα,
+		IF (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NOT NULL AND Κατάσταση_παραλαβής=0, Κωδικός_Βιβλιοθήκης_προορισμού, NULL) AS Μεταφέρεται_σε,
+		IF (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NULL AND Βιβλιοθήκη_καταχώρησης_επιστροφής is NULL, Δανεισμός.Κωδικός_μέλους, NULL) AS Δανεισμένο_σε
+		
+		FROM
+			(   -- Πρώτα βρίσκω τα τελευταία και μετά βρίσκω λεπτομέρειες
+				SELECT books_and_borrows.ISBN, books_and_borrows.Αριθμός_αντιτύπου, books_and_borrows.Κωδικός_Βιβλιοθήκης, max(Κωδικός_δανεισμού) as Κωδικός_δανεισμού, max(Κωδικός_μεταφοράς) as Κωδικός_μεταφοράς
+				FROM (
+					SELECT Αντίτυπο.ISBN, Αντίτυπο.Αριθμός_αντιτύπου, Αντίτυπο.Κωδικός_Βιβλιοθήκης, Κωδικός_δανεισμού, Ημερομηνία_που_επιστράφηκε
+					FROM Αντίτυπο LEFT JOIN Δανεισμός ON Αντίτυπο.ISBN=Δανεισμός.ISBN AND Αντίτυπο.Αριθμός_αντιτύπου=Δανεισμός.Αρ_αντιτύπου AND 	Αντίτυπο.Κωδικός_Βιβλιοθήκης=Δανεισμός.Κωδικός_βιβλιοθήκης_αντιτύπου) as books_and_borrows
+				LEFT JOIN (
+					SELECT ISBN, Κωδ_βιβλιοθήκης, Αρ_αντιτύπου, Κωδικός_μεταφοράς
+					FROM Μεταφορά,Περιέχει
+					WHERE Κωδικός_μεταφοράς=Κωδ_μεταφοράς) AS moved
+				ON books_and_borrows.ISBN=moved.ISBN and books_and_borrows.Αριθμός_αντιτύπου=moved.Αρ_αντιτύπου AND books_and_borrows.Κωδικός_Βιβλιοθήκης=moved.Κωδ_βιβλιοθήκης
+				GROUP BY books_and_borrows.ISBN, books_and_borrows.Αριθμός_αντιτύπου, books_and_borrows.Κωδικός_Βιβλιοθήκης
+			) as all_books LEFT OUTER JOIN
+			Δανεισμός
+			ON all_books.ISBN=Δανεισμός.ISBN AND all_books.Αριθμός_αντιτύπου=Δανεισμός.Αρ_αντιτύπου AND 	all_books.Κωδικός_Βιβλιοθήκης=Δανεισμός.Κωδικός_βιβλιοθήκης_αντιτύπου AND all_books.Κωδικός_δανεισμού=Δανεισμός.Κωδικός_δανεισμού
+			LEFT OUTER JOIN
+			(SELECT ISBN, Κωδ_βιβλιοθήκης, Αρ_αντιτύπου, Ημερομηνία as date_moved, Κατάσταση_παραλαβής, Κωδ_μεταφοράς, Κωδικός_Βιβλιοθήκης_προορισμού
+			FROM Μεταφορά,Περιέχει
+			WHERE Κωδικός_μεταφοράς=Κωδ_μεταφοράς) AS moved
+			ON all_books.ISBN=moved.ISBN AND all_books.Αριθμός_αντιτύπου=moved.Αρ_αντιτύπου AND 	all_books.Κωδικός_Βιβλιοθήκης=moved.Κωδ_Βιβλιοθήκης AND all_books.Κωδικός_μεταφοράς=moved.Κωδ_μεταφοράς
+
+
+
+			) as new_t JOIN Βιβλιοθήκη ON new_t.Βιβλιοθήκη_τώρα=Βιβλιοθήκη.Κωδικός_Βιβλιοθήκης
+		WHERE new_t.Βιβλιοθήκη_τώρα IS NOT NULL
+		GROUP BY new_t.ISBN, new_t.Βιβλιοθήκη_τώρα
+        ORDER BY new_t.Βιβλιοθήκη_τώρα`
 	}
+
+	sql.query(query, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		// console.log(res)
+		
+		callback(null, res)
+	})
+
+};
+
+
+exports.getLocationsOfBook  = function(req, callback) { 
+	const isbn = req.params.ISBN;
+
+
+	sql.query('SELECT new_t.ISBN, new_t.Βιβλιοθήκη_τώρα, Όνομα, COUNT(*) as Ποσότητα FROM\
+	(SELECT all_books.ISBN, all_books.Αριθμός_αντιτύπου, all_books.Κωδικός_Βιβλιοθήκης,\
+	CASE \
+		WHEN (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NULL) THEN Κωδικός_Βιβλιοθήκης\
+		WHEN (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NULL) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής\
+		WHEN (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NOT NULL) THEN \
+			CASE \
+				WHEN (Κατάσταση_παραλαβής=0) THEN NULL\
+				WHEN (Κατάσταση_παραλαβής=1) THEN Κωδικός_Βιβλιοθήκης_προορισμού\
+			END\
+		WHEN (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NOT NULL) THEN \
+			CASE \
+				WHEN (Ημερομηνία_που_επιστράφηκε>=date_moved) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής\
+				WHEN (Ημερομηνία_που_επιστράφηκε<date_moved) THEN Κωδικός_Βιβλιοθήκης_προορισμού\
+			END\
+	END AS Βιβλιοθήκη_τώρα,\
+	IF (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NOT NULL AND Κατάσταση_παραλαβής=0, Κωδικός_Βιβλιοθήκης_προορισμού, NULL) AS Μεταφέρεται_σε,\
+	IF (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NULL AND Βιβλιοθήκη_καταχώρησης_επιστροφής is NULL, Δανεισμός.Κωδικός_μέλους, NULL) AS Δανεισμένο_σε\
+	FROM\
+		(  \
+			SELECT books_and_borrows.ISBN, books_and_borrows.Αριθμός_αντιτύπου, books_and_borrows.Κωδικός_Βιβλιοθήκης, max(Κωδικός_δανεισμού) as Κωδικός_δανεισμού, max(Κωδικός_μεταφοράς) as Κωδικός_μεταφοράς\
+			FROM (\
+				SELECT Αντίτυπο.ISBN, Αντίτυπο.Αριθμός_αντιτύπου, Αντίτυπο.Κωδικός_Βιβλιοθήκης, Κωδικός_δανεισμού, Ημερομηνία_που_επιστράφηκε\
+				FROM \
+				(SELECT * \
+				 FROM\
+				 Αντίτυπο\
+				 WHERE ISBN=?\
+				 ) as Αντίτυπο\
+				LEFT JOIN Δανεισμός ON Αντίτυπο.ISBN=Δανεισμός.ISBN AND Αντίτυπο.Αριθμός_αντιτύπου=Δανεισμός.Αρ_αντιτύπου AND 	Αντίτυπο.Κωδικός_Βιβλιοθήκης=Δανεισμός.Κωδικός_βιβλιοθήκης_αντιτύπου) as books_and_borrows\
+			LEFT JOIN (\
+				SELECT ISBN, Κωδ_βιβλιοθήκης, Αρ_αντιτύπου, Κωδικός_μεταφοράς\
+				FROM Μεταφορά,Περιέχει\
+				WHERE Κωδικός_μεταφοράς=Κωδ_μεταφοράς) AS moved\
+			ON books_and_borrows.ISBN=moved.ISBN and books_and_borrows.Αριθμός_αντιτύπου=moved.Αρ_αντιτύπου AND books_and_borrows.Κωδικός_Βιβλιοθήκης=moved.Κωδ_βιβλιοθήκης\
+			GROUP BY books_and_borrows.ISBN, books_and_borrows.Αριθμός_αντιτύπου, books_and_borrows.Κωδικός_Βιβλιοθήκης\
+		) as all_books LEFT OUTER JOIN\
+		Δανεισμός\
+		ON all_books.ISBN=Δανεισμός.ISBN AND all_books.Αριθμός_αντιτύπου=Δανεισμός.Αρ_αντιτύπου AND 	all_books.Κωδικός_Βιβλιοθήκης=Δανεισμός.Κωδικός_βιβλιοθήκης_αντιτύπου AND all_books.Κωδικός_δανεισμού=Δανεισμός.Κωδικός_δανεισμού\
+		LEFT OUTER JOIN\
+		(SELECT ISBN, Κωδ_βιβλιοθήκης, Αρ_αντιτύπου, Ημερομηνία as date_moved, Κατάσταση_παραλαβής, Κωδ_μεταφοράς, Κωδικός_Βιβλιοθήκης_προορισμού\
+		FROM Μεταφορά,Περιέχει\
+		WHERE Κωδικός_μεταφοράς=Κωδ_μεταφοράς) AS moved\
+		ON all_books.ISBN=moved.ISBN AND all_books.Αριθμός_αντιτύπου=moved.Αρ_αντιτύπου AND 	all_books.Κωδικός_Βιβλιοθήκης=moved.Κωδ_Βιβλιοθήκης AND all_books.Κωδικός_μεταφοράς=moved.Κωδ_μεταφοράς\
+		) as new_t JOIN Βιβλιοθήκη ON new_t.Βιβλιοθήκη_τώρα=Βιβλιοθήκη.Κωδικός_Βιβλιοθήκης\
+		WHERE new_t.Βιβλιοθήκη_τώρα IS NOT NULL\
+	GROUP BY new_t.ISBN, new_t.Βιβλιοθήκη_τώρα\
+	ORDER BY new_t.Βιβλιοθήκη_τώρα', isbn, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		// console.log(res)
+		
+		callback(null, res)
+	})
+
+};
+
+
+
+
+
+exports.getBook  = function(req, callback) { 
+
+	const isbn = req.params.ISBN;
+
+	// console.log('isbn')
+	// console.log(isbn)
+
+
+	sql.query('SELECT * \
+	FROM Έντυπο LEFT OUTER JOIN Συγγραφείς USING(ISBN) \
+	WHERE ISBN=?;', isbn, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+
+		// console.log('books model')
+
+		// console.log(res)
+		
+		callback(null, res)
+	})
+
+};
+
+exports.getBook  = function(req, callback) {
+	const isbn = req.params.ISBN;
+
+	// console.log('isbn')
+	// console.log(isbn)
+
+
+	sql.query('SELECT * \
+	FROM Έντυπο LEFT OUTER JOIN Συγγραφείς USING(ISBN) \
+	WHERE ISBN=?;', isbn, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+
+		// console.log('books model')
+
+		// console.log(res)
+		
+		callback(null, res)
+	})
+
 }
+
+exports.getBookCategories  = function(req, callback) {
+	const isbn = req.params.ISBN;
+
+	// console.log('isbn')
+	// console.log(isbn)
+
+
+	sql.query('SELECT Όνομα \
+	FROM Περιλαμβλανει JOIN Κατηγορία ON Περιλαμβλανει.Κατηγορία=Κατηγορία.Κωδικός\
+	WHERE ISBN=?;', isbn, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+
+		// console.log('books model')
+
+		// console.log(res)
+		
+		callback(null, res)
+	})
+
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

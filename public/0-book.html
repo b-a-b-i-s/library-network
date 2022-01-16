@@ -1,42 +1,4 @@
-<!DOCTYPE html>
-<html lang="el">
 
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Βιβλίo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css" integrity="sha384-DyZ88mC6Up2uqS4h/KRgHuoeGwBcD4Ng9SiP4dIRy0EXTlnuz47vAwmeGwVChigm" crossorigin="anonymous">
-    <link rel="stylesheet" href="css/main.css">
-    <link rel="stylesheet" href="css/book.css">
-    <!-- <link rel="stylesheet" href="css/home.css"> -->
-
-</head>
-
-<body>
-
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav" style="flex-grow: 1;">
-                <a class="nav-item nav-link active" href="./home.html">Αρχική</a>
-                <a class="nav-item nav-link" href="./libraries.html">Βιβλιοθήκες</a>
-                <a class="nav-item nav-link" href="./books.html">Βιβλία</a>
-                <div class="right">
-                    <button class="menu-nav-button nav-item btn login-btn"
-                        id="signinbtn">Είσοδος</button>
-                    <button class="menu-nav-button nav-item btn login-btn"
-                        id="signuplink">Εγγραφή</button>
-                </div>
-                <!-- <a class="nav-item nav-link disabled" href="#">Disabled</a> -->
-            </div>
-        </div>
-    </nav>
 
     <div id="borrow-available" class="modal-lib">
   
@@ -71,10 +33,10 @@
     <div class="main-page-books">
 
         <div class="book">
-            <img src="./images/ele.jpg" alt="" class="book-img">
+            <img src="imageFile" alt="" class="book-img">
 
             <div>
-                <h4>Electrical machines, drives, and power systems Theodore Wildi</h4><br>
+                <h4>{{book.}}Electrical machines, drives, and power systems Theodore Wildi</h4><br>
                 <span><strong>Συγγραφείς: </strong></span><span>Wildi Theodore</span><br>
                 <span><strong>Έκδοση: </strong></span><span>3</span><br>
                 <span><strong>Έτος έκδοσης: </strong></span><span>10/2/1998</span><br>
@@ -92,6 +54,7 @@
                     fuga similique sapiente, excepturi, ducimus at ex maxime quasi et fugiat!</span><br>
                 
                 <span><strong>Κατηγορίες: </strong></span><span>Αυτόματος έλεγχος | MATLAB</span>    <br><br>
+                
                 
                 <div style="display: flex; gap: 0.5em;">
                     <span><strong>Διαθεσιμότητα:</strong></span>
@@ -121,6 +84,3 @@
 
     </script> -->
     <script src="js/book.js"></script>
-</body>
-
-</html>

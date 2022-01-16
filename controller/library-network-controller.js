@@ -1,7 +1,11 @@
 'use strict';
 
 const model = require('../model/library-network-model-remotemysql-com-mysql-db.js');
-const bcrypt = require('bcrypt')
+const bcrypt = require('bcrypt');
+const e = require('express');
+const fs = require('fs')
+
+
 
 
 exports.renderLibraries = (req, res) => {
@@ -9,12 +13,6 @@ exports.renderLibraries = (req, res) => {
         if (err) {
             res.send(err);
         }
-
-       
-        // typeof(libraries)
-        // res.forEach(item=>{
-        //     item.Τηλέφωνο_Βιβλ = [item.Τηλέφωνο_Βιβλ]
-        // })
 
         let last = null;
         let indexOfLast = 0;
@@ -38,9 +36,175 @@ exports.renderLibraries = (req, res) => {
         // console.log('libraries')
         // console.log(libraries)
 
-        res.render('libraries',{libraries: libraries, style: 'libraries'})
+        res.render('libraries',{libraries: libraries, style: ['libraries']})
     });
 }
+
+exports.renderSubscriptions = (req, res) => {
+    model.getSubscriptions(req, (err, subscriptions)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        subscriptions.forEach(item=>{
+            if (item.Διάρκεια>1) item.month_end='ες';
+            else  item.month_end='α';
+        })
+
+        // console.log(subscriptions)
+
+        res.render('subscriptions',{subscriptions: subscriptions, style: ["libraries-admin","subscriptions-admin"]})
+    });
+}
+
+exports.renderBooks = (req, res) => {
+
+    
+
+
+    model.getBooks(req, (err, books)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        console.log('ok')
+
+        
+
+        // console.log('books')
+        // console.log(allBooks)
+
+        model.getLocations(req, (err, locations)=> {
+            if (err) {
+                res.send(err);
+            }
+    
+            let allBooks = {};
+
+            books.forEach(item=>{
+                if (allBooks[item.ISBN]){
+                    allBooks[item.ISBN].Συγγραφείς.push(', '+item.Συγγραφέας);
+                    allBooks[item.ISBN].writers_end='είς';
+                }
+                else{
+                    let temp= {
+                        ISBN:item.ISBN,
+                        Τίτλος:item.Τίτλος,
+                        Έκδοση:item.Έκδοση,
+                        Εκδοτικός_οίκος:item.Εκδοτικός_οίκος,
+                        Συγγραφείς: [item.Συγγραφέας],
+                        writers_end:'έας',
+                        locations:[],
+                        not_available:1,
+                        imageFile: checkCoverImage(item.ISBN)
+                    };
+                    allBooks[item.ISBN] = temp;
+                }
+            });
+            // console.log(allBooks)
+            // console.log(locations)
+            locations.forEach(item=>{
+                console.log(item.ISBN)
+                allBooks[item.ISBN].locations.push(item.Όνομα+`: ${item.Ποσότητα}`);
+                allBooks[item.ISBN].not_available=0;
+            });
+
+            // console.log('end')
+            // console.log(allBooks)
+            // console.log(Object.values(allBooks));
+            res.render('books',{books: allBooks, style: ["books"]})
+        });
+        
+    });
+    
+}
+
+function checkCoverImage(ISBN) {
+    // console.log(__dirname)
+    const imagePath1 = `./public/images/${ISBN}.jpg`;
+    const imagePath2 = `./public/images/${ISBN}.jpeg`;
+    const imagePath3 = `./public/images/${ISBN}.png`;
+
+    // console.log(imagePath1)
+
+    let imageFile = '/images/booknotpictured.jpg';
+    try {
+        if (fs.existsSync(imagePath1)) {
+            imageFile = `/images/${ISBN}.jpg`;
+        }
+        else if (fs.existsSync(imagePath2)){
+            imageFile = `/images/${ISBN}.jpeg`;
+        }
+        else if (fs.existsSync(imagePath3)){
+            imageFile = `/images/${ISBN}.png`;
+        }
+    } catch(err) {
+        console.error(err)
+    }
+
+    return imageFile;
+}
+
+exports.renderBook = (req, res) => {
+
+    model.getBook(req, (err, book) => {
+        
+        if (err) {
+            res.send(err);
+        }
+
+        if (book==undefined) {
+            res.render('error', {layout:'404.hbs'});
+        }
+
+        // console.log(book)
+
+        model.getLocationsOfBook(req, (err, locations)=> {
+            if (err) {
+                res.send(err);
+            }
+    
+            model.getBookCategories(req, (err, categories)=> {
+                if (err) {
+                    res.send(err);
+                }
+    
+                let imageFile = checkCoverImage(book[0].ISBN);
+
+                const writers = [];
+
+                book.forEach((element, i)=>{
+                    if (i==0)
+                        writers.push(element.Συγγραφέας);
+                    else
+                        writers.push(', '+element.Συγγραφέας);
+                });
+
+                let writers_end = 'έας';
+
+                if (writers.length>1) {
+                    writers_end = 'είς'
+                }
+
+                categories.forEach((element, i)=>{
+                    if (i!=0)
+                        element.Όνομα = ' | '+element.Όνομα
+                });
+
+                // console.log (locations)
+        
+                res.render('book',{book: book[0],writers_end:writers_end,
+                    locations: locations, categories:categories, writers: writers,  imageFile: imageFile, style: ["book"]})
+                
+            });
+
+        });
+
+
+    });
+}
+    
+
 
 exports.addMeeting = (req, res) => {
     model.addMeeting(req.body, req.session.loggedUserId, (err, url) => {
