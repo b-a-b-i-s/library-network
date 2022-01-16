@@ -89,7 +89,7 @@ exports.registerUser = async function (username, lastname, email, password, phon
 		const hashedPassword = await bcrypt.hash(password, 10);
 		sql.query('INSERT INTO `Μέλος` (`Κωδικός_μέλους`, `Όνομα`, `Επίθετο`, `Οδός`, `Πόλη`, `ΤΚ`, \
 		`Ημερομηνία_Εγγραφής`, `email`, `Κωδικός_πρόσβασης`) \
-		VALUES (NULL, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?);;',
+		VALUES (NULL, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?);',
 		 [username, lastname, newstreet, newtown, newzip, newemail, hashedPassword] , (err, results) => {
 			if (err) {
 				console.log(err.stack)
