@@ -1,7 +1,7 @@
 
   <div id="new-lib-modal" class="modal-lib">
   
-    <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="/login">
+    <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="">
       <span class="close-sign">&times;</span>
       <fieldset>
           <!-- <i class="fas fa-sign-in-alt fa-4x" id="sign-in-icon"></i> -->
@@ -9,8 +9,8 @@
           <hr>
 
           <div class='inputWithIcon'>
-              <label for="new-lib-name"><strong>Όνομα: </strong> <br></label>
-              <input type="text" name="new-lib-name" id="new-lib-name" placeholder="Εισάγετε το όνομα της βιβλιοθήκης" required>
+              <label for="new-lib-name"><strong>Όνομα</strong> <br></label>
+              <input type="text" name="libName" id="new-lib-name" placeholder="Εισάγετε το όνομα της βιβλιοθήκης" required>
               <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
               <br> 
           </div>
@@ -20,11 +20,11 @@
             <!-- <input type="text" name="new-lib-name" id="new-lib-name" placeholder="Εισάγετε το όνομα της βιβλιοθήκης" required> -->
             <div class="address-edit">
               <label for="lib-address-street">Οδός:&nbsp</label>
-              <input type="text" name="lib-address-street" id="lib-address-street" style="width: 20em;" placeholder="Εισάγετε την οδό της βιβλιοθήκης" required>
+              <input type="text" name="street" id="lib-address-street" style="width: 20em;" placeholder="Εισάγετε την οδό της βιβλιοθήκης" required>
               <label for="lib-address-town">Πόλη:&nbsp</label>
-              <input type="text" name="lib-address-town" id="lib-address-town" style="width: 10em;" placeholder="Εισάγετε την πόλη" required>
+              <input type="text" name="town" id="lib-address-town" style="width: 10em;" placeholder="Εισάγετε την πόλη" required>
               <label for="lib-address-zip">ΤΚ:&nbsp</label>
-              <input type="text" name="lib-address-zip" id="lib-address-zip" style="width: 4em;" placeholder="Τ.Κ." required>
+              <input type="text" name="zip" id="lib-address-zip" style="width: 4em;" placeholder="Τ.Κ." required>
 
             </div>
             <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
@@ -34,18 +34,18 @@
 
 
           <div style="display: flex; margin-left: 3.5em;">
-            <label for="lib-phone-1" style="margin-top: 0.5em margin-left:2em;;"><strong>Τηλέφωνα:&nbsp;</strong></label>
+            <label for="lib-phone-1" style="margin-top: 0.5em; margin-left:2em;"><strong>Τηλέφωνα:&nbsp;</strong></label>
             <div class="phones-add" id="phones" style="display: grid; row-gap: 0.2em;">
-              <input type="text" name="LibPhone1" id="lib-phone-1" style="width: 7.6em;" placeholder="Τηλέφωνο" required>
-              <button class="reserve-btn add-tel-btn" id="add-phone">Προσθήκη</button>
+              <input type="text" name="LibPhone1" type="button" id="lib-phone-1" style="width: 7.6em;" placeholder="Τηλέφωνο" required>
+              <button class="reserve-btn add-tel-btn" type="button" id="add-phone">Προσθήκη</button>
             </div>
           </div>
 
 
 
           <div class='inputWithIcon'>
-            <label for="new-lib-pass"><strong>Κωδικός: </strong> <br></label>
-            <input type="password" name="new-lib-pass" id="new-lib-pass" placeholder="Εισάγετε το κωδικό σύνδεσης" required>
+            <label for="new-lib-pass"><strong>Κωδικός</strong> <br></label>
+            <input type="password" name="password" id="new-lib-pass" placeholder="Εισάγετε το κωδικό σύνδεσης" required>
             <i class="fa fa-eye fa-lg fa-fw" id="togglePasswordLib" style="cursor: pointer;"></i>
             <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
             <br> 
@@ -63,7 +63,7 @@
 
         <br>
 
-        <button class="reserve-btn save-btn">Αποθήκευση</button>
+        <button class="reserve-btn save-btn" type="submit" id='submit-new-lib-btn'>Αποθήκευση</button>
       </fieldset>
     </form>
   </div>
@@ -87,7 +87,7 @@
           <div class="library">
             <div>
 
-            <h3>{{this.Όνομα}}</h3>
+            <h3>{{this.Όνομα}} [{{this.Κωδικός_Βιβλιοθήκης}}]</h3>
             <h5>Διεύθυνση : <span class="address" style="font-size: medium;">{{this.Οδός}}, {{this.Πόλη}} {{this.ΤΚ}}</span></h5>
             <div style="display: flex;">
               {{#if this.multiple_numbers}}
@@ -113,8 +113,8 @@
             {{!--   <strong>52</strong> εκ των οποίων <strong>50</strong> είναι διαθέσιμα προς δανεισμό.</h6> --}}
           </div>      
         <div style="display: grid; margin-left: auto; margin-right: 5%; align-items: center;">
-          <button class="edit-btn reserve-btn" onclick=" location.href='./libraries-admin-1.html' ">Επεξεργασία</button>
-          <button class="edit-btn reserve-btn">Διαγραφή</button>
+          <button class="edit-btn reserve-btn" onclick=" location.href='./libraries-admin/{{this.Κωδικός_Βιβλιοθήκης}}' ">Επεξεργασία</button>
+          <button class="edit-btn reserve-btn" onclick=" location.href='./libraries-admin/delete/{{this.Κωδικός_Βιβλιοθήκης}}' ">Διαγραφή</button>
         </div>
         </div>
         
@@ -142,4 +142,16 @@
       // toggle the eye slash icon
       this.classList.toggle('fa-eye-slash');
     });
+
+
+  // Execute a function when the user releases a key on the keyboard
+  document.getElementById("new-lib-pass").addEventListener("keyup", function(event) {
+    // Number 13 is the "Enter" key on the keyboard
+    if (event.keyCode === 13) {
+      // Cancel the default action, if needed
+      event.preventDefault();
+      // Trigger the button element with a click
+      document.getElementById("submit-new-lib-btn").click();
+    }
+  });
   </script>

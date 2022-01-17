@@ -3,7 +3,8 @@
 const model = require('../model/library-network-model-remotemysql-com-mysql-db.js');
 const bcrypt = require('bcrypt');
 const e = require('express');
-const fs = require('fs')
+const fs = require('fs');
+const { redirect } = require('express/lib/response');
 
 
 
@@ -529,27 +530,28 @@ exports.doLogin = function (req, res) {
     })
 }
 
-//Τη χρησιμοποιούμε για να ανακατευθύνουμε στη σελίδα /login όλα τα αιτήματα από μη συνδεδεμένςου χρήστες
-exports.checkAuthenticated = function (req, res, next) {
-    //Αν η μεταβλητή συνεδρίας έχει τεθεί, τότε ο χρήστης είναι συνεδεμένος
-        // console.log("🚀 ~ file: library-network-controller.js ~ line 475 ~ req.originalUrl", req.session)
-
-    if(req.originalUrl=="/" && req.session.loggedUserId){
-        console.log("efttasa")
-        res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:true})
+exports.renderHome = function (req, res, next) {
+    let loggedin=false;
+    if (req.session.loggedUserName){
+        loggedin = true;
     }
-    else if(req.originalUrl=="/"){
-        next()
-    }
-    else if (req.session.loggedUserId) {
-        console.log("user is authenticated", req.originalUrl);
-        //Καλεί τον επόμενο χειριστή (handler) του αιτήματος
-        next();
-    }
-    else {
-        res.redirect('/needtolog');
-    }
+    res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
 }
+
+//Τη χρησιμοποιούμε για να ανακατευθύνουμε στη σελίδα /login όλα τα αιτήματα από μη συνδεδεμένςου χρήστες
+// exports.checkAuthenticated = function (req, res, next) {
+//     //Αν η μεταβλητή συνεδρίας έχει τεθεί, τότε ο χρήστης είναι συνεδεμένος
+//         // console.log("🚀 ~ file: library-network-controller.js ~ line 475 ~ req.originalUrl", req.session)
+
+//     if (req.session.loggedUserId) {
+//         console.log("user is authenticated", req.originalUrl);
+//         //Καλεί τον επόμενο χειριστή (handler) του αιτήματος
+//         next();
+//     }
+//     else {
+//         res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+//     }
+// }
 
 
 exports.doLogout = (req, res) => {
@@ -651,88 +653,81 @@ exports.renderLibrariesLogin = (req, res) => {
 
 
 
-// exports.doStaffLogin = function (req, res) {
-//     //Ελέγχει αν το username και το password είναι σωστά και εκτελεί την
-//     //συνάρτηση επιστροφής authenticated
-//     console.log(Object.keys(req.body))
+exports.doStaffLogin = function (req, res) {
+    //Ελέγχει αν το username και το password είναι σωστά και εκτελεί την
+    //συνάρτηση επιστροφής authenticated
+    // console.log(Object.keys(req.body))
 
-//     model.getLibraryPass(req.body.selectLibrary, (err, user) => {
-//         if (user == undefined) {
+    model.getSingleLibrary(req.body.selectLibrary, (err, user) => {
+        if (user == undefined) {
 
-//             res.redirect('/staff-login')
+            res.redirect('/staff-login')
 
-//         }
-//         else {
-//             //Θέτουμε τη μεταβλητή συνεδρίας "loggedUserId"
+        }
+        else {
+            //Θέτουμε τη μεταβλητή συνεδρίας "loggedUserId"
 
-//             async function checkcode(){
-//                 // console.log(req.body.UserPass)
+            async function checkcode(){
+                // console.log(req.body.UserPass)
                                 
-//                 bcrypt.compare(req.body.selectLibrary, user[0].Κωδικός_πρόσβασης, function(err, isMatch) {
+                bcrypt.compare(req.body.LibraryPass, user[0].Κωδικός_πρόσβασης, function(err, isMatch) {
+                // console.log("🚀 ~ file: library-network-controller.js ~ line 674 ~ bcrypt.compare ~ user[0].Κωδικός_πρόσβασης", user[0].Κωδικός_πρόσβασης)
+                // console.log("🚀 ~ file: library-network-controller.js ~ line 674 ~ bcrypt.compare ~ req.body.selectLibrary", req.body.selectLibrary)
 
-//                     if (err) {
-//                     throw err
-//                     } else if (!isMatch) {
-//                         model.getLibrariesNoPhone(req, (err, libraries)=> {
-//                             if (err) {
-//                                 res.send(err);
-//                             }
+                    if (err) {
+                    throw err
+                    } else if (!isMatch) {
+                        model.getLibrariesNoPhone(req, (err, libraries)=> {
+                            if (err) {
+                                res.send(err);
+                            }
                     
-//                             let loggedin=false;
-//                             if (req.session.loggedUserName){
-//                                 loggedin = true;
-//                             }
+                            let loggedin=false;
+                            if (req.session.loggedUserName){
+                                loggedin = true;
+                            }
                     
-//                             res.render('staff-login',{alert: 'Λάθος στοιχεία', libraries: libraries, style: ["admin", "admin-login"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
-//                         });
-//                     } else {
-//                         console.log("🚀 ~ file: library-network-controller.js ~ line 686 ~ bcrypt.compare ~ req.session.LibraryId bef ", req.session)
+                            res.render('staff-login',{alert: 'Λάθος στοιχεία', libraries: libraries, style: ["admin", "admin-login"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+                        });
+                    } else {
+                        console.log("🚀 ~ file: library-network-controller.js ~ line 686 ~ bcrypt.compare ~ req.session.LibraryId bef ", req.session)
 
-                        // //req.session.destroy();
-                       // req.session.loggedUserId=undefined;
-//                         console.log("🚀 ~ file: library-network-controller.js ~ line 686 ~ bcrypt.compare ~ req.session.LibraryId mid", req.session)
+                        //req.session.destroy();
+                       req.session.loggedUserId=undefined;
+                        console.log("🚀 ~ file: library-network-controller.js ~ line 686 ~ bcrypt.compare ~ req.session.LibraryId mid", req.session)
 
-//                         req.session.loggedLibraryId = user[0].Κωδικός_Βιβλιοθήκης
-//                         console.log("🚀 ~ file: library-network-controller.js ~ line 686 ~ bcrypt.compare ~ req.session.LibraryId", req.session.loggedLibraryId)
-//                         // console.log("🚀 ~ file: library-network-controller.js ~ line 602 ~ bcrypt.compare ~ user[0]", user[0])
-//                         req.session.loggedUserName= user[0].Όνομα;
-//                         // req.session.userId = user.userId
+                        req.session.loggedLibraryId = user[0].Κωδικός_Βιβλιοθήκης
+                        console.log("🚀 ~ file: library-network-controller.js ~ line 686 ~ bcrypt.compare ~ req.session.LibraryId", req.session.loggedLibraryId)
+                        // console.log("🚀 ~ file: library-network-controller.js ~ line 602 ~ bcrypt.compare ~ user[0]", user[0])
+                        req.session.loggedUserName= user[0].Όνομα;
+                        // req.session.userId = user.userId
             
-//                         async function saveit(){
-//                             await req.session.save()
-//                             // console.log(req.session)
-//                             // const redirectTo = "/loggedin";               
-//                             //res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:true})
-//                             res.render('staff', style: ["admin", "admin-login"]{style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
-//                         }
-//                         saveit();
-//                     }
-//                 })
-//             }
-//             checkcode();
-//         }
-//     })
-// }
+                        async function saveit(){
+                            await req.session.save()
+                            // console.log(req.session)
+                            // const redirectTo = "/loggedin";               
+                            //res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:true})
+                            res.render('staff', {style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
+                        }
+                        saveit();
+                    }
+                })
+            }
+            checkcode();
+        }
+    })
+}
 
 //Τη χρησιμοποιούμε για να ανακατευθύνουμε στη σελίδα /login όλα τα αιτήματα από μη συνδεδεμένςου χρήστες
 exports.checkStaffAuthenticated = function (req, res, next) {
     //Αν η μεταβλητή συνεδρίας έχει τεθεί, τότε ο χρήστης είναι συνεδεμένος
         console.log("🚀 ~ file: library-network-controller.js ~ line 475 ~ req.originalUrl", req.session)
-
-    if(req.originalUrl=="/" && req.session.loggedUserId){
-        console.log("efttasa")
-        res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
-    }
-    else if(req.originalUrl=="/"){
-        next()
-    }
-    else if (req.session.loggedUserId) {
-        console.log("user is authenticated", req.originalUrl);
+    if (req.session.loggedLibraryId){
         //Καλεί τον επόμενο χειριστή (handler) του αιτήματος
         next();
     }
     else {
-        res.redirect('/needtolog');
+        res.redirect('/staff-login');
     }
 }
 
@@ -770,7 +765,7 @@ exports.doAdminLogin = function (req, res) {
 
 exports.checkAdminAuthenticated = function (req, res, next) {
     //Αν η μεταβλητή συνεδρίας έχει τεθεί, τότε ο χρήστης είναι συνεδεμένος
-        console.log("🚀 ~ file: library-network-controller.js ~ line 475 ~ req.originalUrl", req.session)
+        // console.log("🚀 ~ file: library-network-controller.js ~ line 475 ~ req.originalUrl", req.session)
 
     if(req.session.admin){
         next()
@@ -853,5 +848,90 @@ exports.renderAdminLibraries = (req, res) => {
         
         res.render('libraries-admin',{libraries: libraries, style: ['libraries-admin'], partialContext: {name:'Admin'}, loggedin:true});
         
+    });
+}
+
+
+exports.newLibrary = (req, res) => {
+    const UserData = Object.keys(req.body)
+    const Phones = [];
+    // console.log("🚀 ~ file: library-network-controller.js ~ line 648 ~ Register")
+
+
+    for (let index = 0; index < UserData.length; index++) {
+            // console.log("🚀 ~ file: library-network-controller.js ~ line 571 ~ req.body[UserData[index]]", req.body[UserData[index]])
+            // console.log("🚀 ~ file: library-network-controller.js ~ line 571 ~ UserData[index].slice(0,8)", UserData[index].slice(0,8))
+
+        if (UserData[index].slice(0,8)==='LibPhone' && req.body[UserData[index]]) {
+            Phones.push([req.body[UserData[index]]])
+        }
+    }
+    model.newLibrary(req.body.libName, req.body.street, req.body.town, req.body.zip, Phones, req.body.password, (err, id)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        res.redirect('/libraries-admin');
+    });
+}
+
+
+
+exports.deleteLibrary = (req, res) => {
+    model.deleteLibrary(req.params.id, (err, id)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        res.redirect('/libraries-admin');
+    });
+}
+
+
+exports.getSingleLibrary = (req, res) => {
+    model.getSingleLibrary(req.params.id, (err, library)=> {
+        if (err) {
+            res.send(err);
+        }
+
+
+        const phone0 = library[0].Τηλέφωνο_Βιβλ;
+
+        const phones = [];
+
+        library.forEach((el, index) => {
+            if (index>0) phones.push({
+                phone: el.Τηλέφωνο_Βιβλ,
+                id:index+1
+            })
+        });
+
+        res.render('library-edit-admin',{library: library[0], phone0:phone0, phones:  phones, style: ['libraries-admin'], partialContext: {name:'Admin'}, loggedin:true});
+    });
+}
+
+
+exports.editLibrary = (req, res) => {
+    const UserData = Object.keys(req.body)
+    const Phones = [];
+    // console.log("🚀 ~ file: library-network-controller.js ~ line 648 ~ Register")
+
+
+    for (let index = 0; index < UserData.length; index++) {
+            // console.log("🚀 ~ file: library-network-controller.js ~ line 571 ~ req.body[UserData[index]]", req.body[UserData[index]])
+            // console.log("🚀 ~ file: library-network-controller.js ~ line 571 ~ UserData[index].slice(0,8)", UserData[index].slice(0,8))
+
+        if (UserData[index].slice(0,8)==='LibPhone' && req.body[UserData[index]]) {
+            Phones.push([req.body[UserData[index]]])
+        }
+    }
+    
+    model.editLibrary(req.body.libName, req.body.street, req.body.town, req.body.zip, Phones, req.params.id, (err, result)=> {
+        if (err) {
+            res.send(err);
+        }
+        //console.log('editing lll')
+
+        res.redirect('/libraries-admin');
     });
 }
