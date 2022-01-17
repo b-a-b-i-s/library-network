@@ -1,0 +1,79 @@
+
+
+  <div id="new-lib-modal" class="modal-lib">
+  
+    <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="/categories/add">
+      <span class="close-sign">&times;</span>
+      <fieldset>
+          <!-- <i class="fas fa-sign-in-alt fa-4x" id="sign-in-icon"></i> -->
+          <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Νέες κατηγορίες</h1> 
+          <hr>
+
+
+
+
+
+          <div style="display: flex; margin-left: 3.5em;">
+            <label for="lib-phone-1" style="margin-top: 0.5em;"><strong>Κατηγορίες:&nbsp;</strong></label>
+            <div class="phones-add" id="phones" style="display: grid; row-gap: 0.2em;">
+              <input type="text" name="lib-phone-1" id="lib-phone-1" style="width: 34.6em;" placeholder="Εισάγετε νέα κατηγορία" required>
+              <button class="reserve-btn add-tel-btn" type="button" id="add-phone" style="justify-self: center;">Προσθήκη</button>
+            </div>
+          </div>
+
+
+          <!-- <div class='inputWithIcon'>
+            <label for="new-lib-name"><strong>Όνομα: </strong> <br></label>
+            <input type="text" name="new-lib-name" id="new-lib-name" placeholder="Εισάγετε το όνομα της βιβλιοθήκης" required>
+            <br> 
+          </div> -->
+  
+        
+
+
+        <br>
+        <input class="reserve-btn save-btn1" style="width: auto; margin:auto; padding:0 0.5em 0 0.5em; margin-left: 43.2%;" type="submit" id="input-submit" value="Αποθήκευση">
+
+        {{!-- <button>Αποθήκευση</button> --}}
+      </fieldset>
+    </form>
+  </div>
+
+
+
+  <div class="main-page-categories">
+    <div style="display: flex;">
+      <h1>Διαχείριση κατηγοριών</h1>
+      <button class="reserve-btn" id="new-lib-btn" style="margin: auto 0 auto auto; align-items: center; width: 10em;">Προσθήκη νέων</button>
+    </div>
+    
+    <div>
+      <!-- Οι βιβλιοθήκες που μπορείτε να επισκεφτείτε.<div class=""></div> -->
+    </div>
+    <!-- <br> -->
+
+    <div class="categories">
+      <!-- <span>Όνομα :</span> -->
+      {{#each categories}}
+      <hr>
+      <div class="category">
+        <div style="display: grid; align-items: center;">
+          <h3>{{this.Όνομα}}</h3>
+          
+        </div>
+        <div style="margin-left: auto; margin-right: 5em; align-items: center;">
+          <!-- <button class="edit-btn reserve-btn" id="edit-category-1">Επεξεργασία</button> -->
+          <button class="edit-btn reserve-btn"  onclick=" location.href='/category/remove/{{this.Κωδικός}}' ">Διαγραφή</button>
+        </div>
+      </div>
+      {{/each}}
+      
+     
+
+    </div>
+    <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+  <script src="js/categories-admin.js"></script>

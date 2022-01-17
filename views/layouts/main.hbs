@@ -48,9 +48,14 @@
     <script>
         document.querySelector('#alert-modal').style.display='block'
     </script>
+
     {{/if}}
 
-    <script src="js/modal.js"></script>
+    {{#if loggedin}}
+    {{else}}
+        <script src="/js/modal.js"></script>
+    {{/if}}
+    
     
 </body>
 

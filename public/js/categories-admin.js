@@ -74,6 +74,7 @@ window.addEventListener("load", () => {
             console.log(element);
             element.value = ''
         });
+        if (document.querySelector('#input-submit')) document.querySelector('#input-submit').value='Αποθήκευση'
 
 
     }
