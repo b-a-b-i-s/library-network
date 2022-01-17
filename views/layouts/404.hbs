@@ -11,28 +11,18 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
+    {{#if loggedin}}
+    {{> loggedinPartial partialContext}}
+
+    {{else}}
     {{> notLoggedinPartial partialContext}}
-    {{!-- <nav>
-        <button class="menu-nav-button" id='home-ref' data-path='/'>Home</button>
-    </nav> --}}
+
+    {{/if}}
+
+
     {{{body}}}
-    {{!-- <h2>Error 404 - Not found</h2> --}}
+
+    <script src="/js/modal.js"></script>
 </body>
 </html>
 
-<script>
-    {{!-- document.querySelector('#home-ref').addEventListener('mousedown', logMouseButton);
-
-    function logMouseButton(e) {   
-        if (typeof e === 'object') {
-            switch (e.button) {
-            case 0:
-                location.href=e.target.dataset.path;
-                break;
-            case 1:
-                window.open(e.target.dataset.path,'_blank');
-                break;
-            }
-        }
-    } --}}
-</script>

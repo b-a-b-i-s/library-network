@@ -1,0 +1,145 @@
+
+  <div id="new-lib-modal" class="modal-lib">
+  
+    <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="/login">
+      <span class="close-sign">&times;</span>
+      <fieldset>
+          <!-- <i class="fas fa-sign-in-alt fa-4x" id="sign-in-icon"></i> -->
+          <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Νέα βιβλιοθήκη</h1> 
+          <hr>
+
+          <div class='inputWithIcon'>
+              <label for="new-lib-name"><strong>Όνομα: </strong> <br></label>
+              <input type="text" name="new-lib-name" id="new-lib-name" placeholder="Εισάγετε το όνομα της βιβλιοθήκης" required>
+              <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
+              <br> 
+          </div>
+          
+          <div class='inputWithIcon' style="display: flex; margin-left: 3.5em;">
+            <label for="lib-address-street" style="margin-top: 1.15em;"><strong style="margin-left: 2em;">Διεύθυνση:&nbsp</strong> <br></label>
+            <!-- <input type="text" name="new-lib-name" id="new-lib-name" placeholder="Εισάγετε το όνομα της βιβλιοθήκης" required> -->
+            <div class="address-edit">
+              <label for="lib-address-street">Οδός:&nbsp</label>
+              <input type="text" name="lib-address-street" id="lib-address-street" style="width: 20em;" placeholder="Εισάγετε την οδό της βιβλιοθήκης" required>
+              <label for="lib-address-town">Πόλη:&nbsp</label>
+              <input type="text" name="lib-address-town" id="lib-address-town" style="width: 10em;" placeholder="Εισάγετε την πόλη" required>
+              <label for="lib-address-zip">ΤΚ:&nbsp</label>
+              <input type="text" name="lib-address-zip" id="lib-address-zip" style="width: 4em;" placeholder="Τ.Κ." required>
+
+            </div>
+            <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
+            <br> 
+          </div>
+
+
+
+          <div style="display: flex; margin-left: 3.5em;">
+            <label for="lib-phone-1" style="margin-top: 0.5em margin-left:2em;;"><strong>Τηλέφωνα:&nbsp;</strong></label>
+            <div class="phones-add" id="phones" style="display: grid; row-gap: 0.2em;">
+              <input type="text" name="LibPhone1" id="lib-phone-1" style="width: 7.6em;" placeholder="Τηλέφωνο" required>
+              <button class="reserve-btn add-tel-btn" id="add-phone">Προσθήκη</button>
+            </div>
+          </div>
+
+
+
+          <div class='inputWithIcon'>
+            <label for="new-lib-pass"><strong>Κωδικός: </strong> <br></label>
+            <input type="password" name="new-lib-pass" id="new-lib-pass" placeholder="Εισάγετε το κωδικό σύνδεσης" required>
+            <i class="fa fa-eye fa-lg fa-fw" id="togglePasswordLib" style="cursor: pointer;"></i>
+            <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
+            <br> 
+          </div>
+
+
+          <!-- <div class='inputWithIcon'>
+            <label for="new-lib-name"><strong>Όνομα: </strong> <br></label>
+            <input type="text" name="new-lib-name" id="new-lib-name" placeholder="Εισάγετε το όνομα της βιβλιοθήκης" required>
+            <br> 
+          </div> -->
+  
+        
+
+
+        <br>
+
+        <button class="reserve-btn save-btn">Αποθήκευση</button>
+      </fieldset>
+    </form>
+  </div>
+
+
+
+  <div class="main-page-libraries">
+    <div style="display: flex;">
+      <h1>Διαχείριση βιβλιοθηκών</h1>
+      <button class="reserve-btn" id="new-lib-btn" style="margin: auto 0 auto auto; align-items: center; width: 10em;">Προσθήκη νέας</button>
+    </div>
+    {{!-- <hr> --}}
+    <!-- <br> -->
+
+    <div class="libraries">
+      <!-- <span>Όνομα :</span> -->
+
+      {{#each libraries}}
+        {{#if this.Όνομα}}
+        <hr>
+          <div class="library">
+            <div>
+
+            <h3>{{this.Όνομα}}</h3>
+            <h5>Διεύθυνση : <span class="address" style="font-size: medium;">{{this.Οδός}}, {{this.Πόλη}} {{this.ΤΚ}}</span></h5>
+            <div style="display: flex;">
+              {{#if this.multiple_numbers}}
+                <h5>Τηλέφωνα:&nbsp;</h5>
+                <div style="display: grid;">
+                  {{#each this.Τηλέφωνο_Βιβλ}}
+                    <h5><span class="phone" style="font-size: medium;">{{this}}</span></h5>
+                  {{/each}}
+
+                </div>
+              {{else}}
+                <h5>Τηλέφωνο:&nbsp;</h5>
+                <div style="display: grid;">
+                  {{#each this.Τηλέφωνο_Βιβλ}}
+                    <h5><span class="phone" style="font-size: medium;">{{this}}</span></h5>
+                  {{/each}}
+
+                </div>
+              {{/if}}
+              
+            </div>
+            <h6>Διαθέσιμα αντίτυπα : <span>{{this.book_sum}}</span></h6>
+            {{!--   <strong>52</strong> εκ των οποίων <strong>50</strong> είναι διαθέσιμα προς δανεισμό.</h6> --}}
+          </div>      
+        <div style="display: grid; margin-left: auto; margin-right: 5%; align-items: center;">
+          <button class="edit-btn reserve-btn" onclick=" location.href='./libraries-admin-1.html' ">Επεξεργασία</button>
+          <button class="edit-btn reserve-btn">Διαγραφή</button>
+        </div>
+        </div>
+        
+        
+        {{/if}}
+      
+      
+      {{/each}}
+
+    </div>
+    <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+  <script src="js/libraries-admin.js"></script>
+<script>
+    const togglePasswordLib = document.querySelector('#togglePasswordLib');
+    const passwordLib = document.querySelector('#new-lib-pass');
+
+    togglePasswordLib.addEventListener('click', function (e) {
+      // toggle the type attribute
+      const type = passwordLib.getAttribute('type') === 'password' ? 'text' : 'password';
+      passwordLib.setAttribute('type', type);
+      // toggle the eye slash icon
+      this.classList.toggle('fa-eye-slash');
+    });
+  </script>

@@ -36,13 +36,28 @@ router.post('/book/:ISBN', libraryController.newReservation)
 
 router.get('/', libraryController.checkAuthenticated, (req, res) => res.render('home', {style: ["home"]}))
 
+router.get('/staff',libraryController.renderLibrariesLogin)//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
+
+// router.post('/staff-login',libraryController.doStaffLogin)//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
+
+router.get('/admin-login', (req, res) => res.render('admin-login', {style: ["admin", 'admin-login'], loggedin:false}))
+
+router.post('/admin-login', libraryController.doAdminLogin)
+
+router.get('/admin', libraryController.checkAdminAuthenticated, (req, res) => res.render('admin', {style: ["admin"], partialContext: {name:'Admin', admin:true}, loggedin:true}))
+
+router.get('/categories-admin', libraryController.checkAdminAuthenticated, libraryController.renderCategories)
+router.post('/categories/add', libraryController.checkAdminAuthenticated, libraryController.addCategories)
+router.get('/category/remove/:id', libraryController.checkAdminAuthenticated, libraryController.removeCategory)
+
+router.get('/libraries-admin', libraryController.checkAdminAuthenticated, libraryController.renderAdminLibraries)
 
 //log in-------------------------------------------------------------------------------------------------
 router.post('/login', libraryController.doLogin);
 router.post('/signup', libraryController.doRegister);
 // router.get('/login', (req, res) => res.render('index', {needtolog:true}));
 // router.get('/loggedin', (req, res) => res.render('index', {partialContext: {name:req.session.loggedUserName}, loggedin:true}))
-// router.get('/logout', meetMeController.doLogout)
+router.get('/logout', libraryController.doLogout)
 // router.get('/afterregister',(req, res) => res.render('index', {aftersignup:true}))
 // router.get('/failed',(req, res) => res.render('index', { failedloggin: true }))
 

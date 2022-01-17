@@ -44,10 +44,10 @@ window.addEventListener("load", () => {
 
     btnin.addEventListener('click', (el)=> {
             modalavail.style.display = "block";
-            console.log(userId);
+            // console.log(userId);
             // nameInSubs.textContent = `${el.target.dataset.userName} [${el.target.dataset.userId}]`
-            bookId = Number(el.target.dataset.bookId)
-            bookLibraryId = Number(el.target.dataset.bookLibraryId)
+            // bookId = Number(el.target.dataset.bookId)
+            // bookLibraryId = Number(el.target.dataset.bookLibraryId)
         })
 
 
@@ -76,7 +76,10 @@ window.addEventListener("load", () => {
     // spanup.onclick = function () {
     //     modalup.style.display = "none";
     // }
-    window.onclick = function (event) {
+    window.addEventListener('click',  function (event) {
+
+        console.log(event)
+        console.log(event.target)
         // console.log(event)
         if (event.target == modalalertIndex) {
             modalalertIndex.style.display = "none";
@@ -95,6 +98,6 @@ window.addEventListener("load", () => {
         // if (event.target == modalup) {
         //     modalup.style.display = "none";
         // }
-    }
+    })
 })
 

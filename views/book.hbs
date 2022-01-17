@@ -13,15 +13,16 @@
                 <div style="display: grid;">
                     <label for="select-library">
                         <strong>Βιβλιοθήκη:&nbsp</strong>
-                    </la>
-                    <select id="select-library" name="selectLibrary" required>
-                        <option value="" disabled hidden selected >Επιλέξτε βιβλιοθήκη</option>
-                        {{#each locations}}
-                            {{#if this.Ποσότητα}}
-                            <option value="{{this.Βιβλιοθήκη_τώρα}}">{{this.Όνομα}}</option>
-                            {{/if}}
-                        {{/each}}
-                    </select>
+                    
+                        <select id="select-library" name="selectLibrary" required>
+                            <option value="" disabled hidden selected >Επιλέξτε βιβλιοθήκη</option>
+                            {{#each locations}}
+                                {{#if this.Ποσότητα}}
+                                <option value="{{this.Βιβλιοθήκη_τώρα}}">{{this.Όνομα}}</option>
+                                {{/if}}
+                            {{/each}}
+                        </select>
+                    </label>
                 </div>
                 
                 <label for="user-id" style="margin-top: 1em;"><strong>Κωδικός μέλους:&nbsp;</strong>

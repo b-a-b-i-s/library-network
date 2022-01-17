@@ -97,10 +97,11 @@ exports.registerUser = async function (username, lastname, email, password, phon
 			let phonesArray = Object.keys(phones);
 
 			if (phonesArray.length>0){
-				let query = 'INSERT INTO Τηλ_Μέλους (Αρ_Τηλ, ID_μέλους)';
+				let query = 'INSERT INTO Τηλ_Μέλους (Αρ_Τηλ, ID_μέλους) VALUES ';
 
 				for (let index = 0; index < phonesArray.length; index++) {
-					query = query + ' VALUES (?, '+results.insertId+')';
+					if (index==0) query = query + '(?, '+results.insertId+')';
+					else		query = query + ',(?, '+results.insertId+')';
 				}
 
 				console.log(query)
@@ -140,7 +141,81 @@ exports.registerUser = async function (username, lastname, email, password, phon
 
 
 
+exports.getLibrariesAndQtt  = function(req, callback) { 
 
+	const query = {
+		sql: `SELECT * FROM (
+			SELECT Βιβλιοθήκη_τώρα,Οδός, Πόλη, ΤΚ, Όνομα, SUM(Ποσότητα) as book_sum
+			FROM (
+			SELECT new_t.ISBN, new_t.Βιβλιοθήκη_τώρα,Βιβλιοθήκη.Οδός, Βιβλιοθήκη.Πόλη, Βιβλιοθήκη.ΤΚ, Όνομα, COUNT(*) as Ποσότητα
+				FROM
+				(SELECT all_books.ISBN, all_books.Αριθμός_αντιτύπου, all_books.Κωδικός_Βιβλιοθήκης,
+				CASE 
+					WHEN (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NULL) THEN Κωδικός_Βιβλιοθήκης
+					WHEN (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NULL) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής
+				--    	CASE 
+				--        	WHEN (Βιβλιοθήκη_καταχώρησης_επιστροφής IS NULL) THEN NULL
+				--        	WHEN (Βιβλιοθήκη_καταχώρησης_επιστροφής IS NOT NULL) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής
+				--        END
+					WHEN (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NOT NULL) THEN 
+						CASE 
+							WHEN (Κατάσταση_παραλαβής=0) THEN NULL
+							WHEN (Κατάσταση_παραλαβής=1) THEN Κωδικός_Βιβλιοθήκης_προορισμού
+						END
+					WHEN (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NOT NULL) THEN 
+						CASE 
+							WHEN (Ημερομηνία_που_επιστράφηκε>=date_moved) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής
+							WHEN (Ημερομηνία_που_επιστράφηκε<date_moved) THEN Κωδικός_Βιβλιοθήκης_προορισμού
+						END
+				END AS Βιβλιοθήκη_τώρα,
+				IF (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NOT NULL AND Κατάσταση_παραλαβής=0,Κωδικός_Βιβλιοθήκης_προορισμού, NULL) AS Μεταφέρεται_σε,
+				IF (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NULL AND Βιβλιοθήκη_καταχώρησης_επιστροφής is NULL, Δανεισμός.Κωδικός_μέλους, NULL) AS Δανεισμένο_σε
+				
+				FROM
+					(   -- Πρώτα βρίσκω τα τελευταία απο τελευταιους δανεισμούς και μεταφορές και μετά βρίσκω λεπτομέρειες
+						SELECT books_and_borrows.ISBN, books_and_borrows.Αριθμός_αντιτύπου, books_and_borrows.Κωδικός_Βιβλιοθήκης, max(Κωδικός_δανεισμού) as Κωδικός_δανεισμού, max(Κωδικός_μεταφοράς) as Κωδικός_μεταφοράς
+						FROM (
+							SELECT Αντίτυπο.ISBN, Αντίτυπο.Αριθμός_αντιτύπου, Αντίτυπο.Κωδικός_Βιβλιοθήκης, Κωδικός_δανεισμού, Ημερομηνία_που_επιστράφηκε
+							FROM Αντίτυπο LEFT JOIN Δανεισμός ON Αντίτυπο.ISBN=Δανεισμός.ISBN AND Αντίτυπο.Αριθμός_αντιτύπου=Δανεισμός.Αρ_αντιτύπου AND 	Αντίτυπο.Κωδικός_Βιβλιοθήκης=Δανεισμός.Κωδικός_βιβλιοθήκης_αντιτύπου) as books_and_borrows
+						LEFT JOIN (
+							SELECT ISBN, Κωδ_βιβλιοθήκης, Αρ_αντιτύπου, Κωδικός_μεταφοράς
+							FROM Μεταφορά,Περιέχει
+							WHERE Κωδικός_μεταφοράς=Κωδ_μεταφοράς) AS moved
+						ON books_and_borrows.ISBN=moved.ISBN and books_and_borrows.Αριθμός_αντιτύπου=moved.Αρ_αντιτύπου AND books_and_borrows.Κωδικός_Βιβλιοθήκης=moved.Κωδ_βιβλιοθήκης
+						GROUP BY books_and_borrows.ISBN, books_and_borrows.Αριθμός_αντιτύπου, books_and_borrows.Κωδικός_Βιβλιοθήκης
+					) as all_books LEFT OUTER JOIN
+					Δανεισμός
+					ON all_books.ISBN=Δανεισμός.ISBN AND all_books.Αριθμός_αντιτύπου=Δανεισμός.Αρ_αντιτύπου AND 	all_books.Κωδικός_Βιβλιοθήκης=Δανεισμός.Κωδικός_βιβλιοθήκης_αντιτύπου AND all_books.Κωδικός_δανεισμού=Δανεισμός.Κωδικός_δανεισμού
+					LEFT OUTER JOIN
+					(SELECT ISBN, Κωδ_βιβλιοθήκης, Αρ_αντιτύπου, Ημερομηνία as date_moved, Κατάσταση_παραλαβής, Κωδ_μεταφοράς, Κωδικός_Βιβλιοθήκης_προορισμού
+					FROM Μεταφορά,Περιέχει
+					WHERE Κωδικός_μεταφοράς=Κωδ_μεταφοράς) AS moved
+					ON all_books.ISBN=moved.ISBN AND all_books.Αριθμός_αντιτύπου=moved.Αρ_αντιτύπου AND 	all_books.Κωδικός_Βιβλιοθήκης=moved.Κωδ_Βιβλιοθήκης AND all_books.Κωδικός_μεταφοράς=moved.Κωδ_μεταφοράς
+				) as new_t JOIN Βιβλιοθήκη ON new_t.Βιβλιοθήκη_τώρα=Βιβλιοθήκη.Κωδικός_Βιβλιοθήκης
+				WHERE new_t.Βιβλιοθήκη_τώρα IS NOT NULL
+				GROUP BY new_t.ISBN, new_t.Βιβλιοθήκη_τώρα
+		) as book_locs 
+		GROUP BY Βιβλιοθήκη_τώρα
+		) as books_sums LEFT OUTER JOIN Αρ_Τηλ_Βιβλιοθήκης ON Κωδικός_Βιβλιοθήκης=Βιβλιοθήκη_τώρα
+		ORDER BY Βιβλιοθήκη_τώρα`
+	}
+
+	sql.query(query, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+
+
+		// console.log('results')
+		// console.log(res)
+		// console.log('rows')
+		// console.log(res.rows)
+		
+		callback(null, res)
+	})
+
+};
 
 
 
@@ -160,6 +235,8 @@ exports.getLibraries  = function(req, callback) {
 			console.log(err.stack)
 			callback(err.stack)
 		}
+
+
 		// console.log('results')
 		// console.log(res)
 		// console.log('rows')
@@ -435,7 +512,7 @@ exports.makeNewReservation  = function(req, callback) {
 	const isbn = req.params.ISBN;
 
 	const libId = req.body.selectLibrary;
-	const userId = req.body.userId;
+	const userId = req.session.loggedUserId;
 
 	console.log(libId)
 
@@ -463,7 +540,7 @@ exports.makeNewReservation  = function(req, callback) {
 
 
 exports.checkForNewReservation  = function(req, callback) {
-	const userId = req.body.userId;
+	const userId = req.session.loggedUserId;
 
 	// console.log('userId')
 	// console.log(userId)
@@ -493,7 +570,7 @@ exports.checkForNewReservation  = function(req, callback) {
 
 		// console.log('books model')
 
-		// console.log(res)
+		console.log(res)
 		
 		callback(null, res)
 	})
@@ -524,3 +601,114 @@ exports.getBookCategories  = function(req, callback) {
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// STAFF
+
+exports.getLibrariesNoPhone  = function(req, callback) { 
+
+	const query = {
+		sql: `SELECT Κωδικός_Βιβλιοθήκης, Όνομα
+		FROM Βιβλιοθήκη`
+	}
+
+	sql.query(query, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		// console.log('results')
+		// console.log(res)
+		
+		callback(null, res)
+	})
+};
+
+
+
+
+
+
+
+
+// ADMIN
+
+exports.getCategories  = function(req, callback) { 
+
+	const query = {
+		sql: `SELECT * 
+		FROM Κατηγορία 
+		ORDER BY Όνομα`
+	}
+
+	sql.query(query, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		// console.log('results')
+		// console.log(res)
+		
+		callback(null, res)
+	})
+};
+
+
+exports.addCategories  = function(categories, callback) { 
+
+
+	let query = 'INSERT INTO `Κατηγορία` (`Κωδικός`, `Όνομα`) VALUES ';
+	console.log('bef', categories)
+
+	for (let index = 0; index < categories.length; index++) {
+		if (index==0) query = query + '(NULL, ?)';
+		else 			query = query + ',(NULL, ?)';
+	}
+	query += ';';
+
+
+	sql.query(query, categories, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		// console.log('results')
+		// console.log(res)
+		// console.log('rows')
+		// console.log(res.rows)
+		
+		callback(null, res)
+	})
+};
+
+
+exports.removeCategory  = function(id, callback) { 
+
+	sql.query('DELETE FROM `Κατηγορία`\
+	 WHERE `Κατηγορία`.`Κωδικός` = ?;', id, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		// console.log('results')
+		// console.log(res)
+		
+		callback(null, res)
+	})
+};

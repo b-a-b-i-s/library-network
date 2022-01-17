@@ -50,7 +50,7 @@ window.addEventListener("load", () => {
         console.log(newId)
         const newPhone = document.createElement('div');
         newPhone.innerHTML = `
-            <input type="text" name="lib-phone-${newId}" id="lib-phone-${newId}" placeholder="Νέος αριθμός" style="width: 7.6em;">
+            <input type="text" name="LibPhone${newId}" id="lib-phone-${newId}" placeholder="Νέος αριθμός" style="width: 7.6em;">
             <i class="fas fa-times delete-phone" id="x${newId}"></i>`;
         newPhone.id = `phone-div-${newId}`
         newPhone.classList.add("extra-phone");
