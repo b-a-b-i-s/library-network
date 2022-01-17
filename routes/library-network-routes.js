@@ -41,6 +41,11 @@ router.get('/staff', libraryController.checkStaffAuthenticated, (req,res)=> res.
 
 router.post('/staff-login',libraryController.doStaffLogin)//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
 
+router.get('/add-book-staff', libraryController.checkStaffAuthenticated, libraryController.renderAddNewBook)
+router.post('/add-book-staff', libraryController.checkStaffOrAdminAuthenticated, libraryController.addNewBookToDb)
+
+
+
 router.get('/admin-login', (req, res) => res.render('admin-login', {style: ["admin", 'admin-login'], loggedin:false}))
 
 router.post('/admin-login', libraryController.doAdminLogin)
@@ -56,6 +61,8 @@ router.post('/libraries-admin', libraryController.checkAdminAuthenticated, libra
 router.get('/libraries-admin/:id', libraryController.checkAdminAuthenticated, libraryController.getSingleLibrary)
 router.post('/libraries-admin/:id', libraryController.checkAdminAuthenticated, libraryController.editLibrary)
 router.get('/libraries-admin/delete/:id', libraryController.checkAdminAuthenticated, libraryController.deleteLibrary)
+
+router.get('/add-book-admin', libraryController.checkAdminAuthenticated, libraryController.renderAddNewBook)
 
 //log in-------------------------------------------------------------------------------------------------
 router.post('/login', libraryController.doLogin);

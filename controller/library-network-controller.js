@@ -43,7 +43,7 @@ exports.renderLibraries = (req, res) => {
             loggedin = true;
         }
         
-        res.render('libraries',{libraries: libraries, style: ['libraries'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+        res.render('libraries',{libraries: libraries, style: ['libraries'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin})
         
     });
 }
@@ -67,7 +67,7 @@ exports.renderSubscriptions = (req, res) => {
             loggedin = true;
         }
 
-        res.render('subscriptions',{subscriptions: subscriptions, style: ["libraries-admin","subscriptions-admin"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+        res.render('subscriptions',{subscriptions: subscriptions, style: ["libraries-admin","subscriptions-admin"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin})
     });
 }
 
@@ -91,7 +91,7 @@ exports.renderBooks = (req, res) => {
             if (req.session.loggedUserName){
                 loggedin = true;
             }
-            res.render('books',{no_result: req.query.search, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin});
+            res.render('books',{no_result: req.query.search, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin});
         }
         else{
 
@@ -147,7 +147,7 @@ exports.renderBooks = (req, res) => {
                 if (req.session.loggedUserName){
                     loggedin = true;
                 }
-                res.render('books',{books: allBooks, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin});
+                res.render('books',{books: allBooks, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin});
             });
 
         }
@@ -199,7 +199,7 @@ exports.renderBook = (req, res) => {
             if (req.session.loggedUserName){
                 loggedin = true;
             }
-            res.render('not_found', {layout:'404.hbs', partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin});
+            res.render('not_found', {layout:'404.hbs', partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin});
         }
         else{
             model.getLocationsOfBook(req, (err, locations)=> {
@@ -251,7 +251,7 @@ exports.renderBook = (req, res) => {
                         
                     res.render('book',{book: book[0],writers_end:writers_end,
                         locations: locations, categories:categories, writers: writers,  imageFile: imageFile, style: ["book"]
-                        , partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+                        , partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin})
                     
                 });
 
@@ -278,7 +278,7 @@ exports.renderBookErrorReservation = (req, res) => {
             if (req.session.loggedUserName){
                 loggedin = true;
             }
-            res.render('error', {layout:'404.hbs', partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin});
+            res.render('error', {layout:'404.hbs', partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin});
         }
 
 
@@ -330,7 +330,7 @@ exports.renderBookErrorReservation = (req, res) => {
                 }
                 res.render('book',{book: book[0],writers_end:writers_end,
                     locations: locations,alert:'Αποτυχία', categories:categories, writers: writers,  imageFile: imageFile, style: ["book"],
-                    partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+                    partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin})
                 
             });
 
@@ -353,7 +353,7 @@ exports.renderBookSuccessfulReservation = (req, res) => {
             if (req.session.loggedUserName){
                 loggedin = true;
             }
-            res.render('error', {layout:'404.hbs', partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin});
+            res.render('error', {layout:'404.hbs', partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin});
         }
 
 
@@ -405,7 +405,7 @@ exports.renderBookSuccessfulReservation = (req, res) => {
                 }
                 res.render('book',{book: book[0],writers_end:writers_end,
                     locations: locations,alert:'Επιτυχία', categories:categories, writers: writers,  imageFile: imageFile, style: ["book"], 
-                    partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+                    partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin})
                 
             });
 
@@ -481,7 +481,7 @@ exports.newReservation = (req, res) => {
 
 
 
-///// LOGIN REDISTER /////
+// LOGIN REDISTER //
 
 
 
@@ -518,7 +518,7 @@ exports.doLogin = function (req, res) {
                             await req.session.save()
                             // console.log(req.session)
                             // const redirectTo = "/loggedin";               
-                            //res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:true})
+                            //res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:true})
                             res.redirect('/')
                         }
                         saveit();
@@ -535,7 +535,7 @@ exports.renderHome = function (req, res, next) {
     if (req.session.loggedUserName){
         loggedin = true;
     }
-    res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+    res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin})
 }
 
 //Τη χρησιμοποιούμε για να ανακατευθύνουμε στη σελίδα /login όλα τα αιτήματα από μη συνδεδεμένςου χρήστες
@@ -549,7 +549,7 @@ exports.renderHome = function (req, res, next) {
 //         next();
 //     }
 //     else {
-//         res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+//         res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin})
 //     }
 // }
 
@@ -647,7 +647,7 @@ exports.renderLibrariesLogin = (req, res) => {
             loggedin = true;
         }
 
-        res.render('staff-login',{libraries: libraries, style: ["admin", "admin-login"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+        res.render('staff-login',{libraries: libraries, style: ["admin", "admin-login"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin})
     });
 }
 
@@ -687,7 +687,7 @@ exports.doStaffLogin = function (req, res) {
                                 loggedin = true;
                             }
                     
-                            res.render('staff-login',{alert: 'Λάθος στοιχεία', libraries: libraries, style: ["admin", "admin-login"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:loggedin})
+                            res.render('staff-login',{alert: 'Λάθος στοιχεία', libraries: libraries, style: ["admin", "admin-login"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.logged}, loggedin:loggedin})
                         });
                     } else {
                         console.log("🚀 ~ file: library-network-controller.js ~ line 686 ~ bcrypt.compare ~ req.session.LibraryId bef ", req.session)
@@ -721,7 +721,7 @@ exports.doStaffLogin = function (req, res) {
 //Τη χρησιμοποιούμε για να ανακατευθύνουμε στη σελίδα /login όλα τα αιτήματα από μη συνδεδεμένςου χρήστες
 exports.checkStaffAuthenticated = function (req, res, next) {
     //Αν η μεταβλητή συνεδρίας έχει τεθεί, τότε ο χρήστης είναι συνεδεμένος
-        console.log("🚀 ~ file: library-network-controller.js ~ line 475 ~ req.originalUrl", req.session)
+        // console.log("🚀 ~ file: library-network-controller.js ~ line 475 ~ req.originalUrl", req.session)
     if (req.session.loggedLibraryId){
         //Καλεί τον επόμενο χειριστή (handler) του αιτήματος
         next();
@@ -732,9 +732,100 @@ exports.checkStaffAuthenticated = function (req, res, next) {
 }
 
 
+exports.renderAddNewBook = function (req, res, next) {
+    model.getCategories(req, (err, categories)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        if (req.session.admin){
+            res.render('add-book-staff', {categories:categories, style: ["add-book-staff", "dropdown"], partialContext: {name:'Admin'}, loggedin:true});
+        }
+        else{
+            res.render('add-book-staff', {categories:categories, style: ["add-book-staff", "dropdown"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true});
+        }
+
+        
+    })
+}
 
 
-// ADMIN
+exports.addNewBookToDb = function (req, res) {
+    const UserData = Object.keys(req.body)
+    const writers = [];
+    const categories = []
+
+    UserData.forEach((element,index) => {
+        // console.log(UserData[index].slice(0,8))
+        if (UserData[index].slice(0,6)==='Writer' && req.body[UserData[index]]) {
+            writers.push(req.body[element])
+        }
+        else if (UserData[index].slice(0,8)==='category') {
+            categories.push(UserData[index].slice(8,))
+        }
+    });    
+
+    // console.log(writers)
+    // console.log(categories)
+
+    model.addBookToDb(req.body.isbn, req.body.title, req.body.publisher, req.body.version,
+                    req.body.year, req.body.ddc, req.body.pages, (err, users, duplicate) => {
+        if (err) {
+            res.send(err);
+        }
+        if (duplicate) {
+            if (req.session.admin) res.render('admin', {alert:'Υπάρχει ήδη', style: ["admin"], partialContext: {name:'Admin', admin:true}, loggedin:true});
+            else res.render('staff', {alert:'Υπάρχει ήδη', style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
+        }
+        else if (writers.length+categories.length>0){
+            model.addBookCategoriesAndWriters(req.body.isbn, writers, [], (err, result) => {
+                if (err) {
+                    res.send(err);
+                }
+                model.addBookCategoriesAndWriters(req.body.isbn, [], categories, (err, result) => {
+                    if (err) {
+                        res.send(err);
+                    }
+    
+                    if (req.session.admin) res.render('admin', {alert:'Επιτυχής καταχώρηση', style: ["admin"], partialContext: {name:'Admin', admin:true}, loggedin:true});
+                    else
+                        res.redirect(`/book/${req.body.isbn}`);
+                })
+            })
+        }
+        else {
+            if (req.session.admin) res.render('admin', {alert:'Επιτυχής καταχώρηση', style: ["admin"], partialContext: {name:'Admin', admin:true}, loggedin:true});
+            else
+                res.redirect(`/book/${req.body.isbn}`);
+        }
+        
+
+    })
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+////////////////
+//    ADMIN   //
+////////////////
 
 exports.doAdminLogin = function (req, res) {
 
@@ -772,6 +863,18 @@ exports.checkAdminAuthenticated = function (req, res, next) {
     }
     else {
         res.redirect('/admin-login');
+    }
+}
+
+exports.checkStaffOrAdminAuthenticated = function (req, res, next) {
+    //Αν η μεταβλητή συνεδρίας έχει τεθεί, τότε ο χρήστης είναι συνεδεμένος
+        // console.log("🚀 ~ file: library-network-controller.js ~ line 475 ~ req.originalUrl", req.session)
+    if (req.session.loggedLibraryId || req.session.admin){
+        //Καλεί τον επόμενο χειριστή (handler) του αιτήματος
+        next();
+    }
+    else {
+        res.redirect('/staff-login');
     }
 }
 

@@ -54,33 +54,33 @@
       <!-- <span>Όνομα :</span> -->
         <div style="flex-grow: 1;">
           <h5>
-            <label for="isbn">ISBN: </label>
-            <input type="text" name="isbn" id="isbn" placeholder="Εισάγετε το ISBN" required>
+            <label for="isbn">ISBN: <input type="text" name="isbn" id="isbn" placeholder="Εισάγετε το ISBN" required></label>
+            
           </h5>
           <h5>
-            <label for="title">Τίτλος: </label>
-            <input type="text" name="title" id="title" placeholder="Εισάγετε τον τίτλο" required>
+            <label for="title">Τίτλος: <input type="text" name="title" id="title" placeholder="Εισάγετε τον τίτλο" required></label>
+            
           </h5>
           <h5>
-            <label for="version">Έκδοση: </label>
-            <input type="text" name="version" id="version" placeholder="Έκδοση">
+            <label for="version">Έκδοση: <input type="text" name="version" id="version" placeholder="Έκδοση"></label>
+           
           </h5>
           <h5>
-            <label for="year">Έτος έκδοσης: </label>
-            <input type="text" name="year" id="year" placeholder="Έτος">
+            <label for="year">Έτος έκδοσης: <input type="text" name="year" id="year" placeholder="Έτος"></label>
+            
           </h5>
 
           <h5 style="display: flex;">
             <label for="writers-1" style="margin-top: 0.7em;">Συγγραφείς:&nbsp;</label>
             <div id="writers" style="display: grid; row-gap: 0.2em;">
               <input type="text" name="writers-1" id="writers-1" placeholder="Συγγραφέας" style="width: 7.6em;">
-              <button class="reserve-btn" id="add-writer" style="width: 100%; font-size: medium; width: 9.45em">Προσθήκη</button>
+              <button class="reserve-btn" id="add-writer" type="button" style="width: 100%; font-size: medium; width: 9.45em">Προσθήκη</button>
             </div>
           </h5>
 
           <h5>
-            <label for="publisher">Εκδοτικός οίκος: </label>
-            <input type="text" name="publisher" id="publisher" placeholder="Εισάγετε τον εκδοτικό οίκο">
+            <label for="publisher">Εκδοτικός οίκος: <input type="text" name="publisher" id="publisher" placeholder="Εισάγετε τον εκδοτικό οίκο"></label>
+            
           </h5>
 
 
@@ -107,26 +107,26 @@
           
 
           <h5>
-            <label for="page-num">Αριθμός σελίδων: </label>
-            <input type="number" name="page-num" id="page-num" min="0">
+            <label for="page-num">Αριθμός σελίδων: <input type="number" name="page-num" id="page-num" min="0"></label>
+            
           </h5>
 
           <h5>
-            <label for="ddc">Ταξινομικός αριθμός (DDC): </label>
-            <input type="text" name="ddc" id="ddc" placeholder="Εισάγετε τον ταξινομικό αριθμό">
-          </h5>
-
-
-          <h5>
-            <label for="cover">Εισάγετε το εξώφυλλο:</label>
-            <input type="file" id="cover" name="cover" accept="image/png, image/jpeg">
+            <label for="ddc">Ταξινομικός αριθμός (DDC): <input type="text" name="ddc" id="ddc" placeholder="Εισάγετε τον ταξινομικό αριθμό"></label>
+            
           </h5>
 
 
           <h5>
+            <label for="cover">Εισάγετε το εξώφυλλο: <input type="file" id="cover" name="cover" accept="image/png, image/jpeg"></label>
+            
+          </h5>
+
+
+          <!-- <h5>
             <label for="descr">Εισάγετε την περιγραφή:</label>
             <textarea type="textarea" id="descr" name="descr" rows="3" style="width: 19.285em;"></textarea>
-          </h5>
+          </h5> -->
 
           
 
@@ -145,7 +145,7 @@
 
         </div>
         <div style="display: grid; margin-left: auto; margin-right: 5%; align-items: center;">
-          <button class="edit-btn reserve-btn" style="height: 5em; font-size: 1.3em; margin-right: 1em;">Αποθήκευση</button>
+          <button class="edit-btn reserve-btn" type="submit" style="height: 5em; font-size: 1.3em; margin-right: 1em;">Αποθήκευση</button>
           <!-- <button class="edit-btn reserve-btn">Διαγραφή</button> -->
         </div>
 
