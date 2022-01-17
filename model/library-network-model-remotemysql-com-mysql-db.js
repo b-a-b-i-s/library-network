@@ -144,10 +144,10 @@ exports.registerUser = async function (username, lastname, email, password, phon
 exports.getLibrariesAndQtt  = function(req, callback) { 
 
 	const query = {
-		sql: `SELECT * FROM (
-			SELECT Βιβλιοθήκη_τώρα,Οδός, Πόλη, ΤΚ, Όνομα, SUM(Ποσότητα) as book_sum
+		sql: `SELECT Βιβλιοθήκη.Κωδικός_Βιβλιοθήκης, Όνομα, IFNULL(book_sum,0) as book_sum, Οδός, Πόλη, ΤΚ, Τηλέφωνο_Βιβλ FROM (
+			SELECT Βιβλιοθήκη_τώρα, SUM(Ποσότητα) as book_sum
 			FROM (
-			SELECT new_t.ISBN, new_t.Βιβλιοθήκη_τώρα,Βιβλιοθήκη.Οδός, Βιβλιοθήκη.Πόλη, Βιβλιοθήκη.ΤΚ, Όνομα, COUNT(*) as Ποσότητα
+			SELECT new_t.ISBN, new_t.Βιβλιοθήκη_τώρα, COUNT(*) as Ποσότητα
 				FROM
 				(SELECT all_books.ISBN, all_books.Αριθμός_αντιτύπου, all_books.Κωδικός_Βιβλιοθήκης,
 				CASE 
@@ -196,8 +196,8 @@ exports.getLibrariesAndQtt  = function(req, callback) {
 				GROUP BY new_t.ISBN, new_t.Βιβλιοθήκη_τώρα
 		) as book_locs 
 		GROUP BY Βιβλιοθήκη_τώρα
-		) as books_sums LEFT OUTER JOIN Αρ_Τηλ_Βιβλιοθήκης ON Κωδικός_Βιβλιοθήκης=Βιβλιοθήκη_τώρα
-		ORDER BY Βιβλιοθήκη_τώρα`
+		) as books_sums RIGHT OUTER JOIN Βιβλιοθήκη ON books_sums.Βιβλιοθήκη_τώρα=Βιβλιοθήκη.Κωδικός_Βιβλιοθήκης LEFT OUTER JOIN Αρ_Τηλ_Βιβλιοθήκης ON Αρ_Τηλ_Βιβλιοθήκης.Κωδικός_Βιβλιοθήκης=Βιβλιοθήκη.Κωδικός_Βιβλιοθήκης
+		ORDER BY Βιβλιοθήκη.Κωδικός_Βιβλιοθήκης`
 	}
 
 	sql.query(query, (err, res) => {
@@ -712,3 +712,121 @@ exports.removeCategory  = function(id, callback) {
 		callback(null, res)
 	})
 };
+
+
+exports.newLibrary  = async function(libName, street, town, zip, phonesArray, password, callback) { 
+
+	try {
+		const hashedPassword = await bcrypt.hash(password, 10);
+		sql.query('INSERT INTO `Βιβλιοθήκη` (`Κωδικός_Βιβλιοθήκης`, `Όνομα`, `Οδός`, `ΤΚ`, `Πόλη`, `Κωδικός_πρόσβασης`) \
+		VALUES (NULL, ?, ?, ?, ?, ?);', [libName,street, zip, town,hashedPassword], (err, results) => {
+			if (err) {
+				console.log(err.stack)
+				callback(err.stack)
+			}
+            
+			let query = 'INSERT INTO `Αρ_Τηλ_Βιβλιοθήκης` (`Κωδικός_Βιβλιοθήκης`, `Τηλέφωνο_Βιβλ`) VALUES ';
+
+			for (let index = 0; index < phonesArray.length; index++) {
+				if (index==0) query += '('+results.insertId+', ?)';
+				else		query += ',('+results.insertId+', ?)';
+			}
+			query += ';';
+			console.log(query)
+
+			sql.query(query, phonesArray, (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+				// console.log('results')
+				// console.log(res)
+				
+				callback(null, res)
+			})
+		})
+	} catch (error) {
+		callback(error);
+	}
+};
+
+
+exports.deleteLibrary  = function(id, callback) { 
+
+	sql.query('DELETE FROM `Βιβλιοθήκη` \
+			   WHERE `Βιβλιοθήκη`.`Κωδικός_Βιβλιοθήκης` = ?;', id, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		// console.log('results')
+		// console.log(res)
+		
+		callback(null, res)
+	})
+};
+
+
+exports.getSingleLibrary  = function(id, callback) { 
+
+	sql.query('SELECT * FROM Βιβλιοθήκη NATURAL JOIN Αρ_Τηλ_Βιβλιοθήκης\
+			   WHERE Βιβλιοθήκη.Κωδικός_Βιβλιοθήκης = ?;', id, (err, res) => {
+    //   console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 774 ~ res", res)
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		// console.log('results')
+		// console.log(res)
+		
+		callback(null, res)
+	})
+};
+
+
+
+exports.editLibrary  = async function(libName, street, town, zip, phonesArray, id, callback) { 
+
+	sql.query('UPDATE Βιβλιοθήκη \
+			SET Όνομα=?, Οδός=?, ΤΚ=?, Πόλη=? \
+			WHERE Κωδικός_Βιβλιοθήκης=?;', 
+			[libName,street, zip, town, id], (err, results) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+
+		sql.query('DELETE FROM `Αρ_Τηλ_Βιβλιοθήκης` \
+		WHERE `Αρ_Τηλ_Βιβλιοθήκης`.`Κωδικός_Βιβλιοθήκης` = ?', id, (err, res) => {
+			if (err) {
+				console.log(err.stack)
+				callback(err.stack)
+			}
+			// console.log('results')
+			// console.log(res)
+			let query = 'INSERT INTO `Αρ_Τηλ_Βιβλιοθήκης` (`Κωδικός_Βιβλιοθήκης`, `Τηλέφωνο_Βιβλ`) VALUES ';
+                console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 810 ~ exports.editLibrary=function ~ phonesArray", phonesArray)
+
+			for (let index = 0; index < phonesArray.length; index++) {
+				if (index==0) query += '('+id+', ?)';
+				else		query += ',('+id+', ?)';
+			}
+			query += ';';
+			console.log(query)
+
+			sql.query(query, phonesArray, (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+				// console.log('results')
+				// console.log(res)
+				
+				callback(null, res)
+			})	
+		})            
+			
+	})
+};
+
+

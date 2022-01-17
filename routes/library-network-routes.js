@@ -34,11 +34,12 @@ router.post('/book/:ISBN', libraryController.newReservation)
 
 // router.get('/mymeetings', meetMeController.checkAuthenticated, meetMeController.showMyMeetings);
 
-router.get('/', libraryController.checkAuthenticated, (req, res) => res.render('home', {style: ["home"]}))
+router.get('/', libraryController.renderHome)
 
-router.get('/staff',libraryController.renderLibrariesLogin)//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
+router.get('/staff-login', libraryController.renderLibrariesLogin)
+router.get('/staff', libraryController.checkStaffAuthenticated, (req,res)=> res.render('staff', {style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true}))//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
 
-// router.post('/staff-login',libraryController.doStaffLogin)//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
+router.post('/staff-login',libraryController.doStaffLogin)//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
 
 router.get('/admin-login', (req, res) => res.render('admin-login', {style: ["admin", 'admin-login'], loggedin:false}))
 
@@ -51,6 +52,10 @@ router.post('/categories/add', libraryController.checkAdminAuthenticated, librar
 router.get('/category/remove/:id', libraryController.checkAdminAuthenticated, libraryController.removeCategory)
 
 router.get('/libraries-admin', libraryController.checkAdminAuthenticated, libraryController.renderAdminLibraries)
+router.post('/libraries-admin', libraryController.checkAdminAuthenticated, libraryController.newLibrary)
+router.get('/libraries-admin/:id', libraryController.checkAdminAuthenticated, libraryController.getSingleLibrary)
+router.post('/libraries-admin/:id', libraryController.checkAdminAuthenticated, libraryController.editLibrary)
+router.get('/libraries-admin/delete/:id', libraryController.checkAdminAuthenticated, libraryController.deleteLibrary)
 
 //log in-------------------------------------------------------------------------------------------------
 router.post('/login', libraryController.doLogin);

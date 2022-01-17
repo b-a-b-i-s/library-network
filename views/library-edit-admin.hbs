@@ -1,0 +1,73 @@
+
+
+  <div class="main-page-libraries">
+    <h1>{{library.Όνομα}} [{{library.Κωδικός_Βιβλιοθήκης}}]</h1>
+    <div>
+      <!-- Οι βιβλιοθήκες που μπορείτε να επισκεφτείτε.<div class=""></div> -->
+    </div>
+    <hr>
+    <!-- <br> -->
+
+    <form class="libraries" style="background-color: #abbed1;" method="POST" action="">
+      <!-- <span>Όνομα :</span> -->
+      <fieldset class="library-edit" style="background-color: #abbed1;">
+        <div>
+          <h4>
+            <label for="lib-name">Όνομα: <input type="text" name="libName" id="lib-name" value="{{library.Όνομα}}" style="width: 20em;"></label>
+            
+          </h4>
+          <!-- <br> -->
+          <h5 style="display: flex;">
+            <label for="lib-address-street" style="margin-top: 0.7em;">Διεύθυνση:&nbsp</label>
+            <div class="address-edit">
+              <label for="lib-address-street">Οδός:&nbsp</label>
+              <input type="text" name="street" id="lib-address-street" value="{{library.Οδός}}" style="width: 20em;">
+              <label for="lib-address-town">Πόλη:&nbsp</label>
+              <input type="text" name="town" id="lib-address-town" value="{{library.Πόλη}}" style="width: 10em;">
+              <label for="lib-address-zip">ΤΚ:&nbsp</label>
+              <input type="text" name="zip" id="lib-address-zip" value="{{library.ΤΚ}}" style="width: 4em;">
+
+            </div>
+            
+          </h5>
+          <h5 style="display: flex;">
+            <label for="lib-phone-1" style="margin-top: 0.7em;">Τηλέφωνα:&nbsp;</label>
+            <div id="phones" style="display: grid; row-gap: 0.2em;">
+              <input type="text" name="LibPhone1" id="lib-phone-1" value="{{phone0}}" style="width: 7.6em;">
+              {{#each phones}}
+              <div class="extra-phone" id="phone-div-{{this.id}}">
+                <input type="text" name="LibPhone{{this.id}}" id="lib-phone-{{this.id}}" value="{{this.phone}}" style="width: 7.6em;">
+                <i class="fas fa-times delete-phone" id="x{{this.id}}"></i>
+              </div>
+              {{/each}}
+              
+              <button class="reserve-btn" id="add-phone" type="button" style="width: 100%; font-size: medium; width: 9.45em">Προσθήκη</button>
+            </div>
+          </h5>
+          <!-- <div style="display: flex;">
+            <h5>Τηλέφωνο/α:</h5>
+            <div style="display: grid;">
+              <h5><span class="phone" style="font-size: medium;">2610123456</span></h5>
+              <h5><span class="phone" style="font-size: medium;">6978945612</span></h5>
+            </div>
+          </div> -->
+          
+
+        </div>
+        <div style="display: grid; margin-left: auto; margin-right: 5%; align-items: center;">
+          <button class="edit-btn reserve-btn" type="submit" style="height: 5em; font-size: 1.3em; margin-right: 1em;">Αποθήκευση</button>
+          <!-- <button class="edit-btn reserve-btn">Διαγραφή</button> -->
+        </div>
+      </fieldset>
+
+
+    </form>
+    <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+    <script src="/js/libraries-admin-1.js"></script>
+</body>
+
+</html>
