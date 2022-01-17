@@ -10,7 +10,7 @@ document.querySelector('#add-writer').addEventListener('click', function(el) {
     console.log(newId)
     const newWriter = document.createElement('div');
     newWriter.innerHTML = `
-        <input type="text" name="writers-${newId}" id="writers-${newId}" placeholder="Συγγραφέας" style="width: 7.6em;">
+        <input type="text" name="Writer${newId}" id="writers-${newId}" placeholder="Συγγραφέας" style="width: 7.6em;">
         <i class="fas fa-times delete-writer" id="x${newId}"></i>`;
     newWriter.id = `writer-div-${newId}`
     newWriter.classList.add("extra-writer");

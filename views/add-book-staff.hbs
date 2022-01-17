@@ -1,0 +1,147 @@
+
+  <div class="main-page-add-book-staff">
+    <h1>Προσθήκη νέου βιβλίου</h1>
+    <div>
+      <!-- Οι βιβλιοθήκες που μπορείτε να επισκεφτείτε.<div class=""></div> -->
+    </div>
+    <hr>
+    <!-- <br> -->
+
+    <form class="add-book-staff" method="post" action="">
+      <fieldset>
+
+      
+      <!-- <span>Όνομα :</span> -->
+        <div style="flex-grow: 1;">
+          <h5>
+            <label for="isbn">ISBN: <input type="text" name="isbn" id="isbn" placeholder="Εισάγετε το ISBN" required></label>
+            
+          </h5>
+          <h5>
+            <label for="title">Τίτλος: <input type="text" name="title" id="title" placeholder="Εισάγετε τον τίτλο" required></label>
+            
+          </h5>
+          <h5>
+            <label for="version">Έκδοση: <input type="text" name="version" id="version" placeholder="Έκδοση"></label>
+           
+          </h5>
+          <h5>
+            <label for="year">Έτος έκδοσης: <input type="text" name="year" id="year" placeholder="Έτος"></label>
+            
+          </h5>
+
+          <h5 style="display: flex;">
+            <label for="writers-1" style="margin-top: 0.7em;">Συγγραφείς:&nbsp;</label>
+            <div id="writers" style="display: grid; row-gap: 0.2em;">
+              <input type="text" name="Writer1" id="writers-1" placeholder="Συγγραφέας" style="width: 7.6em;">
+              <button class="reserve-btn" id="add-writer" type="button" style="width: 100%; font-size: medium; width: 9.45em">Προσθήκη</button>
+            </div>
+          </h5>
+
+          <h5>
+            <label for="publisher">Εκδοτικός οίκος: <input type="text" name="publisher" id="publisher" placeholder="Εισάγετε τον εκδοτικό οίκο"></label>
+            
+          </h5>
+
+
+          <div style="display: flex; margin-bottom: 0.5rem;">
+            <h5>
+              <label for="categories">Κατηγορίες:&nbsp</label>
+            </h5>
+            <div id="list1" class="dropdown-check-list" tabindex="100">
+              <span class="anchor" id="anchor">Επιλέξτε κατηγορίες</span>
+              <ul style="max-height: 10em; overflow: auto;" class="items" id="categories">
+                {{#each categories}}
+                  <li><label for="cat{{this.Κωδικός}}"><input type="checkbox" name="category{{this.Κωδικός}}" id="cat{{this.Κωδικός}}" value="{{this.Κωδικός}}"/> {{this.Όνομα}}</label></li>
+                {{/each}}
+                  
+                  
+                  <!-- let checkboxes = document.querySelectorAll('input[name="category"]:checked'); -->
+
+
+              
+              </ul>
+            </div>
+          </div>
+          
+
+          
+
+          <h5>
+            <label for="page-num">Αριθμός σελίδων: <input type="number" name="pages" id="page-num" min="0"></label>
+            
+          </h5>
+
+          <h5>
+            <label for="ddc">Ταξινομικός αριθμός (DDC): <input type="text" name="ddc" id="ddc" placeholder="Εισάγετε τον ταξινομικό αριθμό"></label>
+            
+          </h5>
+
+
+          <h5>
+            <label for="cover">Εισάγετε το εξώφυλλο: <input type="file" id="cover" name="cover" accept="image/png, image/jpeg"></label>
+            
+          </h5>
+
+
+          <!-- <h5>
+            <label for="descr">Εισάγετε την περιγραφή:</label>
+            <textarea type="textarea" id="descr" name="descr" rows="3" style="width: 19.285em;"></textarea>
+          </h5> -->
+
+          
+
+          
+          <!-- <br> -->
+          
+          
+          <!-- <div style="display: flex;">
+            <h5>Τηλέφωνο/α:</h5>
+            <div style="display: grid;">
+              <h5><span class="phone" style="font-size: medium;">2610123456</span></h5>
+              <h5><span class="phone" style="font-size: medium;">6978945612</span></h5>
+            </div>
+          </div> -->
+          
+
+        </div>
+        <div style="display: grid; margin-left: auto; margin-right: 5%; align-items: center;">
+          <button class="edit-btn reserve-btn" type="submit" style="height: 5em; font-size: 1.3em; margin-right: 1em;">Αποθήκευση</button>
+          <!-- <button class="edit-btn reserve-btn">Διαγραφή</button> -->
+        </div>
+
+      </fieldset>
+    </form>
+    <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+  <script src="js/add-book-staff.js"></script>
+
+  <script>
+    const checkList = document.getElementById('list1');
+    checkList.querySelector('#anchor').onclick = function(evt) {
+    if (checkList.classList.contains('visible'))
+        checkList.classList.remove('visible');
+    else
+        checkList.classList.add('visible');
+    }
+
+    // document.querySelector("#select-all").addEventListener('change', function() {
+    //     let categoryItems = document.querySelectorAll('input[name="category"]')
+    //     if (categoryItems[0].checked) {
+    //         // for (let i = 0; i<a.length)
+    //         categoryItems.forEach(function(item) {
+    //             item.checked = true
+    //         })
+    //     }
+    //     else {
+    //         categoryItems.forEach(function(item) {
+    //             item.checked = false
+    //         })
+    //     }
+    // })
+
+
+</script>

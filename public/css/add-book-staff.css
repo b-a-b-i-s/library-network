@@ -219,9 +219,9 @@ form , fieldset {
     width: initial;
     padding: initial;
     margin: initial;
-    border: initial;
+    border: 0;
     border-radius: initial;
-    transition: initial;
+    transition: 0;
     margin-left: 5px;
     /* background-color: white; */
 }
@@ -248,11 +248,10 @@ form , fieldset {
 
 
 
-
 .add-book-staff input[type="checkbox"]:focus {
-    border: 0;
-    outline: none; 
-    box-shadow: 0;
+    border: 0 !important;
+    outline: none !important; 
+    box-shadow: 0 !important;
     border-radius: 0;
 }
     

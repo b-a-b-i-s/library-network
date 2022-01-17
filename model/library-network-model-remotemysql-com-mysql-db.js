@@ -618,8 +618,9 @@ exports.getBookCategories  = function(req, callback) {
 
 
 
-
-// STAFF
+/////////////////
+//    STAFF    //
+/////////////////
 
 exports.getLibrariesNoPhone  = function(req, callback) { 
 
@@ -640,6 +641,104 @@ exports.getLibrariesNoPhone  = function(req, callback) {
 	})
 };
 
+exports.addBookToDb  = function(isbn, title, publisher, version, year, ddc, pages, callback) { 
+	if (publisher=='') publisher = null;
+	if (version=='') version = null;
+	if (year=='') year = null;
+	if (ddc=='') ddc = null;
+	if (pages=='') pages = null;
+
+	let query = 'INSERT INTO `Έντυπο` (`ISBN`, `Τίτλος`, `Εκδοτικός_οίκος`, `Έκδοση`, `Ημερομηνία_Έκδοσης`, `DDC`, `Σελίδες`) \
+	VALUES (?, ?, ?, ?, ?, ?, ?)';
+
+
+	// console.log('bef', categories)
+	
+	
+	sql.query('SELECT * FROM Έντυπο WHERE ISBN=?', 
+		[isbn], (err, res) => {
+			if (err) {
+				console.log(err.stack)
+				callback(err.stack)
+			}
+
+            // console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 666 ~ res", res)
+
+			if (res[0]) {
+				callback(null, null, 1)
+			}
+			else{
+				sql.query(query, 
+					[isbn, title, publisher, version, year, ddc, pages], (err, res) => {
+						if (err) {
+							console.log(err.stack)
+							callback(err.stack)
+						}
+						// console.log('results')
+						// console.log(res)
+						
+						callback(null, res)
+					})
+			}
+			// console.log('results')
+			// console.log(res)			
+		})
+
+	
+};
+
+
+exports.addBookCategoriesAndWriters  = function(isbn, writers, categories, callback) { 
+
+	let query1;
+
+	for (let index = 0; index < writers.length; index++) {
+		if (index==0) query1 = 'INSERT INTO `Συγγραφείς` (`Συγγραφέας`, `ISBN`) VALUES (?, '+isbn+')';
+		else 			query1 += ',(?, '+isbn+')';
+	}
+
+	let query2;
+
+	for (let index = 0; index < categories.length; index++) {
+		if (index==0) query2 = 'INSERT INTO `Περιλαμβλανει` (`ISBN`, `Κατηγορία`) VALUES ('+isbn+', ?)';
+		else 			query2 += ',('+isbn+', ?)';
+	}
+
+	// console.log(query2)
+
+
+	// console.log('bef', categories)
+	if (query1) {
+		sql.query(query1, 
+			writers, (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+
+				callback(null, res)
+				// console.log('results')
+				// console.log(res)
+				
+			})
+	}
+	else if (query2){
+		sql.query(query2, 
+			categories, (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+				// console.log('results')
+				// console.log(res)
+				
+				callback(null, res)
+			})
+	}
+	else {
+		callback(null,null)
+	}
+};
 
 
 
@@ -647,7 +746,18 @@ exports.getLibrariesNoPhone  = function(req, callback) {
 
 
 
-// ADMIN
+
+
+
+
+
+
+
+
+
+////////////////
+//   ADMIN    //
+////////////////
 
 exports.getCategories  = function(req, callback) { 
 
