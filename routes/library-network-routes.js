@@ -46,11 +46,11 @@ router.post('/add-book-staff', libraryController.checkStaffOrAdminAuthenticated,
 
 
 
-router.get('/admin-login', (req, res) => res.render('admin-login', {style: ["admin", 'admin-login'], loggedin:false}))
+router.get('/admin-login', (req, res) => res.render('admin-login', {style: ["admin", 'admin-login'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:req.session.loggedUserId||req.session.loggedLibraryId}))
 
 router.post('/admin-login', libraryController.doAdminLogin)
 
-router.get('/admin', libraryController.checkAdminAuthenticated, (req, res) => res.render('admin', {style: ["admin"], partialContext: {name:'Admin', admin:true}, loggedin:true}))
+router.get('/admin', libraryController.checkAdminAuthenticated, (req, res) => res.render('admin', {style: ["staff"], partialContext: {name:'Admin', admin:true}, loggedin:true}))
 
 router.get('/categories-admin', libraryController.checkAdminAuthenticated, libraryController.renderCategories)
 router.post('/categories/add', libraryController.checkAdminAuthenticated, libraryController.addCategories)

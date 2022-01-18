@@ -32,7 +32,7 @@ app.use(session({
 }));
 
 app.use((req, res, next) => {
-  res.locals.userId = req.session.loggedUserId;
+  // res.locals.userId = req.session.loggedUserId;
   next();
 })
 
