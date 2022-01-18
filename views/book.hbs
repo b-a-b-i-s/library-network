@@ -57,16 +57,8 @@
                 <span><strong>Έτος έκδοσης: </strong></span><span>{{book.Εκδοτικός_οίκος}}</span><br>
                 <span><strong>Εκδοτικός οίκος: </strong></span><span>{{book.Ημερομηνία_Έκδοσης}}</span><br>
                 <span><strong>ISBN: </strong></span>{{book.ISBN}}<span></span><br>
-                {{#if book.Σελίδες}}
                 <span><strong>Αριθμός σελίδων: </strong></span>{{book.Σελίδες}}<span></span><br>
-                {{else}}
-                <br><br>
-                {{/if}}
-                {{#if book.DDC}}
                 <span><strong>DDC: </strong></span>{{book.DDC}}<span></span><br>
-                {{else}}
-                <br><br>
-                {{/if}}
                  
                  
             </div>
@@ -83,6 +75,7 @@
                             {{this.Όνομα}}
                     {{/each}}
                     </span><br><br>
+                    <span><strong>Συνολικά αντίτυπα: </strong></span>{{total_books_count}}<span></span><br>
                 <div style="display: flex; gap: 0.5em;">
                     <span><strong>Διαθεσιμότητα:</strong></span>
                     <div>

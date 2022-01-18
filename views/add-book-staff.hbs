@@ -7,14 +7,14 @@
     <hr>
     <!-- <br> -->
 
-    <form class="add-book-staff" method="post" action="">
+    <form class="add-book-staff" method="post" action="" enctype="multipart/form-data">
       <fieldset>
 
       
       <!-- <span>Όνομα :</span> -->
         <div style="flex-grow: 1;">
           <h5>
-            <label for="isbn">ISBN: <input type="text" name="isbn" id="isbn" placeholder="Εισάγετε το ISBN" required></label>
+            <label for="isbn">ISBN: <input type="text" name="isbn" id="isbn" maxlength="13" placeholder="Εισάγετε το ISBN" required></label>
             
           </h5>
           <h5>
@@ -79,7 +79,7 @@
 
 
           <h5>
-            <label for="cover">Εισάγετε το εξώφυλλο: <input type="file" id="cover" name="cover" accept="image/png, image/jpeg"></label>
+            <label for="cover">Εισάγετε το εξώφυλλο: <input type="file" id="cover" name="filetoupload" accept="image/png, image/jpeg"></label>
             
           </h5>
 

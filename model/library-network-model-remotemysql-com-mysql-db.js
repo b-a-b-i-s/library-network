@@ -34,8 +34,8 @@ function makeid(length) {
 exports.getUser = (userInfo, callback) => {
 
 	sql.query('SELECT Όνομα, Επίθετο, Κωδικός_μέλους, email, Αρ_Τηλ, Κωδικός_πρόσβασης\
-	FROM Μέλος LEFT OUTER JOIN Τηλ_Μέλους ON Κωδικός_μέλους=ID_μέλους\
-	WHERE email=? OR Αρ_Τηλ=?\
+			   FROM Μέλος LEFT OUTER JOIN Τηλ_Μέλους ON Κωδικός_μέλους=ID_μέλους\
+			   WHERE email=? OR Αρ_Τηλ=?\
 	', [userInfo, userInfo], (err, res) => {
 				if (err) {
 					console.log(err.stack)
@@ -58,7 +58,7 @@ exports.getAllUsers = function (req, callback) {
     // ελέγχουμε αν υπάρχει χρήστης με αυτό το username
 	const query = {
 		sql: 'SELECT email, Αρ_Τηλ\
-		FROM Μέλος LEFT OUTER JOIN Τηλ_Μέλους ON Κωδικός_μέλους=ID_μέλους'
+			  FROM Μέλος LEFT OUTER JOIN Τηλ_Μέλους ON Κωδικός_μέλους=ID_μέλους'
 	}
 	sql.query(query, (err, res) => {
 			if (err) {
@@ -86,8 +86,8 @@ exports.registerUser = async function (username, lastname, email, password, phon
 	try {
 		const hashedPassword = await bcrypt.hash(password, 10);
 		sql.query('INSERT INTO `Μέλος` (`Κωδικός_μέλους`, `Όνομα`, `Επίθετο`, `Οδός`, `Πόλη`, `ΤΚ`, \
-		`Ημερομηνία_Εγγραφής`, `email`, `Κωδικός_πρόσβασης`) \
-		VALUES (NULL, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?);',
+					`Ημερομηνία_Εγγραφής`, `email`, `Κωδικός_πρόσβασης`) \
+					VALUES (NULL, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP, ?, ?);',
 		 [username, lastname, newstreet, newtown, newzip, newemail, hashedPassword] , (err, results) => {
 			if (err) {
 				console.log(err.stack)
@@ -111,10 +111,6 @@ exports.registerUser = async function (username, lastname, email, password, phon
 						console.log(err.stack)
 						callback(err.stack)
 					}
-					// console.log('results')
-					// console.log(res)
-					// console.log('rows')
-					// console.log(res.rows)
 					
 					callback(null, res)
 				})
@@ -142,7 +138,7 @@ exports.registerUser = async function (username, lastname, email, password, phon
 
 
 exports.getLibrariesAndQtt  = function(req, callback) { 
-
+	// Ανακτούνται οι βιβλιοθήκες και το πλήθος διαθεσιμων βιβλιων
 	const query = {
 		sql: `SELECT Βιβλιοθήκη.Κωδικός_Βιβλιοθήκης, Όνομα, IFNULL(book_sum,0) as book_sum, Οδός, Πόλη, ΤΚ, Τηλέφωνο_Βιβλ FROM (
 			SELECT Βιβλιοθήκη_τώρα, SUM(Ποσότητα) as book_sum
@@ -153,10 +149,6 @@ exports.getLibrariesAndQtt  = function(req, callback) {
 				CASE 
 					WHEN (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NULL) THEN Κωδικός_Βιβλιοθήκης
 					WHEN (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NULL) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής
-				--    	CASE 
-				--        	WHEN (Βιβλιοθήκη_καταχώρησης_επιστροφής IS NULL) THEN NULL
-				--        	WHEN (Βιβλιοθήκη_καταχώρησης_επιστροφής IS NOT NULL) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής
-				--        END
 					WHEN (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NOT NULL) THEN 
 						CASE 
 							WHEN (Κατάσταση_παραλαβής=0) THEN NULL
@@ -225,9 +217,9 @@ exports.getLibrariesAndQtt  = function(req, callback) {
 exports.getLibraries  = function(req, callback) { 
 
 	const query = {
-		sql: `SELECT *
-		FROM (Αρ_Τηλ_Βιβλιοθήκης NATURAL JOIN Βιβλιοθήκη)
-		ORDER BY Κωδικός_Βιβλιοθήκης`
+		sql:`SELECT *
+			 FROM (Αρ_Τηλ_Βιβλιοθήκης NATURAL JOIN Βιβλιοθήκη)
+			 ORDER BY Κωδικός_Βιβλιοθήκης`
 	}
 
 	sql.query(query, (err, res) => {
@@ -250,9 +242,9 @@ exports.getLibraries  = function(req, callback) {
 exports.getSubscriptions  = function(req, callback) { 
 
 	const query = {
-		sql: `SELECT *
-		FROM Επιλογές_Συνδρομής
-		ORDER BY Διάρκεια`
+		sql:`SELECT *
+			 FROM Επιλογές_Συνδρομής
+			 ORDER BY Διάρκεια`
 	}
 
 	sql.query(query, (err, res) => {
@@ -273,10 +265,10 @@ exports.getBooks  = function(search, callback) {
 
 
 	if (search){
-		sql.query('SELECT *\
-		FROM Έντυπο LEFT OUTER JOIN Συγγραφείς USING(ISBN)\
-		WHERE ISBN LIKE ? OR Τίτλος LIKE ? OR Συγγραφέας LIKE ?'
-		, [search, search, search], (err, res) => {
+		sql.query(	'SELECT *\
+					FROM Έντυπο LEFT OUTER JOIN Συγγραφείς USING(ISBN)\
+					WHERE ISBN LIKE ? OR Τίτλος LIKE ? OR Συγγραφέας LIKE ?'
+					, [				search, 		search, 			search], (err, res) => {
 			if (err) {
 				console.log(err.stack)
 				callback(err.stack)
@@ -331,9 +323,9 @@ exports.getBooks  = function(search, callback) {
 // };
 
 exports.getLocations  = function(req, callback) { 
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-	// TODO Replace with VIEW μεταξυ των μεγαλων κενών
-	// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	// Βρίσκει που βρίσκεται το κάθε αντίτυπο
+	// Can be replaced with view
+	// 
 
 	const query = {
 		sql: `SELECT all_before_kratiseis.ISBN, all_before_kratiseis.Βιβλιοθήκη_τώρα, Όνομα, Ποσότητα - IFNULL(Κρατήσεις,0) AS Ποσότητα, IFNULL(Κρατήσεις,0) as Κρατήσεις
@@ -405,9 +397,58 @@ exports.getLocations  = function(req, callback) {
 
 };
 
+exports.bookCountAllISBN = function(isbn, callback) { 
 
-exports.getLocationsOfBook  = function(req, callback) { 
-	const isbn = req.params.ISBN;
+
+	// console.log('isbn')
+	// console.log(isbn)
+
+	if (isbn) {
+		const query = ``
+
+
+		sql.query('SELECT ISBN, COUNT(*) as total_books_count\
+				   FROM Έντυπο NATURAL JOIN Αντίτυπο\
+				   WHERE ISBN=?', isbn, (err, res) => {
+			if (err) {
+				console.log(err.stack)
+				callback(err.stack)
+			}
+
+			// console.log('books model')
+
+			// console.log(res)
+			
+			callback(null, res)
+		})
+	}
+	else {
+
+		const query = `SELECT ISBN, COUNT(*) as total_books_count
+					FROM Έντυπο NATURAL JOIN Αντίτυπο
+					GROUP BY ISBN`
+
+
+		sql.query(query, (err, res) => {
+			if (err) {
+				console.log(err.stack)
+				callback(err.stack)
+			}
+
+			// console.log('books model')
+
+			// console.log(res)
+			
+			callback(null, res)
+		})
+	}
+
+};
+
+
+
+exports.getLocationsOfBook  = function(isbn, callback) { 
+	//	Βρίσκει σε ποιες βιβλιοθήκες βρίσκεται ένα βιβλίο
 
 
 	sql.query('SELECT all_before_kratiseis.ISBN, all_before_kratiseis.Βιβλιοθήκη_τώρα, Όνομα, Ποσότητα - IFNULL(Κρατήσεις,0) AS Ποσότητα, IFNULL(Κρατήσεις,0) as Κρατήσεις\
@@ -470,7 +511,7 @@ exports.getLocationsOfBook  = function(req, callback) {
 			console.log(err.stack)
 			callback(err.stack)
 		}
-		// console.log(res)
+		console.log(res)
 		
 		callback(null, res)
 	})
@@ -490,8 +531,8 @@ exports.getBook  = function(req, callback) {
 
 
 	sql.query('SELECT * \
-	FROM Έντυπο LEFT OUTER JOIN Συγγραφείς USING(ISBN) \
-	WHERE ISBN=?;', isbn, (err, res) => {
+			FROM Έντυπο LEFT OUTER JOIN Συγγραφείς USING(ISBN) \
+			WHERE ISBN=?;', isbn, (err, res) => {
 		if (err) {
 			console.log(err.stack)
 			callback(err.stack)
@@ -521,8 +562,8 @@ exports.makeNewReservation  = function(req, callback) {
 
 
 	sql.query('INSERT INTO `Κράτηση` \
-	(`Ημερομηνία_κράτησης`, `Μέλος`, `ISBN`, `Βιβλιοθήκη_κράτησης`, `Κατάσταση_ολοκλήρωσης`) \
-	VALUES (CURRENT_TIMESTAMP, ?, ?, ?, 0);', [userId, isbn, libId] , (err, res) => {
+			   (`Ημερομηνία_κράτησης`, `Μέλος`, `ISBN`, `Βιβλιοθήκη_κράτησης`, `Κατάσταση_ολοκλήρωσης`) \
+			   VALUES (CURRENT_TIMESTAMP, ?, ?, ?, 0);', [userId, isbn, libId] , (err, res) => {
 		if (err) {
 			console.log(err.stack)
 			callback(err.stack)
@@ -539,8 +580,7 @@ exports.makeNewReservation  = function(req, callback) {
 
 
 
-exports.checkForNewReservation  = function(req, callback) {
-	const userId = req.session.loggedUserId;
+exports.checkForNewReservation  = function(userId, callback) {
 
 	// console.log('userId')
 	// console.log(userId)
@@ -570,15 +610,14 @@ exports.checkForNewReservation  = function(req, callback) {
 
 		// console.log('books model')
 
-		console.log(res)
+		// console.log(res)
 		
 		callback(null, res)
 	})
 
 }
 
-exports.getBookCategories  = function(req, callback) {
-	const isbn = req.params.ISBN;
+exports.getBookCategories  = function(isbn, callback) {
 
 	// console.log('isbn')
 	// console.log(isbn)
