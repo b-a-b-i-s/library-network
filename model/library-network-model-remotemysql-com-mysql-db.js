@@ -4,15 +4,6 @@ const sql = require('./db.remotemysql-com-mysql.js');
 const bcrypt = require('bcrypt')
 
 
-function makeid(length) {
-    var result           = [];
-    var characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    var charactersLength = characters.length;
-    for ( var i = 0; i < length; i++ ) {
-    	result.push(characters.charAt(Math.floor(Math.random() * charactersLength)));
-   	}  
-   return result.join('');
-}
 
 
 
@@ -24,12 +15,7 @@ function makeid(length) {
 
 
 
-
-
-
-
-
-//// LOGIN REGISTER ////
+// LOGIN REGISTER //
 
 exports.getUser = (userInfo, callback) => {
 
@@ -46,10 +32,6 @@ exports.getUser = (userInfo, callback) => {
 				}
 			})
 }
-
-
-
-
 
 
 
