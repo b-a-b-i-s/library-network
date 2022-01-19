@@ -241,6 +241,7 @@ exports.getLibraries  = function(req, callback) {
 
 exports.getSubscriptions  = function(req, callback) { 
 
+
 	const query = {
 		sql:`SELECT *
 			 FROM Επιλογές_Συνδρομής
@@ -780,6 +781,136 @@ exports.addBookCategoriesAndWriters  = function(isbn, writers, categories, callb
 };
 
 
+exports.getUserStatus  = function(req, callback) { 
+// `SET time_zone = "+02:00"; αντί για το date_add(NOW(),interval 2 HOUR) -> NOW()
+	const query = {
+		sql:   `SELECT Κωδικός_Μέλους, Όνομα, Επίθετο, email, Ημερομηνία_Εγγραφής, 
+		Κωδ_συνδρομής, Διάρκεια, date_add(Ημερομηνία_έναρξης, interval Διάρκεια MONTH) as Ημερομηνία_λήξης, 
+		Διάρκεια_δανεισμού, date_add(Ημερομηνία_έναρξης, interval Διάρκεια MONTH) > now() as Ενεργή,
+		TIMESTAMPDIFF(DAY,date_add(NOW(),interval 2 HOUR),date_add(Ημερομηνία_έναρξης, interval Διάρκεια MONTH)) as Λήγει_σε, 
+        Όριο_δανεισμών, Όριο_δανεισμών-IFNULL(Δανεισμένα,0) as Νέο_όριο_δανεισμών, IFNULL(Δανεισμένα,0) as Δανεισμένα
+		FROM
+			(SELECT Κωδ_μέλους, max(Ημερομηνία_έναρξης) as Ημερομηνία_έναρξης
+			FROM Συνδρομή JOIN Επιλογές_Συνδρομής ON Συνδρομή.Κωδ_συνδρομής=Επιλογές_Συνδρομής.Κωδικός_συνδρομής
+			GROUP BY Κωδ_μέλους) as syndromes
+			JOIN Συνδρομή USING(Κωδ_μέλους,Ημερομηνία_έναρξης) JOIN Επιλογές_Συνδρομής ON Κωδ_συνδρομής=Κωδικός_συνδρομής 
+			RIGHT OUTER JOIN Μέλος ON Κωδ_μέλους=Κωδικός_Μέλους LEFT OUTER JOIN 
+            (SELECT Κωδικός_μέλους, COUNT(*) as Δανεισμένα
+            FROM Δανεισμός
+            WHERE Ημερομηνία_που_επιστράφηκε is NULL
+            GROUP BY Κωδικός_μέλους) as borrows USING(Κωδικός_μέλους)`
+	}
+
+	// console.log('bef', categories)
+		sql.query(query, (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+
+				callback(null, res)
+				// console.log('results')
+				// console.log(res)
+				
+			})
+
+};
+
+
+exports.getUsersPhones = (userInfo, callback) => {
+
+	const query = {
+		sql: `SELECT *
+			  FROM Τηλ_Μέλους`
+	}
+	sql.query(query, (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+				else {
+					callback(null, res)
+				}
+			})
+}
+
+
+exports.addUserSub = (subId, userId, end_date, callback) => {
+// console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 839 ~ userId", userId)
+// console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 839 ~ subId", subId)
+
+	if (end_date) {
+		sql.query('INSERT INTO `Συνδρομή` (`Αριθμός_συνδρομής`, `Ημερομηνία_έναρξης`, `Κωδ_μέλους`, `Κωδ_συνδρομής`) \
+				VALUES (NULL, ?, ?, ?)', 
+				[end_date, userId, subId], (err, res) => {
+			if (err) {
+				console.log(err.stack)
+				callback(err.stack)
+			}
+			else {
+				callback(null, res)
+			}
+		})
+	}
+	else{
+		sql.query('INSERT INTO `Συνδρομή` (`Αριθμός_συνδρομής`, `Ημερομηνία_έναρξης`, `Κωδ_μέλους`, `Κωδ_συνδρομής`) \
+			VALUES (NULL, CURRENT_TIMESTAMP, ?, ?)', 
+			[userId, subId], (err, res) => {
+			if (err) {
+				console.log(err.stack)
+				callback(err.stack)
+			}
+			else {
+				callback(null, res)
+			}
+		})
+	}
+	
+}
+
+
+exports.checkPaid = (userId, callback) => {
+	
+		sql.query('SELECT count(*) as Χρωστούμενα\
+		FROM Δανεισμός \
+		WHERE Κωδικός_μέλους=? and Ημερομηνία_που_επιστράφηκε is NULL\
+		GROUP BY Κωδικός_μέλους', 
+				   [userId], (err, res) => {
+			if (err) {
+				console.log(err.stack)
+				callback(err.stack)
+			}
+			else {
+				callback(null, res)
+			}
+		})
+}
+
+
+// Έλεγχος αν έχει ήδη συνδρομή ώστε η συνδρομή να επεκτέινει την τωρινή
+exports.getLastSub = (userId, callback) => {
+	
+		sql.query('SELECT max(Ημερομηνία_λήξης) as end_date FROM \
+						(SELECT Κωδ_μέλους,\
+						Κωδ_συνδρομής, Διάρκεια, date_add(Ημερομηνία_έναρξης, interval Διάρκεια MONTH) as Ημερομηνία_λήξης\
+						FROM\
+							(SELECT Κωδ_μέλους, max(Ημερομηνία_έναρξης) as Ημερομηνία_έναρξης\
+							FROM Συνδρομή JOIN Επιλογές_Συνδρομής ON Συνδρομή.Κωδ_συνδρομής=Επιλογές_Συνδρομής.Κωδικός_συνδρομής\
+							WHERE Κωδ_μέλους=?\
+							GROUP BY Κωδ_μέλους) as syndromes\
+							JOIN Συνδρομή USING(Κωδ_μέλους,Ημερομηνία_έναρξης) JOIN Επιλογές_Συνδρομής ON Κωδ_συνδρομής=Κωδικός_συνδρομής) as exp_dates', 
+				   [userId], (err, res) => {
+			if (err) {
+				console.log(err.stack)
+				callback(err.stack)
+			}
+			else {
+				callback(null, res)
+			}
+		})
+	}
+
+
 
 
 
@@ -976,6 +1107,44 @@ exports.editLibrary  = async function(libName, street, town, zip, phonesArray, i
 		})            
 			
 	})
+};
+
+
+
+exports.newSubscription  = function(months, price, maxDays, maxBooks, extraMoney, callback) { 
+
+	sql.query('INSERT INTO `Επιλογές_Συνδρομής` \
+	(`Κωδικός_συνδρομής`, `Διάρκεια`, `Τιμή`, `Διάρκεια_δανεισμού`, `Επιβάρυνση_καθυστέρησης_ασυνέπειας`, `Όριο_δανεισμών`) \
+	VALUES (NULL, ?, ?, ?, ?, ?)', [months, price, maxDays, extraMoney, maxBooks], (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+
+		callback(null,res)
+		
+        
+	})
+	
+};
+
+
+
+exports.deleteSubscription  = function(id, callback) { 
+
+	sql.query('DELETE FROM `Επιλογές_Συνδρομής` \
+			   WHERE `Επιλογές_Συνδρομής`.`Κωδικός_συνδρομής` = ?', 
+	[id], (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+
+		callback(null,res)
+		
+        
+	})
+	
 };
 
 
