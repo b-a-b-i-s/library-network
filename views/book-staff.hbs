@@ -101,37 +101,32 @@
                                 <td>Κρατημένο για τον χρήστη {{this.Μέλος}}</td>
                                 <td><button class="reserve-btn borrow-btn available-btn" onclick=" location.href='/reservation-confirm/{{this.Μέλος}}' ">Δανεισμός</button></td>
                             </tr>
+                            {{else if this.here}}
+                            <tr class="available"></tr>
+                                <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                                <td>Διαθέσιμο για δανεισμό</td>
+                                <td><button class="reserve-btn borrow-btn available-btn" data-book-id="{{this.Αριθμός_αντιτύπου}}" data-book-library-id="{{this.Κωδικός_Βιβλιοθήκης}}">Δανεισμός</button></td>
+                            </tr>
+                            {{else if this.Μεταφέρεται_σε}}
+                            <tr class="not-available">
+                                <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                                <td>Μεταφέρεται στην βιβλιοθήκη [{{this.Μεταφέρεται_σε}}]</td>
+                                <td><button class="reserve-btn borrow-btn disabled" >Επιστροφή</button></td>
+                            </tr>
+                            {{else if this.Δανεισμένο_σε}}
+                            <tr class="not-available">
+                                <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                                <td>Δανεισμένο στον χρήστη {{this.Δανεισμένο_σε}}</td>
+                                <td><button class="reserve-btn borrow-btn to-return-delay" onclick=" location.href='/return/{{../isbn}}/{{this.Αριθμός_αντιτύπου}}/{{this.Κωδικός_Βιβλιοθήκης}}/{{this.Δανεισμένο_σε}}' ">Επιστροφή</button></td>
+                            </tr>
                             {{else}}
-                                {{#if this.here}}
-                                <tr class="available"></tr>
-                                    <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
-                                    <td>Διαθέσιμο για δανεισμό</td>
-                                    <td><button class="reserve-btn borrow-btn available-btn" data-book-id="{{this.Αριθμός_αντιτύπου}}" data-book-library-id="{{this.Κωδικός_Βιβλιοθήκης}}">Δανεισμός</button></td>
-                                </tr>
-                                {{else}}
-                                    {{#if this.Μεταφέρεται_σε}}
-                                    <tr class="not-available">
-                                        <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
-                                        <td>Μεταφέρεται στην βιβλιοθήκη [{{this.Μεταφέρεται_σε}}]</td>
-                                        <td><button class="reserve-btn borrow-btn disabled" >Επιστροφή</button></td>
-                                    </tr>
-                                    {{else}}
-                                        {{#if this.Δανεισμένο_σε}}
-                                        <tr class="not-available">
-                                            <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
-                                            <td>Δανεισμένο στον χρήστη {{this.Δανεισμένο_σε}}</td>
-                                            <td><button class="reserve-btn borrow-btn to-return-delay" onclick=" location.href='/return/{{../isbn}}/{{this.Αριθμός_αντιτύπου}}/{{this.Κωδικός_Βιβλιοθήκης}}/{{this.Δανεισμένο_σε}}' ">Επιστροφή</button></td>
-                                        </tr>
-                                        {{else}}
-                                        <tr class="not-available">
-                                            <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
-                                            <td>{{this.Βιβλιοθήκη_τώρα_όνομα}}</td>
-                                            <td><button class="reserve-btn borrow-btn disabled">Επιστροφή</button></td>
-                                        </tr>                                        
+                            <tr class="not-available">
+                                <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                                <td>{{this.Βιβλιοθήκη_τώρα_όνομα}}</td>
+                                <td><button class="reserve-btn borrow-btn disabled">Επιστροφή</button></td>
+                            </tr>                                        
 
-                                        {{/if}}
-                                    {{/if}}
-                                {{/if}}
+
                             {{/if}}
                         {{/each}}
                     </table>
@@ -165,31 +160,28 @@
                             <td>Κρατημένο για τον χρήστη {{this.Μέλος}}</td>
                             <td><button class="reserve-btn borrow-btn available-btn"   onclick=" location.href='/reservation-confirm/{{this.Μέλος}}' ">Δανεισμός</button></td>
                         </tr>
-                            {{else}}
-                                {{#if this.here}}
+                        {{else if this.here}}
                         <tr class="available"></tr>
                             <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
                             <td>{{this.owner}}</td>
                             <td>Διαθέσιμο για δανεισμό</td>
                             <td><button class="reserve-btn borrow-btn available-btn" data-book-id="{{this.Αριθμός_αντιτύπου}}" data-book-library-id="{{this.Κωδικός_Βιβλιοθήκης}}">Δανεισμός</button></td>
                         </tr>
-                                {{else}}
-                                    {{#if this.Μεταφέρεται_σε}}
+                        {{else if this.Μεταφέρεται_σε}}
                         <tr class="not-available">
                             <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
                             <td>{{this.owner}}</td>
                             <td>Μεταφέρεται στην βιβλιοθήκη [{{this.Μεταφέρεται_σε}}]</td>
                             <td><button class="reserve-btn borrow-btn disabled">Επιστροφή</button></td>
                         </tr>
-                                    {{else}}
-                                        {{#if this.Δανεισμένο_σε}}
+                        {{else if this.Δανεισμένο_σε}}
                         <tr class="not-available">
                             <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
                             <td>{{this.owner}}</td>
                             <td>Δανεισμένο στον χρήστη {{this.Δανεισμένο_σε}}</td>
                             <td><button class="reserve-btn borrow-btn to-return-delay"  onclick=" location.href='/return/{{../isbn}}/{{this.Αριθμός_αντιτύπου}}/{{this.Κωδικός_Βιβλιοθήκης}}/{{this.Δανεισμένο_σε}}' ">Επιστροφή</button></td>
                         </tr>
-                                        {{else}}
+                        {{else}}
                         <tr class="not-available">
                             <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
                             <td>{{this.owner}}</td>
@@ -197,10 +189,8 @@
                             <td><button class="reserve-btn borrow-btn disabled">Επιστροφή</button></td>
                         </tr>                                        
 
-                                        {{/if}}
-                                    {{/if}}
-                                {{/if}}
-                            {{/if}}
+
+                        {{/if}}
                         {{/each}}
                     </table>
                     
