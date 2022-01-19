@@ -26,30 +26,31 @@ router.get('/book/:ISBN/error', libraryController.renderBookErrorReservation)
 
 router.post('/book/:ISBN', libraryController.newReservation)
 
-// router.get('/create-meetme',  meetMeController.checkAuthenticated, (req, res) => res.render('create_meetme',{partialContext: {name:req.session.loggedUserName}, loggedin:true}));
-
-// router.all('/publish/:url',meetMeController.checkAuthenticated, meetMeController.publish);
-
-// router.get('/loggedin',meetMeController.checkAuthenticated, (req, res) => res.render('index', {partialContext: {name:req.session.loggedUserName}, loggedin:true}))
-
-// router.get('/mymeetings', meetMeController.checkAuthenticated, meetMeController.showMyMeetings);
-
-router.get('/', libraryController.renderHome)
-
+//  login
+//      User
+router.post('/login', libraryController.doLogin);
+router.post('/signup', libraryController.doRegister);
+//      Staff
 router.get('/staff-login', libraryController.renderLibrariesLogin)
-router.get('/staff', libraryController.checkStaffAuthenticated, (req,res)=> res.render('staff', {style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true}))//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
-
 router.post('/staff-login',libraryController.doStaffLogin)//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
+//      Admin
+router.get('/admin-login', (req, res) => res.render('admin-login', {style: ["admin", 'admin-login'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:req.session.loggedUserId||req.session.loggedLibraryId}))
+router.post('/admin-login', libraryController.doAdminLogin)
+
+router.get('/logout', libraryController.doLogout)
+
+
+// Staff
+router.get('/staff', libraryController.checkStaffAuthenticated, (req,res)=> res.render('staff', {style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true}))//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
 
 router.get('/add-book-staff', libraryController.checkStaffAuthenticated, libraryController.renderAddNewBook)
 router.post('/add-book-staff', libraryController.checkStaffOrAdminAuthenticated, libraryController.addNewBookToDb)
 
+router.get('/users-staff', libraryController.checkStaffAuthenticated, libraryController.renderUsers)
 
+router.post('/add-user-subscription/:subId', libraryController.checkStaffAuthenticated, libraryController.addUserSub)// 
 
-router.get('/admin-login', (req, res) => res.render('admin-login', {style: ["admin", 'admin-login'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:req.session.loggedUserId||req.session.loggedLibraryId}))
-
-router.post('/admin-login', libraryController.doAdminLogin)
-
+// Admin
 router.get('/admin', libraryController.checkAdminAuthenticated, (req, res) => res.render('admin', {style: ["staff"], partialContext: {name:'Admin', admin:true}, loggedin:true}))
 
 router.get('/categories-admin', libraryController.checkAdminAuthenticated, libraryController.renderCategories)
@@ -64,15 +65,13 @@ router.get('/libraries-admin/delete/:id', libraryController.checkAdminAuthentica
 
 router.get('/add-book-admin', libraryController.checkAdminAuthenticated, libraryController.renderAddNewBook)
 
-//log in-------------------------------------------------------------------------------------------------
-router.post('/login', libraryController.doLogin);
-router.post('/signup', libraryController.doRegister);
-// router.get('/login', (req, res) => res.render('index', {needtolog:true}));
-// router.get('/loggedin', (req, res) => res.render('index', {partialContext: {name:req.session.loggedUserName}, loggedin:true}))
-router.get('/logout', libraryController.doLogout)
-// router.get('/afterregister',(req, res) => res.render('index', {aftersignup:true}))
-// router.get('/failed',(req, res) => res.render('index', { failedloggin: true }))
+router.get('/users-admin', libraryController.checkAdminAuthenticated, libraryController.renderUsers)
 
+router.post('/subscriptions', libraryController.checkAdminAuthenticated, libraryController.newSubscription)
+router.get('/subscriptions/delete/:id', libraryController.checkAdminAuthenticated, libraryController.deleteSubscription)
+
+
+router.get('/', libraryController.renderHome)
 
 // router.all('*', (req, res) => res.render('not_found', {layout: '404'}))
 

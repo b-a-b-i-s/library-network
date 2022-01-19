@@ -39,12 +39,14 @@ window.addEventListener("load", () => {
     }
 
     const nameInSubs = document.querySelector('#sub-name')
+    const usrIdInp = document.querySelectorAll('.inp-id')
 
     btnin.forEach(item => {
         item.addEventListener('click', (el)=> {
             modalin.style.display = "block";
             console.log(userId);
             nameInSubs.textContent = `${el.target.dataset.userName} [${el.target.dataset.userId}]`
+            usrIdInp.forEach(item=>item.value=el.target.dataset.userId)
             userId = Number(el.target.dataset.userId)
             
         })

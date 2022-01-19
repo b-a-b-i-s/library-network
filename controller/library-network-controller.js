@@ -6,7 +6,6 @@ const e = require('express');
 const fs = require('fs');
 const { redirect } = require('express/lib/response');
 const path = require('path');
-
 const formidable = require('formidable');
 
 
@@ -69,7 +68,12 @@ exports.renderSubscriptions = (req, res) => {
             loggedin = true;
         }
 
-        res.render('subscriptions',{subscriptions: subscriptions, style: ["libraries-admin","subscriptions-admin"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin})
+        if (req.session.admin){
+            res.render('subscriptions',{subscriptions: subscriptions, style: ["libraries-admin","subscriptions-admin"], partialContext: {name:'Admin'}, admin:true, loggedin:true});
+        }
+        else{
+            res.render('subscriptions',{subscriptions: subscriptions, style: ["libraries-admin","subscriptions-admin"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin})
+        }
     });
 }
 
@@ -773,7 +777,7 @@ exports.renderAddNewBook = function (req, res, next) {
         }
 
         if (req.session.admin){
-            res.render('add-book-staff', {categories:categories, style: ["add-book-staff", "dropdown"], partialContext: {name:'Admin'}, loggedin:true});
+            res.render('add-book-staff', {categories:categories, style: ["add-book-staff", "dropdown"], partialContext: {name:'Admin'}, admin:1, loggedin:true});
         }
         else{
             res.render('add-book-staff', {categories:categories, style: ["add-book-staff", "dropdown"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true});
@@ -818,7 +822,7 @@ exports.addNewBookToDb = function (req, res) {
                 res.send(err);
             }
             if (duplicate) {
-                if (req.session.admin) res.render('admin', {alert:'Υπάρχει ήδη', style: ["admin"], partialContext: {name:'Admin', admin:true}, loggedin:true});
+                if (req.session.admin) res.render('admin', {alert:'Υπάρχει ήδη', style: ["admin"], partialContext: {name:'Admin'}, loggedin:true});
                 else res.render('staff', {alert:'Υπάρχει ήδη', style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
             }
             else {
@@ -848,14 +852,14 @@ exports.addNewBookToDb = function (req, res) {
                                 res.send(err);
                             }
             
-                            if (req.session.admin) res.render('admin', {alert:'Επιτυχής καταχώρηση', style: ["admin"], partialContext: {name:'Admin', admin:true}, loggedin:true});
+                            if (req.session.admin) res.render('admin', {alert:'Επιτυχής καταχώρηση', style: ["admin"], partialContext: {name:'Admin'}, loggedin:true});
                             else
                                 res.redirect(`/book/${fields.isbn}`);
                         })
                     })
                 }
                 else {
-                    if (req.session.admin) res.render('admin', {alert:'Επιτυχής καταχώρηση', style: ["admin"], partialContext: {name:'Admin', admin:true}, loggedin:true});
+                    if (req.session.admin) res.render('admin', {alert:'Επιτυχής καταχώρηση', style: ["admin"], partialContext: {name:'Admin'}, loggedin:true});
                     else
                         res.redirect(`/book/${fields.isbn}`);
                 }
@@ -936,6 +940,135 @@ exports.addNewBookToDb = function (req, res) {
 //     })
 // }
 
+
+
+exports.renderUsers = function (req, res, next) {
+    model.getUserStatus(req, (err, users)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        model.getUsersPhones(req, (err, phones)=> {
+            // console.log("🚀 ~ file: library-network-controller.js ~ line 952 ~ model.getUsersPhones ~ phones", phones)
+            if (err) {
+                res.send(err);
+            }
+
+            const newPhones = {};
+
+            if (phones){
+                phones.forEach(element => {
+                    if (newPhones[element.ID_μέλους]) {
+                        newPhones[element.ID_μέλους].push(element.Αρ_Τηλ)
+                    }
+                    else newPhones[element.ID_μέλους] = [element.Αρ_Τηλ];
+                });
+            }
+            // console.log("🚀 ~ file: library-network-controller.js ~ line 971 ~ model.getUsersPhones ~ users", users)
+
+            if (users)
+            users.forEach(element => {
+                element.phone = newPhones[element.Κωδικός_Μέλους];
+                element.Ημερομηνία_Εγγραφής = element.Ημερομηνία_Εγγραφής.toISOString().replace(/T/, ' ').replace(/\..+/, '')
+
+
+            });
+
+            model.getSubscriptions(req, (err, subscriptions)=> {
+                // console.log("🚀 ~ file: library-network-controller.js ~ line 978 ~ model.getSubscriptions ~ subscriptions", subscriptions)
+                if (err) {
+                    res.send(err);
+                }
+                if (subscriptions)
+                subscriptions.forEach(element => {
+                    if (element.Διάρκεια>1) element.months_end = 'ες';
+                    else element.months_end = 'α';
+                    if (element.Διάρκεια_δανεισμού>1) element.Διάρκεια_δανεισμού_end = 'ες';
+                    else element.Διάρκεια_δανεισμού_end = 'α';
+                    if (element.Όριο_δανεισμών>1) element.Όριο_δανεισμών_end = 'α';
+                    else element.Όριο_δανεισμών_end = 'ο';
+                });
+
+                if (req.session.admin){
+                    res.render('users-staff', {subscriptions:subscriptions, users:users, style: ["users-staff"], partialContext: {name:'Admin'},admin:1, loggedin:true});
+                }
+                else{
+                    res.render('users-staff', {subscriptions:subscriptions, users:users, style: ["users-staff"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true});
+                }
+            })
+        })
+
+        
+    })
+}
+
+
+exports.addUserSub = function (req, res, next) {
+    // Νέα συνδρομή μέλους
+
+    // console.log("🚀 ~ file: library-network-controller.js ~ line 1009 ~ Object.keys(req.body)", Object.keys(req.body))
+    let userId = req.body.userId
+    let subId = req.params.subId
+
+    // Έλεγχος αν χρωστάει βιβλία
+    model.checkPaid(req.body.userId, (err, results)=> {
+    
+        console.log("🚀 ~ file: library-network-controller.js ~ line 1013 ~ model.checkPaid ~ results", results)
+        if (err) {
+            res.send(err);
+        }
+
+        if (results[0]) {
+            if (results[0].Χρωστούμενα>0){
+                    if (req.session.admin) res.render('staff', {alert:'Χρωσταει βιβλία', style:['staff'], partialContext: {name:'Admin'},admin:true, loggedin:true})
+                    else res.render('staff', {alert:'Χρωσταει βιβλία', style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
+            }
+            else callbackLastSub();
+        }
+        else callbackLastSub();
+        
+        function callbackLastSub(){
+
+            // Έλεγχος αν έχει ήδη συνδρομή ώστε η συνδρομή να επεκτέινει την τωρινή
+            model.getLastSub(req.body.userId, (err, results)=> {
+                if (err) {
+                    res.send(err);
+                }
+
+                if (results[0]){
+                    if (results[0].end_date!=undefined) {
+
+                        model.addUserSub(req.params.subId, req.body.userId, results[0].end_date, (err, results)=> {
+                            if (err) {
+                                res.send(err);
+                            }
+                    
+                            res.redirect('/users-staff');
+                        })
+                    }
+                    else callbackAddUserSub();
+                }
+                else callbackAddUserSub();
+
+                
+                function callbackAddUserSub(){
+
+                    // Βάζει τη συνδρομή
+                    model.addUserSub(req.params.subId, req.body.userId, undefined, (err, results)=> {
+                        console.log("🚀 ~ file: library-network-controller.js ~ line 1057 ~ model.addUserSub ~ results", results)
+                        if (err) {
+                            res.send(err);
+                        }
+                
+                        res.redirect('/users-staff');
+                    })
+                }
+
+            })
+        }
+    })
+
+}
 
 
 
@@ -1169,5 +1302,30 @@ exports.editLibrary = (req, res) => {
         //console.log('editing lll')
 
         res.redirect('/libraries-admin');
+    });
+}
+
+
+
+exports.newSubscription = (req, res) => {
+
+    model.newSubscription(req.body.months, req.body.price, req.body.maxDays, req.body.maxBooks, req.body.extraMoney, (err, result)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        res.redirect('/subscriptions');
+    });
+}
+
+
+exports.deleteSubscription = (req, res) => {
+
+    model.deleteSubscription(req.params.id, (err, result)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        res.redirect('/subscriptions');
     });
 }

@@ -1,9 +1,70 @@
 
+{{#if admin}}  
+<div id="new-lib-modal" class="modal-lib">
   
+    <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="">
+      <span class="close-sign">&times;</span>
+      <fieldset>
+          <!-- <i class="fas fa-sign-in-alt fa-4x" id="sign-in-icon"></i> -->
+          <h1>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Νέα συνδρομή</h1> 
+          <hr>
+
+          <div class='inputWithIcon'>
+              <label for="new-sub-months"><strong>Μήνες: </strong> <input type="number" name="months" id="new-sub-months" style="width: 4em;" min="0" required> <br></label>
+              
+              <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
+              <br> 
+          </div>
+
+          <div class='inputWithIcon'>
+            <label for="new-sub-price"><strong>Τιμή: </strong> <input type="number" name="price" id="price" style="width: 4em;" min="0" required> <br></label>
+            
+            <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
+            <br> 
+          </div>
+
+          <div class='inputWithIcon'>
+            <label for="new-sub-max-days"><strong>Μέγιστη διάρκεια δανεισμού: </strong> <input type="number" name="maxDays" id="new-sub-max-days" style="width: 4em;" min="0" required> <br></label>
+            
+            <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
+            <br> 
+          </div>
+
+          <div class='inputWithIcon'>
+            <label for="new-sub-max-books"><strong>Μέγιστοι τρέχοντες δανεισμοί: </strong> <input type="number" name="maxBooks" id="new-sub-max-books" style="width: 4em;" min="0" required> <br></label>
+            
+            <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
+            <br> 
+          </div>
+
+          <div class='inputWithIcon'>
+            <label for="new-sub-extra"><strong>Ημερήσια επιβαρυνση καθυστερησης επιστροφής: </strong> <input type="number" name="extraMoney" id="new-sub-extra" style="width: 4em;" min="0" required> <br></label>
+            
+            <!-- <i class="fa fa-envelope fa-lg fa-fw" aria-hidden="true"></i> -->
+            <br> 
+          </div>
+          
+        
+
+
+        <br>
+
+        <button class="reserve-btn save-btn">Αποθήκευση</button>
+      </fieldset>
+    </form>
+  </div>
+  {{/if}}
+
+
 
   <div class="main-page-libraries">
     <div style="display: flex;">
+      {{#if admin}}
+      <h1>Διαχείριση συνδρομών</h1>
+      <button class="reserve-btn" id="new-lib-btn" style="margin: auto 0 auto auto; align-items: center; width: 10em;">Προσθήκη νέας</button>
+      {{else}}
       <h1>Διαθέσιμες συνδρομές</h1>
+      {{/if}}
     </div>
     <div>
       <!-- Οι βιβλιοθήκες που μπορείτε να επισκεφτείτε.<div class=""></div> -->
@@ -18,14 +79,19 @@
       <hr>
         <div class="library">
           <div>
-            <h3>Συνδρομή για {{this.Διάρκεια}} μήν{{this.month_end}}</h3>
+            <h3>Συνδρομή για {{this.Διάρκεια}} μήν{{this.month_end}} [{{this.Κωδικός_συνδρομής}}]</h3>
             <h5>Τιμή: <span class="address" style="font-size: large;">{{this.Τιμή}}€</span></h5>
             <h5>Μέγιστη διάρκεια δανεισμού: <span class="address" style="font-size: large;">{{this.Διάρκεια_δανεισμού}} ημέρες</span></h5>
             <h5>Μέγιστοι τρέχοντες δανεισμοί: <span class="address" style="font-size: large;">{{this.Όριο_δανεισμών}}</span></h5>
             <h5>Ημερήσια επιβαρυνση καθυστερησης επιστροφής: <span class="address" style="font-size: large;">{{this.Επιβάρυνση_καθυστέρησης_ασυνέπειας}}€</span></h5>
 
           </div>
-
+          {{#if ../admin}}
+          <div style="display: grid; margin-left: auto; margin-right: 5%; align-items: center;">
+          <!-- <button class="edit-btn reserve-btn" onclick=" location.href='./subscriptions-admin-1.html' ">Επεξεργασία</button> -->
+            <button class="edit-btn reserve-btn" onclick=" location.href='/subscriptions/delete/{{this.Κωδικός_συνδρομής}}' " style="margin-right: 1.5em;">Διαγραφή</button>
+          </div>
+          {{/if}}
         </div>
       {{/each}}
 
@@ -39,3 +105,6 @@
     
   <script src="https://kit.fontawesome.com/285af68c5a.js" crossorigin="anonymous"></script>
 
+{{#if admin}}
+  <script src="js/subscriptions-admin.js"></script>
+{{/if}}
