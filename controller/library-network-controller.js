@@ -7,6 +7,8 @@ const fs = require('fs');
 const { redirect } = require('express/lib/response');
 const path = require('path');
 const formidable = require('formidable');
+const res = require('express/lib/response');
+const { join } = require('path');
 
 
 
@@ -87,6 +89,7 @@ exports.renderBooks = (req, res) => {
 
 
     model.getBooks(search, (err, books)=> {
+        console.log("🚀 ~ file: library-network-controller.js ~ line 92 ~ model.getBooks ~ books", books)
         if (err) {
             res.send(err);
         }
@@ -97,7 +100,7 @@ exports.renderBooks = (req, res) => {
             if (req.session.loggedUserName){
                 loggedin = true;
             }
-            res.render('books',{no_result: req.query.search, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin});
+            // res.render('books',{no_result: req.query.search, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin});
         }
         else{
 
@@ -107,78 +110,78 @@ exports.renderBooks = (req, res) => {
                 }
 
                 model.bookCountAllISBN(null, (err, book_counts)=> {
+                    // console.log("🚀 ~ file: library-network-controller.js ~ line 112 ~ model.bookCountAllISBN ~ book_counts", book_counts)
                     if (err) {
                         res.send(err);
                     }
 
                     // console.log(books)
         
-                let allBooks = {};
+                    let allBooks = {};
     
-                books.forEach(item=>{
-                    if (allBooks[item.ISBN]){
-                        allBooks[item.ISBN].Συγγραφείς.push(', '+item.Συγγραφέας);
-                        allBooks[item.ISBN].writers_end='είς';
-                    }
-                    else{
-                        let temp= {
-                            ISBN:item.ISBN,
-                            Τίτλος:item.Τίτλος,
-                            Έκδοση:item.Έκδοση,
-                            Εκδοτικός_οίκος:item.Εκδοτικός_οίκος,
-                            Συγγραφείς: [item.Συγγραφέας],
-                            writers_end:'έας',
-                            locations:[],
-                            total_books_count:0,
-                            not_available:1,
-                            imageFile: checkCoverImage(item.ISBN)
-                        };
-                        allBooks[item.ISBN] = temp;
-                    }
-                });
-                // console.log(allBooks)
-                // console.log(locations)
-                locations.forEach(item=>{
-                    // console.log(item.ISBN)
-                    if (allBooks[item.ISBN]) {
-                        allBooks[item.ISBN].locations.push({
-                            available:`${item.Όνομα}: ${item.Ποσότητα}`,
-                            kratiseis: item.Κρατήσεις,
-                            kratiseis_str: item.Κρατήσεις>1 ? 'Κρατήσεις' : 'Κράτηση'
-                        });
-                        allBooks[item.ISBN].not_available=0;
-                    }
-                });
+                    books.forEach(item=>{
+                        if (allBooks[item.ISBN]){
+                            allBooks[item.ISBN].Συγγραφείς.push(', '+item.Συγγραφέας);
+                            allBooks[item.ISBN].writers_end='είς';
+                        }
+                        else{
+                            let temp= {
+                                ISBN:item.ISBN,
+                                Τίτλος:item.Τίτλος,
+                                Έκδοση:item.Έκδοση,
+                                Εκδοτικός_οίκος:item.Εκδοτικός_οίκος,
+                                Συγγραφείς: [item.Συγγραφέας],
+                                writers_end:'έας',
+                                locations:[],
+                                total_books_count:0,
+                                not_available:1,
+                                imageFile: checkCoverImage(item.ISBN)
+                            };
+                            allBooks[item.ISBN] = temp;
+                        }
+                    });
+                    // console.log(allBooks)
+                    // console.log(locations)
+                    locations.forEach(item=>{
+                        // console.log(item.ISBN)
+                        if (allBooks[item.ISBN]) {
+                            allBooks[item.ISBN].locations.push({
+                                available:`${item.Όνομα}: ${item.Ποσότητα}`,
+                                kratiseis: item.Κρατήσεις,
+                                kratiseis_str: item.Κρατήσεις>1 ? 'Κρατήσεις' : 'Κράτηση'
+                            });
+                            allBooks[item.ISBN].not_available=0;
+                        }
+                    });
 
-                book_counts.forEach(item=>{
-                    allBooks[item.ISBN].total_books_count = item.total_books_count
-                })
-    
-                // console.log('end')
-                // console.log(allBooks)
-                // console.log(Object.values(allBooks));
-                let loggedin=false;
+                    book_counts.forEach(item=>{
+                        if (allBooks[item.ISBN])
+                        allBooks[item.ISBN].total_books_count = item.total_books_count;
+                    })
         
+                    // console.log('end')
+                    // console.log(allBooks)
+                    // console.log(Object.values(allBooks));
+                    let loggedin=false;
+            
 
-                if (req.session.loggedUserName){
-                    loggedin = true;
-                }
-                res.render('books',{books: allBooks, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin});
-                    
-                })
-    
-                
+                    if (req.session.loggedUserName){
+                        loggedin = true;
+                    }
+                    if (req.session.loggedLibraryId){
+                        res.render('books',{books: allBooks, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, libraryLogged:true, loggedin:loggedin});
+                    }
+                    else {
+                        res.render('books',{books: allBooks, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin});
+                    }
+                })       
             });
-
         }
-        
-
-        // console.log('books')
-        // console.log(allBooks)
-
-        
     });
 }
+
+
+
 
 function checkCoverImage(ISBN) {
     // console.log(__dirname)
@@ -208,7 +211,7 @@ function checkCoverImage(ISBN) {
 
 exports.renderBook = (req, res) => {
 
-    model.getBook(req, (err, book) => {
+    model.getBook(req.params.ISBN, (err, book) => {
         
         if (err) {
             res.send(err);
@@ -286,17 +289,12 @@ exports.renderBook = (req, res) => {
 
             });
         }
-
-
-        
-
-
     });
 }
 
 exports.renderBookErrorReservation = (req, res) => {
 
-    model.getBook(req, (err, book) => {
+    model.getBook(req.params.ISBN, (err, book) => {
         
         if (err) {
             res.send(err);
@@ -376,7 +374,7 @@ exports.renderBookErrorReservation = (req, res) => {
 
 exports.renderBookSuccessfulReservation = (req, res) => {
 
-    model.getBook(req, (err, book) => {
+    model.getBook(req.params.ISBN, (err, book) => {
         
         if (err) {
             res.send(err);
@@ -1018,16 +1016,11 @@ exports.addUserSub = function (req, res, next) {
             res.send(err);
         }
 
-        if (results[0]) {
-            if (results[0].Χρωστούμενα>0){
-                    if (req.session.admin) res.render('staff', {alert:'Χρωσταει βιβλία', style:['staff'], partialContext: {name:'Admin'},admin:true, loggedin:true})
-                    else res.render('staff', {alert:'Χρωσταει βιβλία', style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
-            }
-            else callbackLastSub();
+        if (results>0) {
+            if (req.session.admin) res.render('staff', {alert:'Χρωσταει βιβλία', style:['staff'], partialContext: {name:'Admin'},admin:true, loggedin:true})
+            else res.render('staff', {alert:'Χρωσταει βιβλία', style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
         }
-        else callbackLastSub();
         
-        function callbackLastSub(){
 
             // Έλεγχος αν έχει ήδη συνδρομή ώστε η συνδρομή να επεκτέινει την τωρινή
             model.getLastSub(req.body.userId, (err, results)=> {
@@ -1035,14 +1028,12 @@ exports.addUserSub = function (req, res, next) {
                     res.send(err);
                 }
 
-                if (results[0]){
-                    if (results[0].end_date!=undefined) {
-
+                if (results>0){
+                    if (results[0].active) {
                         model.addUserSub(req.params.subId, req.body.userId, results[0].end_date, (err, results)=> {
                             if (err) {
                                 res.send(err);
                             }
-                    
                             res.redirect('/users-staff');
                         })
                     }
@@ -1065,10 +1056,126 @@ exports.addUserSub = function (req, res, next) {
                 }
 
             })
-        }
+        
     })
 
 }
+
+
+
+
+exports.renderBookStaff = (req, res) => {
+
+    model.getBook(req.params.ISBN, (err, book) => {
+        
+        if (err) {
+            res.send(err);
+        }
+        if (book.length==0 || book==undefined) {
+            res.render('not_found', {layout:'404.hbs', partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true});
+        }
+        else{
+
+            model.getBookCategories(req.params.ISBN, (err, categories)=> {
+                if (err) {
+                    res.send(err);
+                }
+                console.log(req.params.ISBN)
+                model.bookCountAllISBN(req.params.ISBN, (err, total_books_count)=> {
+                    if (err) {
+                        res.send(err);
+                    }
+    
+                    let imageFile = checkCoverImage(book[0].ISBN);
+                    const writers = [];
+                    book.forEach((element, i)=>{
+                        if (i==0)
+                            writers.push(element.Συγγραφέας);
+                        else
+                            writers.push(', '+element.Συγγραφέας);
+                    });
+                    let writers_end = 'έας';
+                    if (writers.length>1) {
+                        writers_end = 'είς'
+                    }
+                    categories.forEach((element, i)=>{
+                        if (i!=0)
+                            element.Όνομα = ' | '+element.Όνομα
+                    });
+                    
+                    // continueFindingBook(req, book[0],writers_end, total_books_count[0].total_books_count,
+                    //      categories, writers,  imageFile)
+                    model.getSpecificLocationOfSpecificBook(req.params.ISBN, (err, locations)=> {
+                        console.log("🚀 ~ file: library-network-controller.js ~ line 1121 ~ model.getSpecificLocationOfEveryBook ~ location", locations)
+                        if (err) {
+                            res.send(err);
+                        }
+                    
+                        model.getIsbnReservations(req.params.ISBN, (err, reservations)=> {
+                            console.log("🚀 ~ file: library-network-controller.js ~ line 1127 ~ model.getAllReservations ~ reservations", reservations)
+                            if (err) {
+                                res.send(err);
+                            }
+
+                            if (reservations.length>0){
+                                reservations.forEach(element => {
+                                    for (let j = 0; j < locations.length; j++) {                                        console.log("🚀 ~ file: library-network-controller.js ~ line 1125 ~ model.getIsbnReservations ~ locations[j].Βιβλιοθήκη_τώρα", locations[j].Βιβλιοθήκη_τώρα)
+                                        console.log("🚀 ~ file: library-network-controller.js ~ line 1121 ~ model.getIsbnReservations ~ element.Βιβλιοθήκη_κράτησης", element.Βιβλιοθήκη_κράτησης)
+
+                                        if (element.Βιβλιοθήκη_κράτησης==locations[j].Βιβλιοθήκη_τώρα &&
+                                            locations[j].Μεταφέρεται_σε==null && 
+                                            locations[j].Δανεισμένο_σε==null &&
+                                            locations[j].Μέλος == undefined){
+                                                locations[j].Μέλος= element.Μέλος;
+                                            }
+                                        }
+                                    
+                                    
+                                });
+                            }
+
+
+                            model.getLibrariesNoPhone(req, (err, libraries)=> {
+                                if (err) {
+                                    res.send(err);
+                                }
+                        
+                            
+
+                                let thisLib = [];
+
+
+                                let otherLibs = {};
+                                locations.forEach(item=>{
+                                    if (item.Βιβλιοθήκη_τώρα==req.session.loggedLibraryId) thisLib.push(item);
+                                    else if (otherLibs[item.Βιβλιοθήκη_τώρα]){
+                                        otherLibs[item.Βιβλιοθήκη_τώρα].push(item);
+                                    }
+                                    else {
+                                        otherLibs[item.Βιβλιοθήκη_τώρα]=[item];
+                                    }
+                                })
+                                console.log("🚀 ~ file: library-network-controller.js ~ line 1138 ~ model.getIsbnReservations ~ thisLib", thisLib)
+                                console.log("🚀 ~ file: library-network-controller.js ~ line 1142 ~ model.getIsbnReservations ~ otherLibs", otherLibs)
+
+res.redirect('/')
+                            // res.render('book',{book: book[0],writers_end:writers_end, total_books_count:total_books_count[0].total_books_count,
+                            //     locations: locations, categories:categories, writers: writers,  imageFile: imageFile, style: ["book",'book-staff']
+                            //     , partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
+                            });
+                        })
+                    })
+                    
+                });
+            });
+        }
+    });
+}
+
+
+
+
+
 
 
 

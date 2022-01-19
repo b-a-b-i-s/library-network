@@ -98,7 +98,11 @@
             <hr>
                 <div class="book" style="display: flex;">
                 <div>
+                    {{#if ../this.libraryLogged}}
+                    <a href="/book-staff/{{this.ISBN}}" class="book-ref"><strong>{{this.Τίτλος}}</strong></a><br>
+                    {{else}}
                     <a href="/book/{{this.ISBN}}" class="book-ref"><strong>{{this.Τίτλος}}</strong></a><br>
+                    {{/if}}
                     <span>Συγγραφ{{this.writers_end}}: </span>
                         {{#each this.Συγγραφείς}}
                             <span>{{this}}</span>

@@ -1,0 +1,186 @@
+
+
+    <div id="borrow-available" class="modal-lib">
+  
+        <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="">
+          <span class="close-sign">&times;</span>
+          <fieldset>
+              <!-- <i class="fas fa-sign-in-alt fa-4x" id="sign-in-icon"></i> -->
+              <h1>Νέος Δανεισμός</h1> 
+              <hr>
+    
+              <div style="margin: auto; text-align: center;">
+                <label for="user-id"><strong>Κωδικός μέλους:&nbsp;</strong>
+                    <input type="text" name="user-id" id="user-id" style="width: 10em;" required>
+                </label>
+                  
+              </div> 
+    
+    
+            <br>
+    
+            <button class="reserve-btn save-btn1">Δανεισμός</button>
+          </fieldset>
+        </form>
+      </div>
+
+      <div id="delayed-return" class="modal-lib">
+  
+        <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="">
+          <span class="close-sign">&times;</span>
+          <fieldset>
+              <h1>Καθυστερημένη επιστροφή</h1> 
+              <hr>
+    
+              <h5>Ημέρες καθυστέρησης: <span class="address" style="font-size: medium;">10</span></h5>
+              <h5>Κόστος ανα ημέρα: <span class="address" style="font-size: medium;">0,5€</span></h5>
+              <h5>Σύνολο: <span class="address" style="font-size: medium;">5€</span></h5>
+    
+    
+            <br>
+    
+            <button class="reserve-btn save-btn1">Επιβεβαίωση</button>
+          </fieldset>
+        </form>
+      </div>
+
+
+
+
+    <div class="main-page-books">
+
+        <div class="book">
+            <img src="{{imageFile}}" alt="" class="book-img">
+
+            <div>
+                <h4>{{book.Τίτλος}}</h4><br>
+                <span><strong>Συγγραφ{{this.writers_end}}: </strong></span>
+                    <span>
+                    {{#each writers}}
+                            {{this}}
+                    {{/each}}
+                    </span><br>
+                <span><strong>Έκδοση: </strong></span><span>{{book.Έκδοση}}</span><br>
+                <span><strong>Έτος έκδοσης: </strong></span><span>{{book.Εκδοτικός_οίκος}}</span><br>
+                <span><strong>Εκδοτικός οίκος: </strong></span><span>{{book.Ημερομηνία_Έκδοσης}}</span><br>
+                <span><strong>ISBN: </strong></span>{{book.ISBN}}<span></span><br>
+                <span><strong>Αριθμός σελίδων: </strong></span>{{book.Σελίδες}}<span></span><br>
+                <span><strong>DDC: </strong></span>{{book.DDC}}<span></span><br>
+            </div>
+
+            
+        </div>
+        {{!-- <span><strong><u>Περιγραφή</u></strong></span><br>
+                <span>Lorem, ipsum dolor sit amet consectetur adipisicing elit. 
+                    Facilis voluptatem earum cum! Provident beatae iste unde quibusdam veniam qui 
+                    fuga similique sapiente, excepturi, ducimus at ex maxime quasi et fugiat!</span><br> --}}
+                
+                <span><strong>Κατηγορίες: </strong></span><span>
+                    {{#each categories}}
+                            {{this.Όνομα}}
+                    {{/each}}
+                    </span><br><br>
+                    <span><strong>Συνολικά αντίτυπα: </strong></span>{{total_books_count}}<span></span><br><br>
+                    <span><strong><u>Αντίτυπα Βιβλιοθήκης: 4</u></strong></span><br>
+                    
+                    <table class="my-lib">
+                        <tr>
+                            <th>Αντίτυπο</th>
+                            <th>Θέση</th>
+                            <th>Δανεισμός</th>
+                        </tr>
+                        <tr class="available">
+                            <td>Αντίτυπο 1</td>
+                            <td>Διαθέσιμο για δανεισμό</td>
+                            <td><button class="reserve-btn borrow-btn available-btn" data-book-id="1" data-book-library-id="my">Δανεισμός</button></td>
+                        </tr>
+                        <tr class="keeped">
+                            <td>Αντίτυπο 2</td>
+                            <td>Κρατημένο για 3 μέρες από τον/την Γιαννης Παπάς [123456]</td>
+                            <td><button class="reserve-btn borrow-btn keeped-btn" data-book-id="2" data-book-lib-id="my">Δανεισμός</button></td>
+                        </tr>
+                        <tr class="not-available">
+                            <td>Αντίτυπο 3</td>
+                            <td>Βιβλιοθήκη Πατρών</td>
+                            <td><button class="reserve-btn borrow-btn disabled">Δανεισμός</button></td>
+                        </tr>
+                        <tr class="not-available">
+                            <td>Αντίτυπο 4</td>
+                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους [165] <span style="color: green;">(Μέγιστη επιστροφή: 12 ημέρες)</span></td>
+                            <td><button class="reserve-btn borrow-btn to-return">Επιστροφή</button></td>
+                        </tr>
+                        <tr class="not-available">
+                            <td>Αντίτυπο 5</td>
+                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους [165] (Καθυστέρηση: 12 ημέρες)</td>
+                            <td><button class="reserve-btn borrow-btn to-return-delay">Επιστροφή</button></td>
+                        </tr>
+                        <tr class="not-available">
+                            <td>Αντίτυπο 6</td>
+                            <td>Σε μεταφορά</td>
+                            <td><button class="reserve-btn borrow-btn disabled">Επιστροφή</button></td>
+                        </tr>
+                    </table>
+                    
+                    
+                </div>
+                
+                <button class="reserve-btn add-new-lib-book">Προσθήκη αντιτύπου</button>
+                
+                <br>
+                
+                <div>
+                    <span><strong><u>Αντίτυπα άλλων βιβλιοθηκών: 4</u></strong></span><br>
+                    
+                    <table class="other-libs">
+                        <tr>
+                            <th>Αντίτυπο</th>
+                            <th>Ιδιοκτήτρια βιβλιοθήκη</th>
+                            <th>Θέση</th>
+                            <th>Δανεισμός</th>
+                        </tr>
+                        <tr class="available">
+                            <td>Αντίτυπο 1</td>
+                            <td>Βιβλιοθήκη Πατρών</td>
+                            <td>Διαθέσιμο για δανεισμό</td>
+                            <td><button class="reserve-btn borrow-btn available-btn" data-book-id="2" data-book-lib-id="id-patras">Δανεισμός</button></td>
+                        </tr>
+                        <tr class="not-available">
+                            <td>Αντίτυπο 2</td>
+                            <td>Βιβλιοθήκη Θεσσαλονίκης</td>
+                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους [165] <span style="color: green;">(Μέγιστη επιστροφή: 12 ημέρες)</span></td>
+                            <td><button class="reserve-btn borrow-btn to-return">Επιστροφή</button></td>
+                        </tr>
+                        <tr class="not-available">
+                            <td>Αντίτυπο 3</td>
+                            <td>Βιβλιοθήκη Πατρών</td>
+                            <td>Βιβλιοθήκη Πατρών</td>
+                            <td><button class="reserve-btn borrow-btn disabled">Δανεισμός</button></td>
+                        </tr>
+                        <tr class="not-available">
+                            <td>Αντίτυπο 4</td>
+                            <td>Βιβλιοθήκη Πατρών</td>
+                            <td>Κρατημένο για 3 μέρες από τον/την Γιαννης Παπάς [123456]</td>
+                            <td><button class="reserve-btn borrow-btn">Δανεισμός</button></td>
+                        </tr>
+                    </table>
+                    
+                    
+                </div><br>
+        <!-- <button class="reserve-btn" style="">Κράτηση</button> -->
+        <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+        crossorigin="anonymous"></script>
+    <script src="https://kit.fontawesome.com/285af68c5a.js" crossorigin="anonymous"></script>
+    <!-- <script>
+        document.querySelector('#reset-library').addEventListener("click", function() {
+            document.querySelector('#library').value = ""
+        })
+
+    </script> -->
+
+    <script src="js/book-staff.js"></script>
+</body>
+
+</html>
