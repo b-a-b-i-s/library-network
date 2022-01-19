@@ -324,7 +324,7 @@ exports.getBooks  = function(search, callback) {
 // };
 
 exports.getLocations  = function(req, callback) { 
-	// Βρίσκει που βρίσκεται το κάθε αντίτυπο
+	// Βρίσκει που βρίσκεται του κάθε εντύπου ανά βιβλιοθήκη
 	// Can be replaced with view
 	// 
 
@@ -523,9 +523,8 @@ exports.getLocationsOfBook  = function(isbn, callback) {
 
 
 
-exports.getBook  = function(req, callback) { 
+exports.getBook  = function(isbn, callback) { 
 
-	const isbn = req.params.ISBN;
 
 	// console.log('isbn')
 	// console.log(isbn)
@@ -890,25 +889,110 @@ exports.checkPaid = (userId, callback) => {
 // Έλεγχος αν έχει ήδη συνδρομή ώστε η συνδρομή να επεκτέινει την τωρινή
 exports.getLastSub = (userId, callback) => {
 	
-		sql.query('SELECT max(Ημερομηνία_λήξης) as end_date FROM \
-						(SELECT Κωδ_μέλους,\
-						Κωδ_συνδρομής, Διάρκεια, date_add(Ημερομηνία_έναρξης, interval Διάρκεια MONTH) as Ημερομηνία_λήξης\
-						FROM\
-							(SELECT Κωδ_μέλους, max(Ημερομηνία_έναρξης) as Ημερομηνία_έναρξης\
-							FROM Συνδρομή JOIN Επιλογές_Συνδρομής ON Συνδρομή.Κωδ_συνδρομής=Επιλογές_Συνδρομής.Κωδικός_συνδρομής\
-							WHERE Κωδ_μέλους=?\
-							GROUP BY Κωδ_μέλους) as syndromes\
-							JOIN Συνδρομή USING(Κωδ_μέλους,Ημερομηνία_έναρξης) JOIN Επιλογές_Συνδρομής ON Κωδ_συνδρομής=Κωδικός_συνδρομής) as exp_dates', 
-				   [userId], (err, res) => {
-			if (err) {
-				console.log(err.stack)
-				callback(err.stack)
-			}
-			else {
-				callback(null, res)
-			}
-		})
-	}
+	sql.query('SELECT max(Ημερομηνία_λήξης) as end_date, max(Ημερομηνία_λήξης)>NOW() as active FROM \
+					(SELECT Κωδ_μέλους,\
+					Κωδ_συνδρομής, Διάρκεια, date_add(Ημερομηνία_έναρξης, interval Διάρκεια MONTH) as Ημερομηνία_λήξης\
+					FROM\
+						(SELECT Κωδ_μέλους, max(Ημερομηνία_έναρξης) as Ημερομηνία_έναρξης\
+						FROM Συνδρομή JOIN Επιλογές_Συνδρομής ON Συνδρομή.Κωδ_συνδρομής=Επιλογές_Συνδρομής.Κωδικός_συνδρομής\
+						WHERE Κωδ_μέλους=?\
+						GROUP BY Κωδ_μέλους) as syndromes\
+						JOIN Συνδρομή USING(Κωδ_μέλους,Ημερομηνία_έναρξης) JOIN Επιλογές_Συνδρομής ON Κωδ_συνδρομής=Κωδικός_συνδρομής) as exp_dates', 
+			   [userId], (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		else {
+			callback(null, res)
+		}
+	})
+}
+
+
+// Βρίσκει τη θέση κάθε αντιτύπου
+exports.getSpecificLocationOfSpecificBook = (isbn, callback) => {
+	
+	sql.query('SELECT all_books.ISBN, all_books.Αριθμός_αντιτύπου, all_books.Κωδικός_Βιβλιοθήκης,\
+	CASE \
+		WHEN (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NULL) THEN Κωδικός_Βιβλιοθήκης\
+		WHEN (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NULL) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής\
+		WHEN (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NOT NULL) THEN \
+			CASE \
+				WHEN (Κατάσταση_παραλαβής=0) THEN NULL\
+				WHEN (Κατάσταση_παραλαβής=1) THEN Κωδικός_Βιβλιοθήκης_προορισμού\
+			END\
+		WHEN (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NOT NULL) THEN \
+			CASE \
+				WHEN (Ημερομηνία_που_επιστράφηκε>=date_moved) THEN Βιβλιοθήκη_καταχώρησης_επιστροφής\
+				WHEN (Ημερομηνία_που_επιστράφηκε<date_moved) THEN Κωδικός_Βιβλιοθήκης_προορισμού\
+			END\
+	END AS Βιβλιοθήκη_τώρα,\
+	IF (Δανεισμός.Κωδικός_δανεισμού is NULL and Κωδικός_μεταφοράς is NOT NULL AND Κατάσταση_παραλαβής=0, Κωδικός_Βιβλιοθήκης_προορισμού, NULL) AS Μεταφέρεται_σε,\
+	IF (Δανεισμός.Κωδικός_δανεισμού is NOT NULL and Κωδικός_μεταφοράς is NULL AND Βιβλιοθήκη_καταχώρησης_επιστροφής is NULL, Δανεισμός.Κωδικός_μέλους, NULL) AS Δανεισμένο_σε\
+	FROM\
+		(  \
+			SELECT books_and_borrows.ISBN, books_and_borrows.Αριθμός_αντιτύπου, books_and_borrows.Κωδικός_Βιβλιοθήκης, max(Κωδικός_δανεισμού) as Κωδικός_δανεισμού, max(Κωδικός_μεταφοράς) as Κωδικός_μεταφοράς\
+			FROM (\
+				SELECT Αντίτυπο.ISBN, Αντίτυπο.Αριθμός_αντιτύπου, Αντίτυπο.Κωδικός_Βιβλιοθήκης, Κωδικός_δανεισμού, Ημερομηνία_που_επιστράφηκε\
+				FROM \
+				(SELECT * \
+				 FROM\
+				 Αντίτυπο\
+				 WHERE ISBN=?\
+				 ) as Αντίτυπο\
+				LEFT JOIN Δανεισμός ON Αντίτυπο.ISBN=Δανεισμός.ISBN AND Αντίτυπο.Αριθμός_αντιτύπου=Δανεισμός.Αρ_αντιτύπου AND 	Αντίτυπο.Κωδικός_Βιβλιοθήκης=Δανεισμός.Κωδικός_βιβλιοθήκης_αντιτύπου) as books_and_borrows\
+			LEFT JOIN (\
+				SELECT ISBN, Κωδ_βιβλιοθήκης, Αρ_αντιτύπου, Κωδικός_μεταφοράς\
+				FROM Μεταφορά,Περιέχει\
+				WHERE Κωδικός_μεταφοράς=Κωδ_μεταφοράς) AS moved\
+			ON books_and_borrows.ISBN=moved.ISBN and books_and_borrows.Αριθμός_αντιτύπου=moved.Αρ_αντιτύπου AND books_and_borrows.Κωδικός_Βιβλιοθήκης=moved.Κωδ_βιβλιοθήκης\
+			GROUP BY books_and_borrows.ISBN, books_and_borrows.Αριθμός_αντιτύπου, books_and_borrows.Κωδικός_Βιβλιοθήκης\
+		) as all_books LEFT OUTER JOIN\
+		Δανεισμός\
+		ON all_books.ISBN=Δανεισμός.ISBN AND all_books.Αριθμός_αντιτύπου=Δανεισμός.Αρ_αντιτύπου AND 	all_books.Κωδικός_Βιβλιοθήκης=Δανεισμός.Κωδικός_βιβλιοθήκης_αντιτύπου AND all_books.Κωδικός_δανεισμού=Δανεισμός.Κωδικός_δανεισμού\
+		LEFT OUTER JOIN\
+		(SELECT ISBN, Κωδ_βιβλιοθήκης, Αρ_αντιτύπου, Ημερομηνία as date_moved, Κατάσταση_παραλαβής, Κωδ_μεταφοράς, Κωδικός_Βιβλιοθήκης_προορισμού\
+		FROM Μεταφορά,Περιέχει\
+		WHERE Κωδικός_μεταφοράς=Κωδ_μεταφοράς) AS moved\
+		ON all_books.ISBN=moved.ISBN AND all_books.Αριθμός_αντιτύπου=moved.Αρ_αντιτύπου AND all_books.Κωδικός_Βιβλιοθήκης=moved.Κωδ_Βιβλιοθήκης AND all_books.Κωδικός_μεταφοράς=moved.Κωδ_μεταφοράς\
+		', isbn, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		else {
+			callback(null, res)
+		}
+	})
+}
+
+
+exports.getIsbnReservations = (isbn, callback) => {
+
+	sql.query('SELECT ISBN, Βιβλιοθήκη_κράτησης, COUNT(*) as Κρατήσεις, Μέλος\
+	FROM Κράτηση\
+	WHERE ISBN=? AND hour(TIMEDIFF(CURRENT_TIMESTAMP(),Ημερομηνία_κράτησης))/24 < 7 AND Κατάσταση_ολοκλήρωσης=0\
+	GROUP BY ISBN, Βιβλιοθήκη_κράτησης, Μέλος\
+	ORDER BY Βιβλιοθήκη_κράτησης', isbn, (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		else {
+			callback(null, res)
+		}
+	})
+}
+
+
+
+
+
+
+
+
+
 
 
 

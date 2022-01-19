@@ -49,6 +49,8 @@ router.post('/add-book-staff', libraryController.checkStaffOrAdminAuthenticated,
 router.get('/users-staff', libraryController.checkStaffAuthenticated, libraryController.renderUsers)
 
 router.post('/add-user-subscription/:subId', libraryController.checkStaffAuthenticated, libraryController.addUserSub)// 
+// TODO auth
+router.get('/book-staff/:ISBN',  libraryController.renderBookStaff)//libraryController.checkStaffAuthenticated
 
 // Admin
 router.get('/admin', libraryController.checkAdminAuthenticated, (req, res) => res.render('admin', {style: ["staff"], partialContext: {name:'Admin', admin:true}, loggedin:true}))
