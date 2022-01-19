@@ -641,7 +641,22 @@ exports.getBookCategories  = function(isbn, callback) {
 }
 
 
+exports.reservationConfirm  = function(userId, callback) { 
 
+
+	sql.query('UPDATE Κράτηση \
+	SET Κατάσταση_ολοκλήρωσης=1\
+	WHERE Μέλος=?', userId , (err, res) => {
+		if (err) {
+			console.log(err.stack)
+			callback(err.stack)
+		}
+		// console.log('results')
+		// console.log(res)
+		
+		callback(null, res)
+	})
+};
 
 
 
@@ -987,11 +1002,130 @@ exports.getIsbnReservations = (isbn, callback) => {
 
 
 
+exports.addNewBookToLib = (ISBN, loggedLibraryId, callback) => {
+
+	sql.query('INSERT INTO `Αντίτυπο` (`ISBN`, `Αριθμός_αντιτύπου`, `Κωδικός_Βιβλιοθήκης`) \
+				VALUES (?, NULL, ?);', [ISBN, loggedLibraryId], (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+				else {
+					callback(null, res)
+				}
+			})
+}
+
+
+exports.newBorrow = (userId, ISBN, bookNum, libraryId, loggedLibraryId, callback) => {
+
+	sql.query('INSERT INTO `Δανεισμός` (`Κωδικός_δανεισμού`, `Κωδικός_μέλους`, `ISBN`, `Αρ_αντιτύπου`, `Ημερομηνία_δανεισμού`, `Ημερομηνία_που_επιστράφηκε`, `Βιβλιοθήκη_καταχώρησης_δανεισμού`, `Βιβλιοθήκη_καταχώρησης_επιστροφής`, `Κωδικός_βιβλιοθήκης_αντιτύπου`) VALUES \
+			(NULL, ?, ?, ?, CURRENT_TIMESTAMP, NULL, ?, NULL, ?)', [userId, ISBN, bookNum, loggedLibraryId, libraryId], (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+				else {
+					callback(null, res)
+				}
+			})
+}
 
 
 
+exports.checkBorrow = (userId, callback) => {
+
+	sql.query('SELECT (Όριο_δανεισμών - borrows  ) > 0 as possible\
+	FROM ( \
+	SELECT Όριο_δανεισμών\
+	FROM Μέλος, Συνδρομή, Επιλογές_Συνδρομής\
+	WHERE Κωδικός_μέλους=? AND Κωδ_μέλους=? AND Κωδ_συνδρομής=Κωδικός_συνδρομής \
+	ORDER BY Αριθμός_συνδρομής\
+	LIMIT 1) as max_possible, \
+	(SELECT COUNT(*) as borrows\
+	FROM Μέλος NATURAL JOIN Δανεισμός\
+	WHERE Ημερομηνία_που_επιστράφηκε is NULL AND Κωδικός_μέλους=?) as made', 
+	[userId,userId,userId], (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+				else {
+					callback(null, res)
+				}
+			})
+}
 
 
+exports.findExtraCost = (userId, isbn, bookId, libId, callback) => {
+console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 1046 ~ libId", bookId)
+
+	sql.query('SELECT IF (days>Διάρκεια_δανεισμού, ceil((days-Διάρκεια_δανεισμού) * Επιβάρυνση_καθυστέρησης_ασυνέπειας), 0) AS cost,\
+	days-Διάρκεια_δανεισμού as extra_days\
+	FROM \
+	(SELECT Διάρκεια_δανεισμού, Επιβάρυνση_καθυστέρησης_ασυνέπειας\
+	FROM Μέλος, Συνδρομή, Επιλογές_Συνδρομής\
+	WHERE Κωδικός_μέλους=? AND Κωδ_μέλους=? AND Κωδ_συνδρομής=Κωδικός_συνδρομής \
+	ORDER BY Αριθμός_συνδρομής\
+	LIMIT 1) as t1,\
+	(SELECT datediff(CURRENT_TIMESTAMP(),Ημερομηνία_δανεισμού) as days, Ημερομηνία_δανεισμού \
+	 FROM `Δανεισμός` \
+	 WHERE `Κωδικός_μέλους`=? AND `ISBN`=? AND `Αρ_αντιτύπου`=? AND Κωδικός_βιβλιοθήκης_αντιτύπου=? AND `Ημερομηνία_που_επιστράφηκε` IS NULL) as t2', 
+	[userId,userId,userId, isbn, bookId, libId], (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+				else {
+					console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 1046 ~ libId", libId)
+
+					callback(null, res)
+				}
+			})
+}
+
+exports.findExtraCost = (userId, isbn, bookId, libId, callback) => {
+
+	sql.query('SELECT IF (days>Διάρκεια_δανεισμού, ceil((days-Διάρκεια_δανεισμού) * Επιβάρυνση_καθυστέρησης_ασυνέπειας), 0) AS cost,\
+	days-Διάρκεια_δανεισμού as extra_days\
+	FROM \
+	(SELECT Διάρκεια_δανεισμού, Επιβάρυνση_καθυστέρησης_ασυνέπειας\
+	FROM Μέλος, Συνδρομή, Επιλογές_Συνδρομής\
+	WHERE Κωδικός_μέλους=? AND Κωδ_μέλους=? AND Κωδ_συνδρομής=Κωδικός_συνδρομής \
+	ORDER BY Αριθμός_συνδρομής\
+	LIMIT 1) as t1,\
+	(SELECT datediff(CURRENT_TIMESTAMP(),Ημερομηνία_δανεισμού) as days, Ημερομηνία_δανεισμού \
+	 FROM `Δανεισμός` \
+	 WHERE `Κωδικός_μέλους`=? AND `ISBN`=? AND `Αρ_αντιτύπου`=? AND Κωδικός_βιβλιοθήκης_αντιτύπου=? AND `Ημερομηνία_που_επιστράφηκε` IS NULL) as t2', 
+	[userId,userId,userId, isbn, bookId, libId], (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+				else {
+					callback(null, res)
+				}
+			})
+}
+
+
+
+exports.returnBook = (userId, isbn, bookId, libId, loggedLibraryId, callback) => {
+console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 1096 ~ userId", userId)
+
+	sql.query('UPDATE Δανεισμός \
+				SET Ημερομηνία_που_επιστράφηκε=CURRENT_TIMESTAMP, Βιβλιοθήκη_καταχώρησης_επιστροφής=?\
+				WHERE ISBN=? AND Κωδικός_βιβλιοθήκης_αντιτύπου=? AND Αρ_αντιτύπου=? AND Ημερομηνία_που_επιστράφηκε IS NULL', 
+	[loggedLibraryId,isbn,libId, bookId], (err, res) => {
+				if (err) {
+					console.log(err.stack)
+					callback(err.stack)
+				}
+				else {
+					callback(null, res)
+				}
+			})
+}
 
 
 

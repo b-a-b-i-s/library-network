@@ -50,7 +50,20 @@ router.get('/users-staff', libraryController.checkStaffAuthenticated, libraryCon
 
 router.post('/add-user-subscription/:subId', libraryController.checkStaffAuthenticated, libraryController.addUserSub)// 
 // TODO auth
-router.get('/book-staff/:ISBN',  libraryController.renderBookStaff)//libraryController.checkStaffAuthenticated
+router.get('/book-staff/:ISBN', libraryController.checkStaffAuthenticated, libraryController.renderBookStaff);//libraryController.checkStaffAuthenticated
+router.post('/book-staff/:ISBN', libraryController.checkStaffAuthenticated, libraryController.addNewBookToLib);//libraryController.checkStaffAuthenticated
+
+router.post('/borrow/:ISBN', libraryController.checkStaffAuthenticated, libraryController.newBorrow);//libraryController.checkStaffAuthenticated
+router.get('/reservation-confirm/:userId', libraryController.checkStaffAuthenticated, libraryController.reservationConfirm)
+
+router.get('/return/:isbn/:bookId/:libId/:userId', libraryController.checkStaffAuthenticated, libraryController.returnBook)
+
+
+
+
+
+
+
 
 // Admin
 router.get('/admin', libraryController.checkAdminAuthenticated, (req, res) => res.render('admin', {style: ["staff"], partialContext: {name:'Admin', admin:true}, loggedin:true}))

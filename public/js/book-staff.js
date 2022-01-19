@@ -47,10 +47,12 @@ window.addEventListener("load", () => {
         if (item.classList.contains('available-btn')) {
             item.addEventListener('click', (el)=> {
                 modalavail.style.display = "block";
-                console.log(userId);
+                // console.log(userId);
                 // nameInSubs.textContent = `${el.target.dataset.userName} [${el.target.dataset.userId}]`
-                bookId = Number(el.target.dataset.bookId)
-                bookLibraryId = Number(el.target.dataset.bookLibraryId)
+                // bookId = Number(el.target.dataset.bookId)
+                document.querySelector('#book-num').value = el.target.dataset.bookId
+                // bookLibraryId = Number(el.target.dataset.bookLibraryId)
+                document.querySelector('#lib-id').value = el.target.dataset.bookLibraryId
             })
         }
         else if (item.classList.contains('keeped-btn')) {
@@ -70,7 +72,8 @@ window.addEventListener("load", () => {
         else if (item.classList.contains('to-return-delay')) {
             // return script
             item.addEventListener('click', (el)=> {
-                modaladalayed.style.display = "block";
+                // TODO
+                // modaladalayed.style.display = "block";
                 console.log('delayed return');
                 // nameInSubs.textContent = `${el.target.dataset.userName} [${el.target.dataset.userId}]`
                 bookId = Number(el.target.dataset.bookId)
