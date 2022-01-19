@@ -20,8 +20,9 @@
                 <select id="select-library" name="select-library">
                     <option value="" disabled hidden selected>Επιλέξτε βιβλιοθήκη</option>
                     <option value="all">Όλες</option>
-                    <option value="patra">Δανειστική Βιβλιοθήκη Πατρών</option>
-                    <option value="saab">Δανειστική Βιβλιοθήκη Αθήνας</option>
+                    {{#each libraries}}
+                    <option value="sel{{this.Κωδικός_Βιβλιοθήκης}}">{{this.Όνομα}}</option>
+                    {{/each}}
                 </select>
             </div>
 
@@ -62,12 +63,12 @@
                 </div> -->
                 <div id="list1" class="dropdown-check-list" tabindex="100">
                     <span class="anchor" id="anchor">Επιλέξτε κατηγορίες</span>
-                    <ul class="items" id="categories">
-                        <li><label for="select-all"><input type="checkbox" name="category" id="select-all"/> Επιλογή όλων</label></li>
-                        <li><label for="philosophy"><input type="checkbox" name="category" id="philosophy"/> Φιλοσοφία</label></li>
-                        <li><label for="computers"><input type="checkbox" name="category"id="computers"/> Υπολογιστές</label></li>
-                        <li><label for="databases"><input type="checkbox" name="category"id="databases"/> Βάσεις δεδομένων</label></li>
+                    <ul style="max-height: 10em; overflow: auto;" class="items" id="categories">
                         
+                        <li><label for="select-all"><input type="checkbox" name="category" id="select-all"/> Επιλογή όλων</label></li>
+                        {{#each categories}}
+                            <li><label for="cat{{this.Κωδικός}}"><input type="checkbox" name="category{{this.Κωδικός}}" id="cat{{this.Κωδικός}}" value="{{this.Κωδικός}}"/> {{this.Όνομα}}</label></li>
+                        {{/each}}                        
                         <!-- let checkboxes = document.querySelectorAll('input[name="category"]:checked'); -->
 
 

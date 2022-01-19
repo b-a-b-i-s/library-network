@@ -89,7 +89,7 @@ exports.renderBooks = (req, res) => {
 
 
     model.getBooks(search, (err, books)=> {
-        console.log("🚀 ~ file: library-network-controller.js ~ line 92 ~ model.getBooks ~ books", books)
+        // console.log("🚀 ~ file: library-network-controller.js ~ line 92 ~ model.getBooks ~ books", books)
         if (err) {
             res.send(err);
         }
@@ -158,22 +158,34 @@ exports.renderBooks = (req, res) => {
                         if (allBooks[item.ISBN])
                         allBooks[item.ISBN].total_books_count = item.total_books_count;
                     })
+
+                    model.getCategories(req, (err, categories)=> {
+                        if (err) {
+                            res.send(err);
+                        }
+
+                        model.getLibrariesNoPhone(req, (err, libraries)=> {
+                            if (err) {
+                                res.send(err);
+                            }                        
         
                     // console.log('end')
                     // console.log(allBooks)
-                    // console.log(Object.values(allBooks));
-                    let loggedin=false;
-            
+                        // console.log(Object.values(allBooks));
+                            let loggedin=false;
+                
 
-                    if (req.session.loggedUserName){
-                        loggedin = true;
-                    }
-                    if (req.session.loggedLibraryId){
-                        res.render('books',{books: allBooks, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, libraryLogged:true, loggedin:loggedin});
-                    }
-                    else {
-                        res.render('books',{books: allBooks, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin});
-                    }
+                            if (req.session.loggedUserName){
+                                loggedin = true;
+                            }
+                            if (req.session.loggedLibraryId){
+                                res.render('books',{books: allBooks,categories:categories, libraries:libraries, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, libraryLogged:true, loggedin:loggedin});
+                            }
+                            else {
+                                res.render('books',{books: allBooks,categories:categories, libraries:libraries, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin});
+                            }
+                        });
+                    })
                 })       
             });
         }
@@ -216,7 +228,6 @@ exports.renderBook = (req, res) => {
         if (err) {
             res.send(err);
         }
-// console.log("🚀 ~ file: library-network-controller.js ~ line 196 ~ model.getBook ~ book", book)
         if (book.length==0 || book==undefined) {
             let loggedin=false;
             if (req.session.loggedUserName){
@@ -1080,7 +1091,7 @@ exports.renderBookStaff = (req, res) => {
                 if (err) {
                     res.send(err);
                 }
-                console.log(req.params.ISBN)
+                // console.log(req.params.ISBN)
                 model.bookCountAllISBN(req.params.ISBN, (err, total_books_count)=> {
                     if (err) {
                         res.send(err);
@@ -1106,16 +1117,17 @@ exports.renderBookStaff = (req, res) => {
                     // continueFindingBook(req, book[0],writers_end, total_books_count[0].total_books_count,
                     //      categories, writers,  imageFile)
                     model.getSpecificLocationOfSpecificBook(req.params.ISBN, (err, locations)=> {
-                        console.log("🚀 ~ file: library-network-controller.js ~ line 1121 ~ model.getSpecificLocationOfEveryBook ~ location", locations)
+                        // console.log("🚀 ~ file: library-network-controller.js ~ line 1121 ~ model.getSpecificLocationOfEveryBook ~ location", locations)
                         if (err) {
                             res.send(err);
                         }
                     
                         model.getIsbnReservations(req.params.ISBN, (err, reservations)=> {
-                            console.log("🚀 ~ file: library-network-controller.js ~ line 1127 ~ model.getAllReservations ~ reservations", reservations)
+                            // console.log("🚀 ~ file: library-network-controller.js ~ line 1127 ~ model.getAllReservations ~ reservations", reservations)
                             if (err) {
                                 res.send(err);
                             }
+    console.log("🚀 ~ file: library-network-controller.js ~ line 1132 ~ model.getIsbnReservations ~ reservations", reservations)
 
                             if (reservations.length>0){
                                 reservations.forEach(element => {
@@ -1127,6 +1139,7 @@ exports.renderBookStaff = (req, res) => {
                                             locations[j].Δανεισμένο_σε==null &&
                                             locations[j].Μέλος == undefined){
                                                 locations[j].Μέλος= element.Μέλος;
+                                                break;
                                             }
                                         }
                                     
@@ -1139,29 +1152,50 @@ exports.renderBookStaff = (req, res) => {
                                 if (err) {
                                     res.send(err);
                                 }
-                        
-                            
+
+                                const libDict = {};
+
+                                libraries.forEach(el=>{
+                                    libDict[el.Κωδικός_Βιβλιοθήκης] = el.Όνομα;
+                                })
 
                                 let thisLib = [];
 
+                                let otherLibs = [];
+                                locations.forEach(item=>{                                        
+                                    // console.log("🚀 ~ file: library-network-controller.js ~ line 1154 ~ model.getLibrariesNoPhone ~ req.session.loggedLibraryId", req.session.loggedLibraryId)
+                                        // console.log("🚀 ~ file: library-network-controller.js ~ line 1154 ~ model.getLibrariesNoPhone ~ item.Κωδικός_Βιβλιοθήκης", item.Κωδικός_Βιβλιοθήκης)
 
-                                let otherLibs = {};
-                                locations.forEach(item=>{
-                                    if (item.Βιβλιοθήκη_τώρα==req.session.loggedLibraryId) thisLib.push(item);
-                                    else if (otherLibs[item.Βιβλιοθήκη_τώρα]){
-                                        otherLibs[item.Βιβλιοθήκη_τώρα].push(item);
+                                    if (item.Κωδικός_Βιβλιοθήκης==req.session.loggedLibraryId){
+                                        item.Βιβλιοθήκη_τώρα_όνομα = libDict[item.Βιβλιοθήκη_τώρα]
+                                        if (item.Βιβλιοθήκη_τώρα==req.session.loggedLibraryId) {
+                                            item.here = true;
+                                        }
+                                        thisLib.push(item);
                                     }
-                                    else {
-                                        otherLibs[item.Βιβλιοθήκη_τώρα]=[item];
+                                    else if (item.Βιβλιοθήκη_τώρα==req.session.loggedLibraryId) {
+                                        item.here = true;
+                                        item.owner = libDict[item.Κωδικός_Βιβλιοθήκης]
+                                        otherLibs.push(item);
                                     }
                                 })
-                                console.log("🚀 ~ file: library-network-controller.js ~ line 1138 ~ model.getIsbnReservations ~ thisLib", thisLib)
-                                console.log("🚀 ~ file: library-network-controller.js ~ line 1142 ~ model.getIsbnReservations ~ otherLibs", otherLibs)
+                                locations.forEach(item=>{
+                                    if (item.Κωδικός_Βιβλιοθήκης!=req.session.loggedLibraryId && item.Βιβλιοθήκη_τώρα!=req.session.loggedLibraryId) {
+                                        
+                                        item.Βιβλιοθήκη_τώρα_όνομα = libDict[item.Βιβλιοθήκη_τώρα]
+                                        item.owner = libDict[item.Κωδικός_Βιβλιοθήκης]
+                                        otherLibs.push(item);
+                                    }
+                                })
 
-res.redirect('/')
-                            // res.render('book',{book: book[0],writers_end:writers_end, total_books_count:total_books_count[0].total_books_count,
-                            //     locations: locations, categories:categories, writers: writers,  imageFile: imageFile, style: ["book",'book-staff']
-                            //     , partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
+                                
+                                // console.log("🚀 ~ file: library-network-controller.js ~ line 1138 ~ model.getIsbnReservations ~ thisLib", thisLib)
+                                // console.log("🚀 ~ file: library-network-controller.js ~ line 1142 ~ model.getIsbnReservations ~ otherLibs", otherLibs)
+
+// res.redirect('/')
+                            res.render('book-staff',{book: book[0],writers_end:writers_end, total_books_count:total_books_count[0].total_books_count,
+                                isbn:req.params.ISBN, categories:categories, writers: writers,  imageFile: imageFile, style: ["book",'book-staff']
+                                ,thisLib:thisLib, otherLibs:otherLibs, booksHere: thisLib.lenth, booksOthers: otherLibs.lenth, partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
                             });
                         })
                     })
@@ -1172,12 +1206,93 @@ res.redirect('/')
     });
 }
 
+exports.addNewBookToLib = function (req, res, next) {
+    model.addNewBookToLib(req.params.ISBN, req.session.loggedLibraryId, (err, result)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        res.redirect(`/book-staff/${req.params.ISBN}`);
+    })
+}
+
+
+exports.newBorrow = function (req, res, next) {
+        console.log("🚀 ~ file: library-network-controller.js ~ line 1210 ~ model.checkBorrow ~ req.body.userId", req.body.userId)
+
+    model.checkBorrow(req.body.userId, (err, result)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        if (result){
+            if (result[0]){
+                if (result[0].possible) {
+                model.newBorrow(req.body.userId, req.params.ISBN, req.body.bookNum, req.body.libraryId, req.session.loggedLibraryId, (err, result)=> {
+                    if (err) {
+                        res.send(err);
+                    }
+            
+                    res.redirect('back');
+                })
+            }
+            else res.redirect('back')
+            }
+            else res.redirect('back')
+            
+        }
+        else res.redirect('back')  
+    })
+}
 
 
 
 
+exports.returnBook = function (req, res, next) {
+    const {isbn,bookId,libId,userId} = req.params;
+    console.log("🚀 ~ file: library-network-controller.js ~ line 1236 ~ libId", libId)
+    console.log("🚀 ~ file: library-network-controller.js ~ line 1236 ~ bookId", bookId)
+
+    console.log("🚀 ~ file: library-network-controller.js ~ line 1236 ~ a", isbn)
+    
+
+    model.findExtraCost(userId, isbn,bookId,libId, (err, result)=> {
+        console.log("🚀 ~ file: library-network-controller.js ~ line 1256 ~ model.findExtraCost ~ result", result)
+        if (err) {
+            res.send(err);
+        }
+
+        
+        let message;
+
+            if (result) {
+                if (result[0].cost>0)
+                message = `Ο χρήστης πρέπει να πληρώσει ${result[0].cost}€ γιατί καθυστέρησε ${result[0].extra_days} μέρες`;
+            }
+            else message='Επιτυχία'
+        
+
+        model.returnBook(userId,isbn,bookId,libId, req.session.loggedLibraryId, (err, result)=>{
+            if (err) {
+                res.send(err);
+            }
+
+            res.render('home', {alert:message, style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
+        })
+
+    })
+}
 
 
+exports.reservationConfirm = function (req, res, next) {
+    model.reservationConfirm(req.params.userId, (err, result)=> {
+        if (err) {
+            res.send(err);
+        }
+
+        res.redirect(`back`);
+    })
+}
 
 
 

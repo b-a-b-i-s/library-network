@@ -2,7 +2,7 @@
 
     <div id="borrow-available" class="modal-lib">
   
-        <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="">
+        <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="/borrow/{{this.isbn}}">
           <span class="close-sign">&times;</span>
           <fieldset>
               <!-- <i class="fas fa-sign-in-alt fa-4x" id="sign-in-icon"></i> -->
@@ -11,20 +11,23 @@
     
               <div style="margin: auto; text-align: center;">
                 <label for="user-id"><strong>Κωδικός μέλους:&nbsp;</strong>
-                    <input type="text" name="user-id" id="user-id" style="width: 10em;" required>
+                    <input type="text" name="userId" id="user-id" style="width: 10em;" required>
                 </label>
+
+                <input type="text" name="bookNum" id="book-num" style="display:none;">
+                <input type="text" name="libraryId" id="lib-id" style="display:none;">
                   
               </div> 
     
     
             <br>
     
-            <button class="reserve-btn save-btn1">Δανεισμός</button>
+            <button type="submit" class="reserve-btn save-btn1">Δανεισμός</button>
           </fieldset>
         </form>
       </div>
 
-      <div id="delayed-return" class="modal-lib">
+      <div id="delayed-return" class="modal-lib" style="display: none;">
   
         <form class="new-library modal-lib-content" style="background-color: whitesmoke;" method="POST" action="">
           <span class="close-sign">&times;</span>
@@ -81,55 +84,70 @@
                     {{/each}}
                     </span><br><br>
                     <span><strong>Συνολικά αντίτυπα: </strong></span>{{total_books_count}}<span></span><br><br>
-                    <span><strong><u>Αντίτυπα Βιβλιοθήκης: 4</u></strong></span><br>
                     
+                    <span><strong><u>Αντίτυπα Βιβλιοθήκης: {{this.booksHere}}</u></strong></span><br>
+                    <div>
                     <table class="my-lib">
                         <tr>
                             <th>Αντίτυπο</th>
                             <th>Θέση</th>
                             <th>Δανεισμός</th>
                         </tr>
-                        <tr class="available">
-                            <td>Αντίτυπο 1</td>
-                            <td>Διαθέσιμο για δανεισμό</td>
-                            <td><button class="reserve-btn borrow-btn available-btn" data-book-id="1" data-book-library-id="my">Δανεισμός</button></td>
-                        </tr>
-                        <tr class="keeped">
-                            <td>Αντίτυπο 2</td>
-                            <td>Κρατημένο για 3 μέρες από τον/την Γιαννης Παπάς [123456]</td>
-                            <td><button class="reserve-btn borrow-btn keeped-btn" data-book-id="2" data-book-lib-id="my">Δανεισμός</button></td>
-                        </tr>
-                        <tr class="not-available">
-                            <td>Αντίτυπο 3</td>
-                            <td>Βιβλιοθήκη Πατρών</td>
-                            <td><button class="reserve-btn borrow-btn disabled">Δανεισμός</button></td>
-                        </tr>
-                        <tr class="not-available">
-                            <td>Αντίτυπο 4</td>
-                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους [165] <span style="color: green;">(Μέγιστη επιστροφή: 12 ημέρες)</span></td>
-                            <td><button class="reserve-btn borrow-btn to-return">Επιστροφή</button></td>
-                        </tr>
-                        <tr class="not-available">
-                            <td>Αντίτυπο 5</td>
-                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους [165] (Καθυστέρηση: 12 ημέρες)</td>
-                            <td><button class="reserve-btn borrow-btn to-return-delay">Επιστροφή</button></td>
-                        </tr>
-                        <tr class="not-available">
-                            <td>Αντίτυπο 6</td>
-                            <td>Σε μεταφορά</td>
-                            <td><button class="reserve-btn borrow-btn disabled">Επιστροφή</button></td>
-                        </tr>
+                        {{#each thisLib}}
+                            
+                            {{#if this.Μέλος}}
+                            <tr class="keeped"></tr>
+                                <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                                <td>Κρατημένο για τον χρήστη {{this.Μέλος}}</td>
+                                <td><button class="reserve-btn borrow-btn available-btn" onclick=" location.href='/reservation-confirm/{{this.Μέλος}}' ">Δανεισμός</button></td>
+                            </tr>
+                            {{else}}
+                                {{#if this.here}}
+                                <tr class="available"></tr>
+                                    <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                                    <td>Διαθέσιμο για δανεισμό</td>
+                                    <td><button class="reserve-btn borrow-btn available-btn" data-book-id="{{this.Αριθμός_αντιτύπου}}" data-book-library-id="{{this.Κωδικός_Βιβλιοθήκης}}">Δανεισμός</button></td>
+                                </tr>
+                                {{else}}
+                                    {{#if this.Μεταφέρεται_σε}}
+                                    <tr class="not-available">
+                                        <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                                        <td>Μεταφέρεται στην βιβλιοθήκη [{{this.Μεταφέρεται_σε}}]</td>
+                                        <td><button class="reserve-btn borrow-btn disabled" >Επιστροφή</button></td>
+                                    </tr>
+                                    {{else}}
+                                        {{#if this.Δανεισμένο_σε}}
+                                        <tr class="not-available">
+                                            <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                                            <td>Δανεισμένο στον χρήστη {{this.Δανεισμένο_σε}}</td>
+                                            <td><button class="reserve-btn borrow-btn to-return-delay" onclick=" location.href='/return/{{../isbn}}/{{this.Αριθμός_αντιτύπου}}/{{this.Κωδικός_Βιβλιοθήκης}}/{{this.Δανεισμένο_σε}}' ">Επιστροφή</button></td>
+                                        </tr>
+                                        {{else}}
+                                        <tr class="not-available">
+                                            <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                                            <td>{{this.Βιβλιοθήκη_τώρα_όνομα}}</td>
+                                            <td><button class="reserve-btn borrow-btn disabled">Επιστροφή</button></td>
+                                        </tr>                                        
+
+                                        {{/if}}
+                                    {{/if}}
+                                {{/if}}
+                            {{/if}}
+                        {{/each}}
                     </table>
                     
                     
                 </div>
+
+                <form method="post" action="" style="background-color: #abbed1;">                
+                    <button class="reserve-btn add-new-lib-book">Προσθήκη αντιτύπου</button>
+                </form>
                 
-                <button class="reserve-btn add-new-lib-book">Προσθήκη αντιτύπου</button>
                 
                 <br>
                 
                 <div>
-                    <span><strong><u>Αντίτυπα άλλων βιβλιοθηκών: 4</u></strong></span><br>
+                    <span><strong><u>Αντίτυπα άλλων βιβλιοθηκών: {{this.booksOthers}}</u></strong></span><br>
                     
                     <table class="other-libs">
                         <tr>
@@ -138,34 +156,58 @@
                             <th>Θέση</th>
                             <th>Δανεισμός</th>
                         </tr>
-                        <tr class="available">
-                            <td>Αντίτυπο 1</td>
-                            <td>Βιβλιοθήκη Πατρών</td>
+                        {{#each otherLibs}}
+                            
+                            {{#if this.Μέλος}}
+                        <tr class="keeped"></tr>
+                            <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                            <td>{{this.owner}}</td>
+                            <td>Κρατημένο για τον χρήστη {{this.Μέλος}}</td>
+                            <td><button class="reserve-btn borrow-btn available-btn"   onclick=" location.href='/reservation-confirm/{{this.Μέλος}}' ">Δανεισμός</button></td>
+                        </tr>
+                            {{else}}
+                                {{#if this.here}}
+                        <tr class="available"></tr>
+                            <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                            <td>{{this.owner}}</td>
                             <td>Διαθέσιμο για δανεισμό</td>
-                            <td><button class="reserve-btn borrow-btn available-btn" data-book-id="2" data-book-lib-id="id-patras">Δανεισμός</button></td>
+                            <td><button class="reserve-btn borrow-btn available-btn" data-book-id="{{this.Αριθμός_αντιτύπου}}" data-book-library-id="{{this.Κωδικός_Βιβλιοθήκης}}">Δανεισμός</button></td>
                         </tr>
+                                {{else}}
+                                    {{#if this.Μεταφέρεται_σε}}
                         <tr class="not-available">
-                            <td>Αντίτυπο 2</td>
-                            <td>Βιβλιοθήκη Θεσσαλονίκης</td>
-                            <td>Δανεισμένο στον/στην Γιώργο Ευαγγέλους [165] <span style="color: green;">(Μέγιστη επιστροφή: 12 ημέρες)</span></td>
-                            <td><button class="reserve-btn borrow-btn to-return">Επιστροφή</button></td>
+                            <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                            <td>{{this.owner}}</td>
+                            <td>Μεταφέρεται στην βιβλιοθήκη [{{this.Μεταφέρεται_σε}}]</td>
+                            <td><button class="reserve-btn borrow-btn disabled">Επιστροφή</button></td>
                         </tr>
+                                    {{else}}
+                                        {{#if this.Δανεισμένο_σε}}
                         <tr class="not-available">
-                            <td>Αντίτυπο 3</td>
-                            <td>Βιβλιοθήκη Πατρών</td>
-                            <td>Βιβλιοθήκη Πατρών</td>
-                            <td><button class="reserve-btn borrow-btn disabled">Δανεισμός</button></td>
+                            <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                            <td>{{this.owner}}</td>
+                            <td>Δανεισμένο στον χρήστη {{this.Δανεισμένο_σε}}</td>
+                            <td><button class="reserve-btn borrow-btn to-return-delay"  onclick=" location.href='/return/{{../isbn}}/{{this.Αριθμός_αντιτύπου}}/{{this.Κωδικός_Βιβλιοθήκης}}/{{this.Δανεισμένο_σε}}' ">Επιστροφή</button></td>
                         </tr>
+                                        {{else}}
                         <tr class="not-available">
-                            <td>Αντίτυπο 4</td>
-                            <td>Βιβλιοθήκη Πατρών</td>
-                            <td>Κρατημένο για 3 μέρες από τον/την Γιαννης Παπάς [123456]</td>
-                            <td><button class="reserve-btn borrow-btn">Δανεισμός</button></td>
-                        </tr>
+                            <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
+                            <td>{{this.owner}}</td>
+                            <td>{{this.Βιβλιοθήκη_τώρα_όνομα}}</td>
+                            <td><button class="reserve-btn borrow-btn disabled">Επιστροφή</button></td>
+                        </tr>                                        
+
+                                        {{/if}}
+                                    {{/if}}
+                                {{/if}}
+                            {{/if}}
+                        {{/each}}
                     </table>
                     
                     
                 </div><br>
+
+                </div>
         <!-- <button class="reserve-btn" style="">Κράτηση</button> -->
         <!-- <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br> -->
     </div>
@@ -180,7 +222,7 @@
 
     </script> -->
 
-    <script src="js/book-staff.js"></script>
+    <script src="/js/book-staff.js"></script>
 </body>
 
 </html>
