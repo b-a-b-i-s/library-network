@@ -6,13 +6,10 @@ const router = express.Router({caseSensitive:true});
 
 const libraryController = require('../controller/library-network-controller.js');
 
-//fetch
-// router.get('/meeting/get-data/:url',  meetMeController.getDates)
-// router.post('/meeting/choose-fianl-option/:url',meetMeController.checkAuthenticated, meetMeController.chooseFinalOption)
-// router.post('/meeting/add-votes/:url/:name',  meetMeController.addVotes)
-// router.post('/add-meeting',meetMeController.checkAuthenticated, meetMeController.addMeeting);
 
-// router.get('/meeting/:url',  meetMeController.renderVote)
+
+router.get('/', libraryController.renderHome)
+
 
 router.get('/libraries',  libraryController.renderLibraries)
 
@@ -26,6 +23,7 @@ router.get('/book/:ISBN/error', libraryController.renderBookErrorReservation)
 
 router.post('/book/:ISBN', libraryController.newReservation)
 
+
 //  login
 //      User
 router.post('/login', libraryController.doLogin);
@@ -38,6 +36,8 @@ router.get('/admin-login', (req, res) => res.render('admin-login', {style: ["adm
 router.post('/admin-login', libraryController.doAdminLogin)
 
 router.get('/logout', libraryController.doLogout)
+
+
 
 
 // Staff
@@ -57,8 +57,6 @@ router.post('/borrow/:ISBN', libraryController.checkStaffAuthenticated, libraryC
 router.get('/reservation-confirm/:userId', libraryController.checkStaffAuthenticated, libraryController.reservationConfirm)
 
 router.get('/return/:isbn/:bookId/:libId/:userId', libraryController.checkStaffAuthenticated, libraryController.returnBook)
-
-
 
 
 
@@ -86,9 +84,13 @@ router.post('/subscriptions', libraryController.checkAdminAuthenticated, library
 router.get('/subscriptions/delete/:id', libraryController.checkAdminAuthenticated, libraryController.deleteSubscription)
 
 
-router.get('/', libraryController.renderHome)
 
 // router.all('*', (req, res) => res.render('not_found', {layout: '404'}))
+//fetch
+// router.get('/meeting/get-data/:url',  meetMeController.getDates)
+// router.post('/meeting/choose-fianl-option/:url',meetMeController.checkAuthenticated, meetMeController.chooseFinalOption)
+// router.post('/meeting/add-votes/:url/:name',  meetMeController.addVotes)
+// router.post('/add-meeting',meetMeController.checkAuthenticated, meetMeController.addMeeting);
 
 
 module.exports = router;
