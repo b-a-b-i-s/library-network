@@ -9,7 +9,15 @@ const router = require('./routes/library-network-routes');
 
 const app = express()
 
-const MemoryStore = require('memorystore')(session)
+// const MemoryStore = require('memorystore')(session)
+
+
+const { createClient } = require('redis')
+
+
+let RedisStore = require('connect-redis')(session)
+let redisClient = createClient()
+
 
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -32,7 +40,8 @@ app.use(session({
   cookie: {
       maxAge: 24 * 60 * 60 * 1000,
   },
-  store: new MemoryStore({ checkPeriod: 86400000 })
+  store: new RedisStore({ client: redisClient }),
+//  new MemoryStore({ checkPeriod: 86400000 })
 }));
 
 if (app.get('env') === 'production') {
