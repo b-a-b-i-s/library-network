@@ -5,6 +5,8 @@ const logger = require('morgan');
 const createError = require('http-errors');
 const session = require('express-session');
 
+const router = require('./routes/library-network-routes');
+
 const app = express()
 
 const MemoryStore = require('memorystore')(session)
@@ -12,13 +14,13 @@ const MemoryStore = require('memorystore')(session)
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-
-app.use(logger('dev'));
-app.engine('hbs', engine({ extname: '.hbs', defaultLayout: "main"}));
+// view engine setup
+app.engine('hbs', engine({ extname: '.hbs'}));
 app.set('view engine', 'hbs');
 
-app.use(express.urlencoded({ extended: false }));
+app.use(logger('dev'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
 
 app.use(session({
   name: 'library-network',
@@ -36,9 +38,8 @@ app.use((req, res, next) => {
   next();
 })
 
-//Διαδρομές - Routse
-const routes = require('./routes/library-network-routes');
-app.use('/', routes);
+// Διαδρομές - Routes
+app.use('/', router);
 
 
 app.use(function(req, res, next) {
