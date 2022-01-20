@@ -22,6 +22,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+if (app.get('env') === 'production') {
+  app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}
+
 app.use(session({
   name: 'library-network',
   secret: process.env.SESSION_SECRET || 'enterasecrethere', // κλειδί για κρυπτογράφηση του cookie
@@ -29,14 +34,15 @@ app.use(session({
   saveUninitialized: false,
   cookie: {
       maxAge: 24 * 60 * 60 * 1000,
+      secure: true
   },
   store: new MemoryStore({ checkPeriod: 86400000 })
 }));
 
-app.use((req, res, next) => {
+// app.use((req, res, next) => {
   // res.locals.userId = req.session.loggedUserId;
-  next();
-})
+  // next();
+// })
 
 // Διαδρομές - Routes
 app.use('/', router);
