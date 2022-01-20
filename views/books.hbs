@@ -146,7 +146,7 @@
                     fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:{{this.ISBN}}')
                         .then(response => response.json())
                         .then(data => {
-                            if (data.totalItems>0 && data.items[0].volumeInfo.imageLinks.smallThumbnail){
+                            if (data.totalItems>0 && data.items[0].volumeInfo.imageLinks && data.items[0].volumeInfo.imageLinks.smallThumbnail){
                                 document.querySelector('#thumb{{this.ISBN}}').src = data.items[0].volumeInfo.imageLinks.smallThumbnail;
                                 document.querySelector('#thumb{{this.ISBN}}').alt = 'Cover photo from Google books';
                             }

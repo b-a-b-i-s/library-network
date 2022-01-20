@@ -86,7 +86,7 @@ exports.registerUser = async function (username, lastname, email, password, phon
 					else		query = query + ',(?, '+results.insertId+')';
 				}
 
-				console.log(query)
+				// console.log(query)
 
 				sql.query(query, phonesArray, (err, res) => {
 					if (err) {
@@ -235,10 +235,6 @@ exports.getSubscriptions  = function(req, callback) {
 			console.log(err.stack)
 			callback(err.stack)
 		}
-		// console.log('results')
-		// console.log(res)
-		// console.log('rows')
-		// console.log(res.rows)
 		
 		callback(null, res)
 	})
@@ -494,7 +490,7 @@ exports.getLocationsOfBook  = function(isbn, callback) {
 			console.log(err.stack)
 			callback(err.stack)
 		}
-		console.log(res)
+		// console.log(res)
 		
 		callback(null, res)
 	})

@@ -136,7 +136,7 @@ exports.renderBooks = (req, res) => {
                                 locations:[],
                                 total_books_count:0,
                                 not_available:1,
-                                imageFile: checkCoverImage(item.ISBN) ? checkCoverImage(item.ISBN) : 0
+                                imageFile: checkCoverImage(item.ISBN)
                             };
                             allBooks[item.ISBN] = temp;
                             // console.log(temp.imageFile)
