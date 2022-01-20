@@ -18,7 +18,7 @@ const { createClient } = require('redis')
 
 let RedisStore = require('connect-redis')(session)
 let redisClient = createClient({
-  url: process.env.REDISURI
+  url: process.env.REDIS_URL
 });
 
 
