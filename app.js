@@ -32,9 +32,8 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-
-
-app.use(session({
+// Set session
+const sess = {
   name: 'library-network',
   secret: process.env.SESSION_SECRET || 'enterasecrethere', // κλειδί για κρυπτογράφηση του cookie
   resave: false,
@@ -44,12 +43,15 @@ app.use(session({
   },
   store: new RedisStore({ client: redisClient }),
 //  new MemoryStore({ checkPeriod: 86400000 })
-}));
+}
 
 if (app.get('env') === 'production') {
-  // app.set('trust proxy', 1) // trust first proxy
+  //app.set('trust proxy', 1) // trust first proxy
   sess.cookie.secure = true // serve secure cookies
 }
+
+app.use(session(sess));
+
 
 // app.use((req, res, next) => {
   // res.locals.userId = req.session.loggedUserId;
