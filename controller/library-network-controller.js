@@ -1335,7 +1335,7 @@ exports.doAdminLogin = function (req, res) {
             // console.log(req.session)
             // const redirectTo = "/loggedin";               
             //res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:true})
-            res.redirect('/admin')
+            res.render('admin', {style: ["staff"], partialContext: {name:'Admin', admin:true}, loggedin:true})
         }
         saveit();
     }
