@@ -1,8 +1,8 @@
 {
   "name": "databases-library-project",
   "version": "1.0.0",
-  "description": "",
-  "main": "start.js",
+  "description": "Library network for borrowing books",
+  "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "debug": "nodemon --inspect ./start.js",
