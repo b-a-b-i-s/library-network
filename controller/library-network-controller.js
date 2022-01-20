@@ -560,7 +560,7 @@ exports.doLogin = function (req, res) {
                         // console.log("🚀 ~ file: library-network-controller.js ~ line 450 ~ bcrypt.compare ~ req.session.loggedUserId", req.session.loggedUserId)
                         // console.log("🚀 ~ file: library-network-controller.js ~ line 450 ~ bcrypt.compare ~ user[0].Κωδικός_μέλους", user[0].Κωδικός_μέλους)
                         // console.log("🚀 ~ file: library-network-controller.js ~ line 602 ~ bcrypt.compare ~ user[0]", user[0])
-                        req.session.loggedUserName= user[0].Όνομα + ' ' + user[0].Επίθετο;
+                        req.session.loggedUserName = user[0].Όνομα + ' ' + user[0].Επίθετο;
                         console.log("🚀 ~ file: library-network-controller.js ~ line 564 ~ bcrypt.compare ~ user[0].Όνομα", user[0].Όνομα)
                         console.log("🚀 ~ file: library-network-controller.js ~ line 564 ~ bcrypt.compare ~ req.session.loggedUserName", req.session.loggedUserName)
                         // req.session.userId = user.userId
@@ -570,7 +570,7 @@ exports.doLogin = function (req, res) {
                             // console.log(req.session)
                             // const redirectTo = "/loggedin";               
                             //res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:true})
-                            res.redirect('/')
+                            res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:true})
                         }
                         saveit();
                     }
