@@ -13,10 +13,10 @@ const app = express()
 // const MemoryStore = require('memorystore')(session)
 
 
-const { createClient } = require('redis')
 
 let RedisStore = require('connect-redis')(session)
 
+const redis = require("redis");
 let redisClient = redis.createClient({url: process.env.REDIS_URL});
 
 
