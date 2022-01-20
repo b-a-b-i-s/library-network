@@ -1,8 +1,8 @@
-/node_modules
-npm-debug.log
-.DS_Store
-/*.env
-/backup
+# /node_modules
+# npm-debug.log
+# .DS_Store
+# /*.env
+# /backup
 
 
 # Logs
