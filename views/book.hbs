@@ -44,26 +44,28 @@
 
         <div class="book">
             {{#if imageFile}}
-            <img src="{{imageFile}}" alt="Cover photo" class="book-img">
+            <img src="{{imageFile}}" alt="Cover photo of uploaded file" class="book-img">
             {{else}}
-            <img src="" alt="Cover photo" id="thumb{{this.ISBN}}" class="book-img">
+            <img src="" alt="Cover photo" id="thumb{{book.ISBN}}" class="book-img">
             <script>
-                fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:{{this.ISBN}}')
+                fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:{{book.ISBN}}')
                     .then(response => response.json())
                     .then(data => {
-                        if (data.totalItems>0 && data.items[0].volumeInfo.imageLinks.smallThumbnail){
-                            document.querySelector('#thumb{{this.ISBN}}').src = data.items[0].volumeInfo.imageLinks.smallThumbnail;
-                            document.querySelector('#thumb{{this.ISBN}}').alt = 'Cover photo from Google books';
+                        if (data.totalItems>0 && data.items[0].volumeInfo.imageLinks && data.items[0].volumeInfo.imageLinks.smallThumbnail){
+                            document.querySelector('#thumb{{book.ISBN}}').src = data.items[0].volumeInfo.imageLinks.smallThumbnail;
+                            document.querySelector('#thumb{{book.ISBN}}').alt = 'Cover photo from Google books {{book.ISBN}}';
                         }
                         else{
-                            fetch('https://covers.openlibrary.org/b/isbn/{{this.ISBN}}-M.jpg?default=false')
+                            fetch('https://covers.openlibrary.org/b/isbn/{{book.ISBN}}-M.jpg?default=false')
                                 .then(response => {
                                     if (response.status==200){
-                                        document.querySelector('#thumb{{this.ISBN}}').src = 'https://covers.openlibrary.org/b/isbn/{{this.ISBN}}-M.jpg?default=false';
-                                        document.querySelector('#thumb{{this.ISBN}}').alt = 'Cover photo from Open Library';
+                                        document.querySelector('#thumb{{book.ISBN}}').src = 'https://covers.openlibrary.org/b/isbn/{{book.ISBN}}-M.jpg?default=false';
+                                        document.querySelector('#thumb{{book.ISBN}}').alt = 'Cover photo from Open Library';
                                     }
-                                    else
-                                        document.querySelector('#thumb{{this.ISBN}}').src = '/images/booknotpictured.jpg';
+                                    else{
+                                        document.querySelector('#thumb{{book.ISBN}}').src = '/images/booknotpictured.jpg';
+                                        document.querySelector('#thumb{{book.ISBN}}').alt = 'Cover photo not found anywhere';
+                                    }
                                 })
                         }
                     });
