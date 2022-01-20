@@ -22,10 +22,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
-  sess.cookie.secure = true // serve secure cookies
-}
+
 
 app.use(session({
   name: 'library-network',
@@ -37,6 +34,11 @@ app.use(session({
   },
   store: new MemoryStore({ checkPeriod: 86400000 })
 }));
+
+if (app.get('env') === 'production') {
+  // app.set('trust proxy', 1) // trust first proxy
+  sess.cookie.secure = true // serve secure cookies
+}
 
 // app.use((req, res, next) => {
   // res.locals.userId = req.session.loggedUserId;
