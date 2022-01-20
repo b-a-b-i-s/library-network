@@ -15,11 +15,10 @@ const app = express()
 
 const { createClient } = require('redis')
 
-
 let RedisStore = require('connect-redis')(session)
-let redisClient = createClient({
-  url: process.env.REDIS_URL
-});
+
+let redisClient = redis.createClient({url: process.env.REDIS_URL});
+
 
 
 
