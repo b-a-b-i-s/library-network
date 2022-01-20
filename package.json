@@ -17,8 +17,8 @@
     "library",
     "network"
   ],
-  "author": "Charalampos Skeparnakos",
-  "license": "ISC",
+  "author": "Charalampos Skeparnakos <babis.skeparnakos@gmail.com> (https://babis-skeparnakos.xyz)",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/b-a-b-i-s/databases-library-project/issues"
   },
