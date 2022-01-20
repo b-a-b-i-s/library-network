@@ -128,8 +128,7 @@ a:active {
 .book-img {
     margin-left: auto;
     margin-right: 1em;
-    max-width: 10em;
-    max-height: 8em;
+    width: 120px;
 }
 
 

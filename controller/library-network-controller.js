@@ -136,10 +136,12 @@ exports.renderBooks = (req, res) => {
                                 locations:[],
                                 total_books_count:0,
                                 not_available:1,
-                                imageFile: checkCoverImage(item.ISBN)
+                                imageFile: checkCoverImage(item.ISBN) ? checkCoverImage(item.ISBN) : 0
                             };
                             allBooks[item.ISBN] = temp;
+                            // console.log(temp.imageFile)
                         }
+                        
                     });
                     // console.log(allBooks)
                     // console.log(locations)
@@ -204,7 +206,7 @@ function checkCoverImage(ISBN) {
 
     // console.log(imagePath1)
 
-    let imageFile = '/images/booknotpictured.jpg';
+    let imageFile;
     try {
         if (fs.existsSync(imagePath1)) {
             imageFile = `/images/${ISBN}.jpg`;
@@ -241,14 +243,14 @@ exports.renderBook = (req, res) => {
             if (err) {
                 res.send(err);
             }
-            console.log(req.params.ISBN)
+            // console.log(req.params.ISBN)
 
     
                 model.getBookCategories(req.params.ISBN, (err, categories)=> {
                     if (err) {
                         res.send(err);
                     }
-                    console.log(req.params.ISBN)
+                    // console.log(req.params.ISBN)
 
                     model.bookCountAllISBN(req.params.ISBN, (err, total_books_count)=> {
                         if (err) {
@@ -464,14 +466,14 @@ exports.renderBookSuccessfulReservation = (req, res) => {
 }
     
 exports.newReservation = (req, res) => {
-    console.log(req.session.loggedUserId)
+    // console.log(req.session.loggedUserId)
     if (req.session.loggedUserId) {
         model.checkForNewReservation(req.session.loggedUserId, (err, userId)=> {
             if (err) {
                 res.send(err);
             }
 
-            console.log(userId[0])
+            // console.log(userId[0])
 
             if (userId[0]){// success
                 model.makeNewReservation(req, (err, result)=> {
@@ -479,7 +481,7 @@ exports.newReservation = (req, res) => {
                         res.send(err);
                     }
                     
-                    console.log('success')
+                    // console.log('success')
 
                     res.redirect(`/book/${req.params.ISBN}/success`);
             
@@ -549,7 +551,7 @@ exports.doLogin = function (req, res) {
                 // console.log(req.body.UserPass)
                                 
                 bcrypt.compare(req.body.UserPass, user[0].Κωδικός_πρόσβασης, function(err, isMatch) {
-        console.log("🚀 ~ file: library-network-controller.js ~ line 542 ~ model.getUser ~ user", user)
+        // console.log("🚀 ~ file: library-network-controller.js ~ line 542 ~ model.getUser ~ user", user)
 
                     if (err) {
                     throw err
@@ -561,8 +563,8 @@ exports.doLogin = function (req, res) {
                         // console.log("🚀 ~ file: library-network-controller.js ~ line 450 ~ bcrypt.compare ~ user[0].Κωδικός_μέλους", user[0].Κωδικός_μέλους)
                         // console.log("🚀 ~ file: library-network-controller.js ~ line 602 ~ bcrypt.compare ~ user[0]", user[0])
                         req.session.loggedUserName = user[0].Όνομα + ' ' + user[0].Επίθετο;
-                        console.log("🚀 ~ file: library-network-controller.js ~ line 564 ~ bcrypt.compare ~ user[0].Όνομα", user[0].Όνομα)
-                        console.log("🚀 ~ file: library-network-controller.js ~ line 564 ~ bcrypt.compare ~ req.session.loggedUserName", req.session.loggedUserName)
+                        // console.log("🚀 ~ file: library-network-controller.js ~ line 564 ~ bcrypt.compare ~ user[0].Όνομα", user[0].Όνομα)
+                        // console.log("🚀 ~ file: library-network-controller.js ~ line 564 ~ bcrypt.compare ~ req.session.loggedUserName", req.session.loggedUserName)
                         // req.session.userId = user.userId
             
                         async function saveit(){
@@ -607,7 +609,7 @@ exports.renderHome = function (req, res, next) {
 
 exports.doLogout = (req, res) => {
     //Σημειώνουμε πως ο χρήστης δεν είναι πια συνδεδεμένος
-    console.log("loggedout")
+    // console.log("loggedout")
     req.session.destroy();
     res.redirect('/');
 }
@@ -627,7 +629,7 @@ exports.doRegister = function (req, res) {
         }
     }
 
-    console.log(Phones)
+    // console.log(Phones)
 
     // console.log(Phones)
     // model.registerUser(req.body.username, req.body.password, (err, result, message) => {
@@ -811,13 +813,13 @@ exports.addNewBookToDb = function (req, res) {
             res.send(err);
         }
     //   res.json({ fields, files });
-      console.log(fields)
+    //   console.log(fields)
         const UserData = Object.keys(fields)
         const writers = [];
         const categories = []
 
         UserData.forEach((element,index) => {
-            console.log(UserData[index].slice(0,8))
+            // console.log(UserData[index].slice(0,8))
             if (UserData[index].slice(0,6)==='Writer' && fields[UserData[index]]) {
                 writers.push(fields[element])
             }
@@ -1026,7 +1028,7 @@ exports.addUserSub = function (req, res, next) {
     // Έλεγχος αν χρωστάει βιβλία
     model.checkPaid(req.body.userId, (err, results)=> {
     
-        console.log("🚀 ~ file: library-network-controller.js ~ line 1013 ~ model.checkPaid ~ results", results)
+        // console.log("🚀 ~ file: library-network-controller.js ~ line 1013 ~ model.checkPaid ~ results", results)
         if (err) {
             res.send(err);
         }
@@ -1061,7 +1063,7 @@ exports.addUserSub = function (req, res, next) {
 
                     // Βάζει τη συνδρομή
                     model.addUserSub(req.params.subId, req.body.userId, undefined, (err, results)=> {
-                        console.log("🚀 ~ file: library-network-controller.js ~ line 1057 ~ model.addUserSub ~ results", results)
+                        // console.log("🚀 ~ file: library-network-controller.js ~ line 1057 ~ model.addUserSub ~ results", results)
                         if (err) {
                             res.send(err);
                         }
@@ -1131,12 +1133,13 @@ exports.renderBookStaff = (req, res) => {
                             if (err) {
                                 res.send(err);
                             }
-    console.log("🚀 ~ file: library-network-controller.js ~ line 1132 ~ model.getIsbnReservations ~ reservations", reservations)
+    // console.log("🚀 ~ file: library-network-controller.js ~ line 1132 ~ model.getIsbnReservations ~ reservations", reservations)
 
                             if (reservations.length>0){
                                 reservations.forEach(element => {
-                                    for (let j = 0; j < locations.length; j++) {                                        console.log("🚀 ~ file: library-network-controller.js ~ line 1125 ~ model.getIsbnReservations ~ locations[j].Βιβλιοθήκη_τώρα", locations[j].Βιβλιοθήκη_τώρα)
-                                        console.log("🚀 ~ file: library-network-controller.js ~ line 1121 ~ model.getIsbnReservations ~ element.Βιβλιοθήκη_κράτησης", element.Βιβλιοθήκη_κράτησης)
+                                    for (let j = 0; j < locations.length; j++) {                                        
+                                        // console.log("🚀 ~ file: library-network-controller.js ~ line 1125 ~ model.getIsbnReservations ~ locations[j].Βιβλιοθήκη_τώρα", locations[j].Βιβλιοθήκη_τώρα)
+                                        // console.log("🚀 ~ file: library-network-controller.js ~ line 1121 ~ model.getIsbnReservations ~ element.Βιβλιοθήκη_κράτησης", element.Βιβλιοθήκη_κράτησης)
 
                                         if (element.Βιβλιοθήκη_κράτησης==locations[j].Βιβλιοθήκη_τώρα &&
                                             locations[j].Μεταφέρεται_σε==null && 
@@ -1222,7 +1225,7 @@ exports.addNewBookToLib = function (req, res, next) {
 
 
 exports.newBorrow = function (req, res, next) {
-        console.log("🚀 ~ file: library-network-controller.js ~ line 1210 ~ model.checkBorrow ~ req.body.userId", req.body.userId)
+        // console.log("🚀 ~ file: library-network-controller.js ~ line 1210 ~ model.checkBorrow ~ req.body.userId", req.body.userId)
 
     model.checkBorrow(req.body.userId, (err, result)=> {
         if (err) {
@@ -1254,14 +1257,14 @@ exports.newBorrow = function (req, res, next) {
 
 exports.returnBook = function (req, res, next) {
     const {isbn,bookId,libId,userId} = req.params;
-    console.log("🚀 ~ file: library-network-controller.js ~ line 1236 ~ libId", libId)
-    console.log("🚀 ~ file: library-network-controller.js ~ line 1236 ~ bookId", bookId)
+    // console.log("🚀 ~ file: library-network-controller.js ~ line 1236 ~ libId", libId)
+    // console.log("🚀 ~ file: library-network-controller.js ~ line 1236 ~ bookId", bookId)
 
-    console.log("🚀 ~ file: library-network-controller.js ~ line 1236 ~ a", isbn)
+    // console.log("🚀 ~ file: library-network-controller.js ~ line 1236 ~ a", isbn)
     
 
     model.findExtraCost(userId, isbn,bookId,libId, (err, result)=> {
-        console.log("🚀 ~ file: library-network-controller.js ~ line 1256 ~ model.findExtraCost ~ result", result)
+        // console.log("🚀 ~ file: library-network-controller.js ~ line 1256 ~ model.findExtraCost ~ result", result)
         if (err) {
             res.send(err);
         }
@@ -1384,13 +1387,13 @@ exports.renderCategories = function (req, res, next) {
 exports.addCategories = function (req, res, next) {
     const UserData = Object.keys(req.body)
     const categories = [];
-    console.log("🚀 ~ file: library-network-controller.js ~ line 648 ~ cat", Object.keys(req.body))
+    // console.log("🚀 ~ file: library-network-controller.js ~ line 648 ~ cat", Object.keys(req.body))
 
     UserData.forEach(element => {
         categories.push(req.body[element])
     });        
 
-    console.log(categories)
+    // console.log(categories)
 
 
     model.addCategories(categories, (err, result)=> {
