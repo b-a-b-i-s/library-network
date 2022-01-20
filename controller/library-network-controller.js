@@ -560,6 +560,7 @@ exports.doLogin = function (req, res) {
                         // console.log("🚀 ~ file: library-network-controller.js ~ line 450 ~ bcrypt.compare ~ user[0].Κωδικός_μέλους", user[0].Κωδικός_μέλους)
                         // console.log("🚀 ~ file: library-network-controller.js ~ line 602 ~ bcrypt.compare ~ user[0]", user[0])
                         req.session.loggedUserName= user[0].Όνομα + ' ' + user[0].Επίθετο;
+                        console.log("🚀 ~ file: library-network-controller.js ~ line 563 ~ bcrypt.compare ~ req.session.loggedUserName", req.session.loggedUserName)
                         // req.session.userId = user.userId
             
                         async function saveit(){
