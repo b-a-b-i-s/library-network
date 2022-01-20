@@ -141,7 +141,7 @@
                 {{#if this.imageFile}}
                 <img src="{{this.imageFile}}" alt="Cover photo" class="book-img">
                 {{else}}
-                <img src="" alt="Cover photo" id="thumb{{this.ISBN}}" class="book-img">
+                <img src="/images/booknotpictured.jpg" alt="Cover photo not found" id="thumb{{this.ISBN}}" class="book-img">
                 <script>
                     fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:{{this.ISBN}}')
                         .then(response => response.json())
@@ -157,8 +157,6 @@
                                             document.querySelector('#thumb{{this.ISBN}}').src = 'https://covers.openlibrary.org/b/isbn/{{this.ISBN}}-M.jpg?default=false';
                                             document.querySelector('#thumb{{this.ISBN}}').alt = 'Cover photo from Open Library';
                                         }
-                                        else
-                                            document.querySelector('#thumb{{this.ISBN}}').src = '/images/booknotpictured.jpg';
                                     })
                             }
                         });
