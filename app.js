@@ -16,7 +16,9 @@ const { createClient } = require('redis')
 
 
 let RedisStore = require('connect-redis')(session)
-let redisClient = createClient()
+let redisClient = createClient({
+  url: 'redis://alice:foobared@awesome.redis.server:6380'
+});
 
 
 
