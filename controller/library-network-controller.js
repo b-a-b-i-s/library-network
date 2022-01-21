@@ -13,6 +13,16 @@ const { join } = require('path');
 
 
 
+
+
+exports.renderHome = function (req, res, next) {
+    let loggedin=false;
+    if (req.session.loggedUserName){
+        loggedin = true;
+    }
+    res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin})
+}
+
 exports.renderLibraries = (req, res) => {
     model.getLibrariesAndQtt(req, (err, libraries)=> {
         if (err) {
@@ -566,13 +576,15 @@ exports.doLogin = function (req, res) {
                         // console.log("🚀 ~ file: library-network-controller.js ~ line 564 ~ bcrypt.compare ~ user[0].Όνομα", user[0].Όνομα)
                         // console.log("🚀 ~ file: library-network-controller.js ~ line 564 ~ bcrypt.compare ~ req.session.loggedUserName", req.session.loggedUserName)
                         // req.session.userId = user.userId
-            
+
+                        // res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:true})
+
+                        // save function needed if a redirect is made
                         async function saveit(){
                             await req.session.save()
                             // console.log(req.session)
-                            // const redirectTo = "/loggedin";               
-                            //res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:true})
-                            res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:true})
+                            // const redirectTo = "/loggedin";      
+                            res.redirect('/')         
                         }
                         saveit();
                     }
@@ -583,13 +595,7 @@ exports.doLogin = function (req, res) {
     })
 }
 
-exports.renderHome = function (req, res, next) {
-    let loggedin=false;
-    if (req.session.loggedUserName){
-        loggedin = true;
-    }
-    res.render('home', {style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin})
-}
+
 
 //Τη χρησιμοποιούμε για να ανακατευθύνουμε στη σελίδα /login όλα τα αιτήματα από μη συνδεδεμένςου χρήστες
 // exports.checkAuthenticated = function (req, res, next) {
@@ -684,6 +690,12 @@ exports.doRegister = function (req, res) {
 
 
 
+
+
+
+
+
+
 /////////////////////
 //      STAFF      //
 /////////////////////
@@ -760,7 +772,8 @@ exports.doStaffLogin = function (req, res) {
                             // console.log(req.session)
                             // const redirectTo = "/loggedin";               
                             //res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:true})
-                            res.render('staff', {style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
+                            // res.render('staff', {style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true})
+                            res.redirect('/staff')
                         }
                         saveit();
                     }
@@ -1338,7 +1351,8 @@ exports.doAdminLogin = function (req, res) {
             // console.log(req.session)
             // const redirectTo = "/loggedin";               
             //res.render('home', {alert: 'Επιτυχής σύνδεση', style: ['home'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId}, loggedin:true})
-            res.render('admin', {style: ["staff"], partialContext: {name:'Admin', admin:true}, loggedin:true})
+            // res.render('admin', {style: ["staff"], partialContext: {name:'Admin', admin:true}, loggedin:true})
+            res.redirect('/admin')
         }
         saveit();
     }
