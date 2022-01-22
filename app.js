@@ -39,11 +39,11 @@ const sess = {
 }
 
 if (app.get('env') === 'production') {
-  app.set('trust proxy', 1) // trust first proxy
+  // app.set('trust proxy', 1) // trust first proxy
   sess.cookie.secure = true // serve secure cookies
 
   const redis = require("redis");
-  let redisClient = redis.createClient({url: process.env.REDIS_URL});
+  let redisClient = redis.createClient({url: process.env.REDIS_TLS_URL});
   let RedisStore = require('connect-redis')(session)
   sess.store = new RedisStore({ client: redisClient })
 }
