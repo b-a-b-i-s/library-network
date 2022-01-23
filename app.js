@@ -43,8 +43,10 @@ if (app.get('env') === 'production') {
   sess.cookie.secure = true // serve secure cookies
 
   const redis = require("redis");
-  let redisClient = redis.createClient({url: process.env.REDIS_URL});
-  // const redisClient = redis.createClient({
+  let redisClient = redis.createClient({url: process.env.REDIS_TLS_URL});
+  // const fs = require("fs");
+
+  // const client = redis.createClient({
   //   url: process.env.REDIS_TLS_URL,
   //   socket: {
   //     tls: true,
