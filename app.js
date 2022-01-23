@@ -46,7 +46,7 @@ if (app.get('env') === 'production') {
   // let redisClient = redis.createClient({url: process.env.REDIS_URL});
   const fs = require("fs");
 
-  const client = redis.createClient({
+  const redisClient = redis.createClient({
     url: process.env.REDIS_TLS_URL,
     socket: {
       tls: true,
