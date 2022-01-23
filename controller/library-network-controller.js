@@ -228,7 +228,7 @@ function checkCoverImage(ISBN) {
             imageFile = `/images/${ISBN}.png`;
         }
     } catch(err) {
-        console.error(err)
+        throw(err)
     }
 
     return imageFile;

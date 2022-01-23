@@ -33,6 +33,7 @@ const sess = {
   saveUninitialized: false,
   cookie: {
       maxAge: 24 * 60 * 60 * 1000,
+      sameSite: true,
   },
   // store: new MemoryStore({ checkPeriod: 86400000 })
 //  
