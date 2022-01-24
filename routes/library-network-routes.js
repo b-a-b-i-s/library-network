@@ -43,7 +43,7 @@ router.get('/logout', libraryController.doLogout)
 // Staff
 router.get('/staff', libraryController.checkStaffAuthenticated, (req,res)=> res.render('staff', {style:['staff'], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true}))//,  (req, res) => res.render('staff-login', {style: ["admin", "admin-login"]}))
 
-router.get('/add-book-staff', libraryController.checkStaffAuthenticated, libraryController.renderAddNewBook)
+router.get('/add-book-staff', libraryController.checkStaffOrAdminAuthenticated, libraryController.renderAddNewBook)
 router.post('/add-book-staff', libraryController.checkStaffOrAdminAuthenticated, libraryController.addNewBookToDb)
 
 router.get('/users-staff', libraryController.checkStaffAuthenticated, libraryController.renderUsers)
