@@ -1288,6 +1288,7 @@ exports.returnBook = function (req, res, next) {
             if (result) {
                 if (result[0].cost>0)
                 message = `Ο χρήστης πρέπει να πληρώσει ${result[0].cost}€ γιατί καθυστέρησε ${result[0].extra_days} μέρες`;
+                else message='Επιτυχία'
             }
             else message='Επιτυχία'
         
