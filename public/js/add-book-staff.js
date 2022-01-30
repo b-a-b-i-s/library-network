@@ -23,3 +23,11 @@ document.querySelector('#add-writer').addEventListener('click', function(el) {
     document.querySelector(`#writers-${newId}`).select();
 
 })
+
+const checkList = document.getElementById('list1');
+    checkList.querySelector('#anchor').onclick = function(evt) {
+    if (checkList.classList.contains('visible'))
+        checkList.classList.remove('visible');
+    else
+        checkList.classList.add('visible');
+    }
