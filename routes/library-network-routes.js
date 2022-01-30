@@ -49,7 +49,7 @@ router.post('/add-book-staff', libraryController.checkStaffOrAdminAuthenticated,
 router.get('/users-staff', libraryController.checkStaffAuthenticated, libraryController.renderUsers)
 
 router.post('/add-user-subscription/:subId', libraryController.checkStaffAuthenticated, libraryController.addUserSub)// 
-// TODO auth
+
 router.get('/book-staff/:ISBN', libraryController.checkStaffAuthenticated, libraryController.renderBookStaff);//libraryController.checkStaffAuthenticated
 router.post('/book-staff/:ISBN', libraryController.checkStaffAuthenticated, libraryController.addNewBookToLib);//libraryController.checkStaffAuthenticated
 
@@ -87,10 +87,10 @@ router.get('/subscriptions/delete/:id', libraryController.checkAdminAuthenticate
 
 // router.all('*', (req, res) => res.render('not_found', {layout: '404'}))
 //fetch
-// router.get('/meeting/get-data/:url',  meetMeController.getDates)
-// router.post('/meeting/choose-fianl-option/:url',meetMeController.checkAuthenticated, meetMeController.chooseFinalOption)
-// router.post('/meeting/add-votes/:url/:name',  meetMeController.addVotes)
-// router.post('/add-meeting',meetMeController.checkAuthenticated, meetMeController.addMeeting);
+// router.get('/meeting/get-data/:url', Controller.getDates)
+// router.post('/meeting/choose-final-option/:url',Controller.checkAuthenticated, Controller.chooseFinalOption)
+// router.post('/meeting/add-votes/:url/:name',  Controller.addVotes)
+// router.post('/add-meeting',Controller.checkAuthenticated, Controller.addMeeting);
 
 
 module.exports = router;

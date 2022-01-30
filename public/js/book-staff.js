@@ -1,12 +1,14 @@
 
 window.addEventListener("load", () => {
+
+
     const modalavail = document.querySelector("#borrow-available");
     const modaladalayed = document.querySelector("#delayed-return");
     const btnin = document.querySelectorAll(".borrow-btn");
     const spanin = document.querySelectorAll(".close-sign");
 
-    let bookId=-1;
-    let bookLibraryId=-1;
+    // let bookId=-1;
+    // let bookLibraryId=-1;
 
     
     // const modalup = document.getElementById("signupmodal");
