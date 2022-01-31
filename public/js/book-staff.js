@@ -139,5 +139,25 @@ window.addEventListener("load", () => {
         //     modalup.style.display = "none";
         // }
     }
+
+
+    document.querySelectorAll('.keeped button').forEach(item=>{
+        const userId = item.dataset.userId;
+        item.onclick = ()=>{
+            location.href=`/reservation-confirm/${userId}`;
+        }
+    })
+
+    document.querySelectorAll('.to-return-delay').forEach(item=>{
+        const isbn = item.dataset.isbn;
+        const bookId = item.dataset.bookId;
+        const libId = item.dataset.libId;
+        const userId = item.dataset.userId;
+
+
+        item.onclick = ()=>{
+            location.href=`/return/${isbn}/${bookId}/${libId}/${userId}` 
+        }
+    })
 })
 
