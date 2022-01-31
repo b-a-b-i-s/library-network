@@ -57,8 +57,8 @@
             <img src="{{imageFile}}" alt="Cover photo" class="book-img">
             {{else}}
             <img src="/images/booknotpictured.jpg" alt="Cover photo not found" id="thumb{{book.ISBN}}" class="book-img">
-            {{!-- <script src="/js/book-load-image.js"></script> --}}
-            <script>
+            <script src="/js/book-get-image.js"></script>
+            {{!-- <script>
                 fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:{{book.ISBN}}')
                     .then(response => response.json())
                     .then(data => {
@@ -76,7 +76,7 @@
                                 })
                         }
                     });
-            </script>
+            </script> --}}
             {{/if}}
 
             <div>

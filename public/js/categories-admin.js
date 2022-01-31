@@ -111,5 +111,13 @@ window.addEventListener("load", () => {
         //     modalup.style.display = "none";
         // }
     }
+
+
+    document.querySelectorAll('.delete-btn').forEach(item=>{
+        const catId = item.id.slice(3)
+        item.onclick = ()=>{
+            location.href=`/category/remove/${catId}` 
+        }
+    })
 })
 

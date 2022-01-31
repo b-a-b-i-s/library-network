@@ -210,22 +210,26 @@ exports.renderBooks = (req, res) => {
 
 function checkCoverImage(ISBN) {
     // console.log(__dirname)
-    const imagePath1 = `./public/images/${ISBN}.jpg`;
-    const imagePath2 = `./public/images/${ISBN}.jpeg`;
-    const imagePath3 = `./public/images/${ISBN}.png`;
+    const imagePath1 = `./public/covers/${ISBN}.jpg`;
+    const imagePath2 = `./public/covers/${ISBN}.jpeg`;
+    const imagePath3 = `./public/covers/${ISBN}.png`;
+    const imagePath4 = `./public/covers/${ISBN}.tiff`;
 
     // console.log(imagePath1)
 
     let imageFile;
     try {
         if (fs.existsSync(imagePath1)) {
-            imageFile = `/images/${ISBN}.jpg`;
+            imageFile = `/covers/${ISBN}.jpg`;
         }
         else if (fs.existsSync(imagePath2)){
-            imageFile = `/images/${ISBN}.jpeg`;
+            imageFile = `/covers/${ISBN}.jpeg`;
         }
         else if (fs.existsSync(imagePath3)){
-            imageFile = `/images/${ISBN}.png`;
+            imageFile = `/covers/${ISBN}.png`;
+        }
+        else if (fs.existsSync(imagePath3)){
+            imageFile = `/covers/${ISBN}.tiff`;
         }
     } catch(err) {
         throw(err)
@@ -861,7 +865,7 @@ exports.addNewBookToDb = function (req, res) {
                 const oldpath = files.filetoupload.filepath;
                 // console.log("🚀 ~ file: library-network-controller.js ~ line 794 ~ form.parse ~ files.filetoupload.filepath", files.filetoupload.filepath)
                 const extension = path.extname(files.filetoupload.originalFilename)
-                const newpath = './public/images/' + fields.isbn +extension;
+                const newpath = './public/covers/' + fields.isbn +extension;
                 fs.rename(oldpath, newpath, function (err) {
                     if (err) throw err;
                     callbackContinue()
