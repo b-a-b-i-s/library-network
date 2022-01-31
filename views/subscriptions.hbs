@@ -89,7 +89,7 @@
           {{#if ../admin}}
           <div style="display: grid; margin-left: auto; margin-right: 5%; align-items: center;">
           <!-- <button class="edit-btn reserve-btn" onclick=" location.href='./subscriptions-admin-1.html' ">Επεξεργασία</button> -->
-            <button class="edit-btn reserve-btn" onclick=" location.href='/subscriptions/delete/{{this.Κωδικός_συνδρομής}}' " style="margin-right: 1.5em;">Διαγραφή</button>
+            <button class="delete-btn reserve-btn" id='sub{{this.Κωδικός_συνδρομής}}' style="margin-right: 1.5em;">Διαγραφή</button>
           </div>
           {{/if}}
         </div>

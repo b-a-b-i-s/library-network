@@ -141,8 +141,8 @@
                 {{#if this.imageFile}}
                 <img src="{{this.imageFile}}" alt="Cover photo" class="book-img">
                 {{else}}
-                <img src="/images/booknotpictured.jpg" alt="Cover photo not found" id="thumb{{this.ISBN}}" class="book-img">
-                <script>
+                <img src="/covers/booknotpictured.jpg" alt="Cover photo not found" id="thumb{{this.ISBN}}" class="book-img">
+                {{!-- <script async>
                     fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:{{this.ISBN}}', { mode: 'cors' })
                         .then(response => response.json())
                         .then(data => {
@@ -160,7 +160,7 @@
                                     })
                             }
                         });
-                </script>
+                </script> --}}
                 {{/if}}
             </div>
 
@@ -184,3 +184,4 @@
 
 
     <script src="/js/dropdown.js"></script>
+    <script src="/js/book-get-image.js"></script>

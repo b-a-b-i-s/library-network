@@ -5,14 +5,24 @@ const logger = require('morgan');
 const createError = require('http-errors');
 const session = require('express-session');
 const compression = require('compression')
-// const helmet = require('helmet');
+const helmet = require('helmet');
 
 const router = require('./routes/library-network-routes');
 
 const app = express()
 
-// app.use(helmet());
-
+app.use(helmet({
+  crossOriginEmbedderPolicy: false,
+  crossOriginOpenerPolicy: false,
+  contentSecurityPolicy:{
+    useDefaults: true,
+    directives: {
+      "img-src": ["'self'", "i.creativecommons.org licensebuttons.net covers.openlibrary.org books.google.com *.archive.org archive.org data:"],
+      // "script-src": ["'self'", "'unsafe-inline'"],
+      "default-src": ["'self'", "www.googleapis.com covers.openlibrary.org *.archive.org archive.org"]
+    }
+  }
+}));
 
 
 app.use(express.static(path.join(__dirname, 'public')));
