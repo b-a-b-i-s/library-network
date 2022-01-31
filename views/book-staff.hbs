@@ -123,7 +123,9 @@
                             <tr class="keeped"></tr>
                                 <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
                                 <td>Κρατημένο για τον χρήστη {{this.Μέλος}}</td>
-                                <td><button class="reserve-btn borrow-btn available-btn" onclick=" location.href='/reservation-confirm/{{this.Μέλος}}' ">Δανεισμός</button></td>
+                                <td><button class="reserve-btn borrow-btn available-btn" data-user-id="{{this.Μέλος}}" 
+                                        {{!-- onclick=" location.href='/reservation-confirm/{{this.Μέλος}}' " --}}
+                                        >Δανεισμός</button></td>
                             </tr>
                             {{else if this.here}}
                             <tr class="available"></tr>
@@ -141,7 +143,10 @@
                             <tr class="not-available">
                                 <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
                                 <td>Δανεισμένο στον χρήστη {{this.Δανεισμένο_σε}}</td>
-                                <td><button class="reserve-btn borrow-btn to-return-delay" onclick=" location.href='/return/{{../isbn}}/{{this.Αριθμός_αντιτύπου}}/{{this.Κωδικός_Βιβλιοθήκης}}/{{this.Δανεισμένο_σε}}' ">Επιστροφή</button></td>
+                                <td><button class="reserve-btn borrow-btn to-return-delay" data-isbn="{{../isbn}}" data-book-id="{{this.Αριθμός_αντιτύπου}}" 
+                                        data-lib-id="{{this.Κωδικός_Βιβλιοθήκης}}" data-user-id="{{this.Δανεισμένο_σε}}" 
+                                        onclick="location.href='/return/{{../isbn}}/{{this.Αριθμός_αντιτύπου}}/{{this.Κωδικός_Βιβλιοθήκης}}/{{this.Δανεισμένο_σε}}' "
+                                        >Επιστροφή</button></td>
                             </tr>
                             {{else}}
                             <tr class="not-available">
@@ -182,7 +187,9 @@
                             <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
                             <td>{{this.owner}}</td>
                             <td>Κρατημένο για τον χρήστη {{this.Μέλος}}</td>
-                            <td><button class="reserve-btn borrow-btn available-btn"   onclick=" location.href='/reservation-confirm/{{this.Μέλος}}' ">Δανεισμός</button></td>
+                            <td><button class="reserve-btn borrow-btn available-btn" data-user-id="{{this.Μέλος}}" 
+                            {{!-- onclick=" location.href='/reservation-confirm/{{this.Μέλος}}' " --}}
+                            >Δανεισμός</button></td>
                         </tr>
                         {{else if this.here}}
                         <tr class="available"></tr>
@@ -203,7 +210,10 @@
                             <td>Αντίτυπο {{this.Αριθμός_αντιτύπου}}</td>
                             <td>{{this.owner}}</td>
                             <td>Δανεισμένο στον χρήστη {{this.Δανεισμένο_σε}}</td>
-                            <td><button class="reserve-btn borrow-btn to-return-delay"  onclick=" location.href='/return/{{../isbn}}/{{this.Αριθμός_αντιτύπου}}/{{this.Κωδικός_Βιβλιοθήκης}}/{{this.Δανεισμένο_σε}}' ">Επιστροφή</button></td>
+                            <td><button class="reserve-btn borrow-btn to-return-delay" data-isbn="{{../isbn}}" data-book-id="{{this.Αριθμός_αντιτύπου}}" 
+                                    data-lib-id="{{this.Κωδικός_Βιβλιοθήκης}}" data-user-id="{{this.Δανεισμένο_σε}}"
+                                    onclick=" location.href='/return/{{../isbn}}/{{this.Αριθμός_αντιτύπου}}/{{this.Κωδικός_Βιβλιοθήκης}}/{{this.Δανεισμένο_σε}}' "
+                                    >Επιστροφή</button></td>
                         </tr>
                         {{else}}
                         <tr class="not-available">
