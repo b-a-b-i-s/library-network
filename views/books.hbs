@@ -65,7 +65,7 @@
                     <span class="anchor" id="anchor">Επιλέξτε κατηγορίες</span>
                     <ul style="max-height: 10em; overflow: auto;" class="items" id="categories">
                         
-                        <li><label for="select-all"><input type="checkbox" name="category" id="select-all"/> Επιλογή όλων</label></li>
+                        <li><label for="select-all"><input type="checkbox" name="categoryAll" id="select-all" value="select-all"/> Επιλογή όλων</label></li>
                         {{#each categories}}
                             <li><label for="cat{{this.Κωδικός}}"><input type="checkbox" name="category{{this.Κωδικός}}" id="cat{{this.Κωδικός}}" value="{{this.Κωδικός}}"/> {{this.Όνομα}}</label></li>
                         {{/each}}                        
@@ -186,29 +186,4 @@
         crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/285af68c5a.js" crossorigin="anonymous"></script>
 
-    <script>
-        const checkList = document.getElementById('list1');
-        checkList.getElementsByClassName('anchor')[0].onclick = function(evt) {
-        if (checkList.classList.contains('visible'))
-            checkList.classList.remove('visible');
-        else
-            checkList.classList.add('visible');
-        }
-
-        document.querySelector("#select-all").addEventListener('change', function() {
-            let categoryItems = document.querySelectorAll('input[name="category"]')
-            if (categoryItems[0].checked) {
-                // for (let i = 0; i<a.length)
-                categoryItems.forEach(function(item) {
-                    item.checked = true
-                })
-            }
-            else {
-                categoryItems.forEach(function(item) {
-                    item.checked = false
-                })
-            }
-        })
-
-
-    </script>
+    <script src="/js/dropdown.js"></script>

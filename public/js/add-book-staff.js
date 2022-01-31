@@ -24,7 +24,7 @@ document.querySelector('#add-writer').addEventListener('click', function(el) {
 
 })
 
-const checkList = document.getElementById('list1');
+const checkList = document.querySelector('#list1');
     checkList.querySelector('#anchor').onclick = function(evt) {
     if (checkList.classList.contains('visible'))
         checkList.classList.remove('visible');
