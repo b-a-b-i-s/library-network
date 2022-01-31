@@ -20,7 +20,13 @@
 
 <body>
 
-    <div id="alert-modal" class="modal-lib-alert" style="display: none;">
+    <div id="alert-modal" class="modal-lib-alert" 
+    {{#if alert}}
+        style="display: block;"
+    {{else}}
+        style="display: none;"
+    {{/if}}
+    >
         <div class="alert-content modal-lib-content-alert" style="background-color:whitesmoke; width:40%;">
              <span class="close-sign-alert" id="close-sign-alert">&times;</span>
             <fieldset>
@@ -45,12 +51,7 @@
 
     {{{body}}}
 
-    {{#if alert}}
-    <script>
-        document.querySelector('#alert-modal').style.display='block'
-    </script>
-
-    {{/if}}
+    
 
     {{#if loggedin}}
         <script src="/js/modal-logged.js"></script>
