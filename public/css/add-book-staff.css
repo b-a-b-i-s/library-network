@@ -231,6 +231,11 @@ form , fieldset {
     /* box-shadow: 1px 1px #EB6E34; */
 }
 
+.add-book-staff input[type="checkbox"]:hover {
+    border: 0;
+    /* box-shadow: 1px 1px #EB6E34; */
+}
+
 .add-book-staff input::placeholder {
     color: #31170bd2;
     transition: none;
@@ -249,9 +254,9 @@ form , fieldset {
 
 
 .add-book-staff input[type="checkbox"]:focus {
-    border: 0 !important;
-    outline: none !important; 
-    box-shadow: 0 !important;
+    border: 0;
+    outline: none; 
+    box-shadow: 0 0 0 0;
     border-radius: 0;
 }
     

@@ -192,10 +192,10 @@ exports.renderBooks = (req, res) => {
                                 loggedin = true;
                             }
                             if (req.session.loggedLibraryId){
-                                res.render('books',{books: allBooks,categories:categories, libraries:libraries, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, libraryLogged:true, loggedin:loggedin});
+                                res.render('books',{books: allBooks,categories:categories, libraries:libraries, style: ["books", "dropdown"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, libraryLogged:true, loggedin:loggedin});
                             }
                             else {
-                                res.render('books',{books: allBooks,categories:categories, libraries:libraries, style: ["books"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin});
+                                res.render('books',{books: allBooks,categories:categories, libraries:libraries, style: ["books", "dropdown"], partialContext: {name:req.session.loggedUserName, userid: req.session.loggedUserId||req.session.loggedLibraryId}, loggedin:loggedin});
                             }
                         });
                     })
