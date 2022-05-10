@@ -5,9 +5,10 @@
 } */
 html {
     height: 100%;
-  }
-  body {
-      position: relative;
+}
+
+body {
+    position: relative;
     min-height: 100%;
     padding-bottom: 2.02em;
 }
@@ -440,3 +441,6 @@ label {
 
 }
 
+.address-edit input {
+    margin: 0.75em 0;
+}
