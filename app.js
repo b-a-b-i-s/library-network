@@ -19,7 +19,8 @@ app.use(helmet({
     directives: {
       "img-src": ["'self'", "i.creativecommons.org licensebuttons.net covers.openlibrary.org books.google.com *.archive.org archive.org data:"],
       // "script-src": ["'self'", "'unsafe-inline'"],
-      "default-src": ["'self'", "www.googleapis.com covers.openlibrary.org *.archive.org archive.org"]
+      "script-src": ["'self'", "www.googletagmanager.com 'sha256-siPczbDnkR2146fECl0hOWvyYgQKCAvxKJ+4dmBaXCk='"],
+      "default-src": ["'self'", "www.googleapis.com covers.openlibrary.org *.archive.org archive.org www.google-analytics.com"]
     }
   }
 }));

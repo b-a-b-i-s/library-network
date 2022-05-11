@@ -1,10 +1,10 @@
 document.querySelectorAll('.book-img[id^="thumb"]').forEach(item=>{
     const ISBN = item.id.slice(5);
 
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${ISBN}`)
+    fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:4${ISBN}`)
         .then(response => response.json())
         .then(data => {
-            if (data.totalItems>0 && data.items[0].volumeInfo.imageLinks && data.items[0].volumeInfo.imageLinks.smallThumbnail){
+            if (data?.items?.[0]?.volumeInfo?.imageLinks?.smallThumbnail){
                 document.querySelector(`#thumb${ISBN}`).src = data.items[0].volumeInfo.imageLinks.smallThumbnail;
                 document.querySelector(`#thumb${ISBN}`).alt = 'Cover photo from Google books';
             }
