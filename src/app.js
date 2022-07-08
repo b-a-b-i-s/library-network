@@ -30,6 +30,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // view engine setup
 app.engine('hbs', engine({ extname: '.hbs'}));
+app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'hbs');
 
 app.use(logger('dev'));

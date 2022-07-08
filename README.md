@@ -1,6 +1,6 @@
 # databases-library-project
 
-Η σελίδα υπάρχει διαθέσιμη στο link : https://library-network.herokuapp.com/
+Η σελίδα υπάρχει διαθέσιμη στο link : <https://library-network.herokuapp.com/>
 
 Για την ανάκτηση των εξώφυλλων που δεν έχουν προστεθεί από τις βιβλιοθήκες χρησιμοποιούνται τα API :
 
