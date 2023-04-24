@@ -24,7 +24,7 @@
   },
   "homepage": "https://github.com/b-a-b-i-s/databases-library-project#readme",
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcrypt": "^5.1.0",
     "compression": "^1.7.4",
     "connect-redis": "^6.0.0",
     "dotenv": "^14.3.2",
