@@ -1,0 +1,26 @@
+version: '2'
+
+services:
+  db:
+    image: mysql:5.7
+    env_file:
+      - ./.env
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./src/model/library-network.sql:/docker-entrypoint-initdb.d/1.ddl-schema.sql
+      - ./src/model/books.sql:/docker-entrypoint-initdb.d/2.books.sql
+  redis:
+    image: redis/redis-stack-server:latest
+    env_file:
+      - ./.env
+    ports:
+      - 6379:6379
+  # adminer:
+  #   image: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+volumes: 
+  mysql-data:

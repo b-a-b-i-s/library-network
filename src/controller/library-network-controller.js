@@ -555,10 +555,11 @@ exports.doLogin = function (req, res) {
     //συνάρτηση επιστροφής authenticated
 
     model.getUser(req.body.UserEmailOrPhone, (err, user) => {
-        if (user == undefined) {
+        if (user == null || user.length === 0) {
             res.render('home', {alert: 'Λάθος στοιχεία', style: ["home"]})
         }
         else {
+            console.log('user',user)
             //Θέτουμε τη μεταβλητή συνεδρίας "loggedUserId"
 
             async function checkcode(){
