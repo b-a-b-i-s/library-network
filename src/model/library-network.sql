@@ -1,13 +1,14 @@
 --
 -- Table structure for table `Έντυπο`
 --
+/*!50503 SET NAMES utf8mb4 */;
 
 CREATE TABLE `Έντυπο` (
   `ISBN` bigint(13) UNSIGNED NOT NULL,
-  `Τίτλος` varchar(130) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `Εκδοτικός_οίκος` varchar(40) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `Τίτλος` varchar(1300) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `Εκδοτικός_οίκος` varchar(400) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,
   `Έκδοση` varchar(5) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `Ημερομηνία_Έκδοσης` smallint(6) DEFAULT NULL,
+  `Ημερομηνία_Έκδοσης` varchar(10) DEFAULT NULL,
   `DDC` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `Σελίδες` int(10) UNSIGNED DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -17,17 +18,17 @@ CREATE TABLE `Έντυπο` (
 --
 
 INSERT INTO `Έντυπο` (`ISBN`, `Τίτλος`, `Εκδοτικός_οίκος`, `Έκδοση`, `Ημερομηνία_Έκδοσης`, `DDC`, `Σελίδες`) VALUES
-(9780070057791, 'Data mining with neural networks: solving business problems--from application development to decision support', 'McGraw-Hill', NULL, 1996, '658.4/038/028563 ', NULL),
-(9780071347778, 'Cisco Packetized Voice and Data Integration', 'Addison-Wesley Professional', NULL, 1999, '004.6 ', NULL),
-(9780131776913, 'Electrical machines, drives, and power systems', 'Pearson', '6', 2005, NULL, 934),
-(9780139460531, 'Waves and Fields in Optoelectronics', 'Prentice Hall', 'PH', 1983, '621.36/6 ', NULL),
-(9780201513769, 'Neural networks, algorithms, applications, and programming techniques', 'Addison-Wesley Pub (Sd)', NULL, 1991, '006.3 ', NULL),
-(9780470484135, 'Fundamentals of Wavelets', 'Wiley', '1', 2010, NULL, NULL),
-(9780470850978, 'Web Server Programming', 'Wiley', NULL, 2003, NULL, NULL),
-(9780792350378, 'Fluctuations, information, gravity and the quantum potential', 'Springer', NULL, 2006, '512/.57 ', NULL),
-(9780898711875, 'Data structures and network algorithms', 'Industrial and Applied Mathematics', NULL, 1987, '001.64/2 ', NULL),
-(9781107024137, 'Acquisition and Analysis of Terrestrial Gravity Data', 'Cambridge University Press', NULL, 2013, NULL, NULL),
-(9783540575214, 'Quantum gravity, quantum cosmology and Lorentzian geometries', 'Springer-Verlag', '2nd ', 1994, '531/.14 ', NULL);
+(9780070057791, 'Data mining with neural networks: solving business problems--from application development to decision support', 'McGraw-Hill', NULL, '1996', '658.4/038/028563 ', NULL),
+(9780071347778, 'Cisco Packetized Voice and Data Integration', 'Addison-Wesley Professional', NULL, '1999', '004.6 ', NULL),
+(9780131776913, 'Electrical machines, drives, and power systems', 'Pearson', '6', '2005', NULL, 934),
+(9780139460531, 'Waves and Fields in Optoelectronics', 'Prentice Hall', 'PH', '1983', '621.36/6 ', NULL),
+(9780201513769, 'Neural networks, algorithms, applications, and programming techniques', 'Addison-Wesley Pub (Sd)', NULL, '1991', '006.3 ', NULL),
+(9780470484135, 'Fundamentals of Wavelets', 'Wiley', '1', '2010', NULL, NULL),
+(9780470850978, 'Web Server Programming', 'Wiley', NULL, '2003', NULL, NULL),
+(9780792350378, 'Fluctuations, information, gravity and the quantum potential', 'Springer', NULL, '2006', '512/.57 ', NULL),
+(9780898711875, 'Data structures and network algorithms', 'Industrial and Applied Mathematics', NULL, '1987', '001.64/2 ', NULL),
+(9781107024137, 'Acquisition and Analysis of Terrestrial Gravity Data', 'Cambridge University Press', NULL, '2013', NULL, NULL),
+(9783540575214, 'Quantum gravity, quantum cosmology and Lorentzian geometries', 'Springer-Verlag', '2nd ', '1994', '531/.14 ', NULL);
 
 -- --------------------------------------------------------
 
@@ -147,7 +148,7 @@ INSERT INTO `Αρ_Τηλ_Βιβλιοθήκης` (`Κωδικός_Βιβλιοθ
 
 CREATE TABLE `Βιβλιοθήκη` (
   `Κωδικός_Βιβλιοθήκης` smallint(5) UNSIGNED NOT NULL,
-  `Όνομα` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `Όνομα` varchar(500) COLLATE utf8_unicode_ci NOT NULL,
   `Οδός` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
   `ΤΚ` int(11) NOT NULL,
   `Πόλη` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
@@ -308,13 +309,13 @@ CREATE TABLE `Κράτηση` (
 --
 
 INSERT INTO `Κράτηση` (`Μέλος`, `ISBN`, `Βιβλιοθήκη_κράτησης`, `Κατάσταση_ολοκλήρωσης`) VALUES
-(94534, 9783540575214, 3, 0),
-(5553883, 9783540575214, 1, 0),
-(1953453, 9783540575214, 1, 1),
-(22499383, 9783540575214, 1, 0),
-(94534, 9783540575214, 3, 0),
-(32299923, 9783540575214, 1, 0),
-(3329283, 9783540575214, 2, 0),
+-- (94534, 9783540575214, 3, 0),
+-- (5553883, 9783540575214, 1, 0),
+-- (1953453, 9783540575214, 1, 1),
+-- (22499383, 9783540575214, 1, 0),
+-- (94534, 9783540575214, 3, 0),
+-- (32299923, 9783540575214, 1, 0),
+-- (3329283, 9783540575214, 2, 0),
 (33398864, 9780139460531, 1, 0);
 
 -- --------------------------------------------------------
@@ -325,7 +326,7 @@ INSERT INTO `Κράτηση` (`Μέλος`, `ISBN`, `Βιβλιοθήκη_κρά
 
 CREATE TABLE `Μέλος` (
   `Κωδικός_μέλους` int(10) UNSIGNED NOT NULL,
-  `Όνομα` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `Όνομα` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `Επίθετο` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `Οδός` varchar(30) COLLATE utf8_unicode_ci DEFAULT NULL,
   `Πόλη` varchar(30) CHARACTER SET utf8 COLLATE utf8_unicode_ci DEFAULT NULL,

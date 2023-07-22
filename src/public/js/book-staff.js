@@ -55,6 +55,10 @@ window.addEventListener("load", () => {
                 document.querySelector('#book-num').value = el.target.dataset.bookId
                 // bookLibraryId = Number(el.target.dataset.bookLibraryId)
                 document.querySelector('#lib-id').value = el.target.dataset.bookLibraryId
+
+                if (el.target.dataset.userId) {
+                    document.querySelector('#user-id').value = el.target.dataset.userId
+                }
             })
         }
         else if (item.classList.contains('keeped-btn')) {

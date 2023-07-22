@@ -41,8 +41,8 @@
     "serve-favicon": "^2.5.0"
   },
   "engines": {
-    "node": "^14.16.1",
-    "npm": "^6.14.12"
+    "node": ">=14.16.1",
+    "npm": ">=6.14.12"
   },
   "devDependencies": {
     "nodemon": "^2.0.19"
