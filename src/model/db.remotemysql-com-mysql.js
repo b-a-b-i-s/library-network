@@ -1,6 +1,6 @@
 'use strict';
 
-const mysql = require('mysql');
+const mysql = require('mariadb/callback');
 
 const connection = mysql.createPool(
   process.env.MYSQL_URL ? `${process.env.MYSQL_URL}?connectionLimit=10` : 

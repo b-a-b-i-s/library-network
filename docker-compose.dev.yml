@@ -8,6 +8,10 @@ services:
     env_file:
       - ./.env
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
     ports:
       - "8000:8000"
+    volumes:
+      - ./:/code
+      - /code/node_modules
+    command: npm run debug

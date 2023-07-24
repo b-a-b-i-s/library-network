@@ -2,7 +2,7 @@ version: '2'
 
 services:
   db:
-    image: mysql:5.7
+    image: mariadb:10
     env_file:
       - ./.env
     ports:
@@ -12,15 +12,10 @@ services:
       - ./src/model/library-network.sql:/docker-entrypoint-initdb.d/1.ddl-schema.sql
       - ./src/model/books.sql:/docker-entrypoint-initdb.d/2.books.sql
   redis:
-    image: redis/redis-stack-server:latest
+    image: redis:6
     env_file:
       - ./.env
     ports:
       - 6379:6379
-  # adminer:
-  #   image: adminer
-  #   restart: always
-  #   ports:
-  #     - 8080:8080
 volumes: 
   mysql-data:

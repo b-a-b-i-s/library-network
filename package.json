@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "debug": "nodemon --inspect ./src/bin/www",
+    "debug": "nodemon --inspect=0.0.0.0:9229 -L server.js",
     "watch": "nodemon ./src/bin/www",
     "start": "node ./src/bin/www"
   },
@@ -34,6 +34,7 @@
     "formidable": "^2.0.1",
     "helmet": "^5.0.2",
     "http-errors": "^2.0.0",
+    "mariadb": "^3.2.0",
     "memorystore": "^1.6.7",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
