@@ -10,5 +10,7 @@ services:
       - ./.env
     environment:
       - NODE_ENV=production
+    ports:
+      - "8000:8000"
     volumes:
       - /code/node_modules
