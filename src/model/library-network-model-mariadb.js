@@ -1,6 +1,6 @@
 'use strict';
 
-const sql = require('./db.remotemysql-com-mysql.js');
+const sql = require('./db.mariadb.js');
 const bcrypt = require('bcrypt')
 
 
@@ -694,7 +694,7 @@ exports.addBookToDb  = function(isbn, title, publisher, version, year, ddc, page
 				callback(err.stack)
 			}
 
-            // console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 666 ~ res", res)
+            // console.log("🚀 ~ file: library-network-model-mariadb.js ~ line 666 ~ res", res)
 
 			if (res[0]) {
 				callback(null, null, 1)
@@ -828,8 +828,8 @@ exports.getUsersPhones = (userInfo, callback) => {
 
 
 exports.addUserSub = (subId, userId, end_date, callback) => {
-// console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 839 ~ userId", userId)
-// console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 839 ~ subId", subId)
+// console.log("🚀 ~ file: library-network-model-mariadb.js ~ line 839 ~ userId", userId)
+// console.log("🚀 ~ file: library-network-model-mariadb.js ~ line 839 ~ subId", subId)
 
 	if (end_date) {
 		sql.query('INSERT INTO `Συνδρομή` (`Αριθμός_συνδρομής`, `Ημερομηνία_έναρξης`, `Κωδ_μέλους`, `Κωδ_συνδρομής`) \
@@ -1036,7 +1036,7 @@ exports.checkBorrow = (userId, callback) => {
 
 
 exports.findExtraCost = (userId, isbn, bookId, libId, callback) => {
-console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 1046 ~ libId", bookId)
+console.log("🚀 ~ file: library-network-model-mariadb.js ~ line 1046 ~ libId", bookId)
 
 	sql.query('SELECT IF (days>Διάρκεια_δανεισμού, ceil((days-Διάρκεια_δανεισμού) * Επιβάρυνση_καθυστέρησης_ασυνέπειας), 0) AS cost,\
 	days-Διάρκεια_δανεισμού as extra_days\
@@ -1055,7 +1055,7 @@ console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ li
 					callback(err.stack)
 				}
 				else {
-					console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 1046 ~ libId", libId)
+					console.log("🚀 ~ file: library-network-model-mariadb.js ~ line 1046 ~ libId", libId)
 
 					callback(null, res)
 				}
@@ -1089,7 +1089,7 @@ exports.findExtraCost = (userId, isbn, bookId, libId, callback) => {
 
 
 exports.returnBook = (userId, isbn, bookId, libId, loggedLibraryId, callback) => {
-console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 1096 ~ userId", userId)
+console.log("🚀 ~ file: library-network-model-mariadb.js ~ line 1096 ~ userId", userId)
 
 	sql.query('UPDATE Δανεισμός \
 				SET Ημερομηνία_που_επιστράφηκε=CURRENT_TIMESTAMP, Βιβλιοθήκη_καταχώρησης_επιστροφής=?\
@@ -1247,7 +1247,7 @@ exports.getSingleLibrary  = function(id, callback) {
 
 	sql.query('SELECT * FROM Βιβλιοθήκη NATURAL JOIN Αρ_Τηλ_Βιβλιοθήκης\
 			   WHERE Βιβλιοθήκη.Κωδικός_Βιβλιοθήκης = ?;', id, (err, res) => {
-    //   console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 774 ~ res", res)
+    //   console.log("🚀 ~ file: library-network-model-mariadb.js ~ line 774 ~ res", res)
 		if (err) {
 			console.log(err.stack)
 			callback(err.stack)
@@ -1281,7 +1281,7 @@ exports.editLibrary  = async function(libName, street, town, zip, phonesArray, i
 			// console.log('results')
 			// console.log(res)
 			let query = 'INSERT INTO `Αρ_Τηλ_Βιβλιοθήκης` (`Κωδικός_Βιβλιοθήκης`, `Τηλέφωνο_Βιβλ`) VALUES ';
-                console.log("🚀 ~ file: library-network-model-remotemysql-com-mysql-db.js ~ line 810 ~ exports.editLibrary=function ~ phonesArray", phonesArray)
+                console.log("🚀 ~ file: library-network-model-mariadb.js ~ line 810 ~ exports.editLibrary=function ~ phonesArray", phonesArray)
 
 			for (let index = 0; index < phonesArray.length; index++) {
 				if (index==0) query += '('+id+', ?)';

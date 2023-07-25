@@ -9,8 +9,9 @@ services:
       - 3306:3306
     volumes:
       - mysql-data:/var/lib/mysql
-      - ./src/model/library-network.sql:/docker-entrypoint-initdb.d/1.ddl-schema.sql
-      - ./src/model/books.sql:/docker-entrypoint-initdb.d/2.books.sql
+      - ./src/model/ddl-schema.sql:/docker-entrypoint-initdb.d/1.ddl-schema.sql
+      - ./src/model/init-data.sql:/docker-entrypoint-initdb.d/2.init-data.sql
+      # - ./src/model/books.sql:/docker-entrypoint-initdb.d/3.books.sql
   redis:
     image: redis:6
     env_file:

@@ -1,6 +1,6 @@
 'use strict';
 
-const model = require('../model/library-network-model-remotemysql-com-mysql-db.js');
+const model = require('../model/library-network-model-mariadb.js');
 const bcrypt = require('bcrypt');
 // const e = require('express');
 const fs = require('fs');
