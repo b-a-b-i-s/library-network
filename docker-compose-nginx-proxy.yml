@@ -2,14 +2,13 @@ version: "3"
 
 services:
   reverse:
-    container_name: reverse
-    hostname: reverse
+    restart: always
     image: nginx
     ports:
-     - 80:80
-      # - 443:443
+      - 80:80
+      - 443:443
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      # - ./certs/:/etc/ssl/private
-    extra_hosts:
-      - host.docker.internal:host-gateway
+      - ./src/public:/usr/share/nginx/html
+      - /etc/cloudflare/live/babis-skeparnakos.com/fullchain.pem:/etc/cloudflare/live/babis-skeparnakos.com/fullchain.pem:ro
+      - /etc/cloudflare/live/babis-skeparnakos.com/privkey.pem:/etc/cloudflare/live/babis-skeparnakos.com/privkey.pem:ro

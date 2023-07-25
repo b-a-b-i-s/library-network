@@ -1,10 +1,11 @@
 version: '2'
 
 services:
-  web:
+  web-dev:
+    restart: on-failure
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile.dev
     env_file:
       - ./.env
     environment:
