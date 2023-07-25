@@ -975,6 +975,11 @@ exports.addNewBookToDb = function (req, res) {
 
 
 
+exports.transferStaff = function (req, res, next) {
+    // TODO: implement fully
+    res.render('transfer-staff', {subscriptions:subscriptions, users:users, partialContext: {name:req.session.loggedUserName, userid: req.session.loggedLibraryId}, loggedin:true});
+}
+
 exports.renderUsers = function (req, res, next) {
     model.getUserStatus(req, (err, users)=> {
         if (err) {

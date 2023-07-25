@@ -8,5 +8,5 @@ document.querySelector('#users-staff').onclick = function () {
     location.href='/users-staff';
 }
 document.querySelector('#transfer-staff').onclick = function () {
-    location.href='/transfer-staff.html';
+    location.href='/transfer-staff';
 }

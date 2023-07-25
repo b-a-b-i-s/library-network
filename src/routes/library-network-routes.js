@@ -46,6 +46,8 @@ router.get('/staff', libraryController.checkStaffAuthenticated, (req,res)=> res.
 router.get('/add-book-staff', libraryController.checkStaffOrAdminAuthenticated, libraryController.renderAddNewBook)
 router.post('/add-book-staff', libraryController.checkStaffOrAdminAuthenticated, libraryController.addNewBookToDb)
 
+router.get('/transfer-staff', libraryController.checkStaffAuthenticated, libraryController.transferStaff)
+
 router.get('/users-staff', libraryController.checkStaffAuthenticated, libraryController.renderUsers)
 
 router.post('/add-user-subscription/:subId', libraryController.checkStaffAuthenticated, libraryController.addUserSub)// 
