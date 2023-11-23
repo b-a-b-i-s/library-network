@@ -12,7 +12,6 @@
 To run for production:
 ```
 cp .env.sample .env
-docker compose -f docker-compose-postgres.yml up -d
 docker compose up -d --build
 docker compose -f docker-compose-nginx.yml up -d
 ```
@@ -35,4 +34,3 @@ Todo:
 - [ ] Βελτίωση του Readme
 - [ ] Ελεγχος της εκδοσης του node (14/16)
 - [ ] Αλλαγη license και προσθηκη του στο 1ο commit
-- [ ] Ίσως αλλαγή του ονόματος του repo και στο heroku
