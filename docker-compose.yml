@@ -14,3 +14,22 @@ services:
       - "8000:8000"
     volumes:
       - /code/node_modules
+  db:
+    image: mariadb:10
+    env_file:
+      - ./.env
+    ports:
+      - 3306:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+      - ./src/model/ddl-schema.sql:/docker-entrypoint-initdb.d/1.ddl-schema.sql
+      - ./src/model/init-data.sql:/docker-entrypoint-initdb.d/2.init-data.sql
+      # - ./src/model/books.sql:/docker-entrypoint-initdb.d/3.books.sql
+  redis:
+    image: redis:6
+    env_file:
+      - ./.env
+    ports:
+      - 6379:6379
+volumes: 
+  mysql-data:
