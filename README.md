@@ -24,10 +24,11 @@ chmod +x ./resetDb.sh
 docker compose -f docker-compose.dev.yml up --build
 ```
 
-## Τρέξιμο χωρίς docker:
+<!-- ## Τρέξιμο χωρίς docker -->
 
 Todo:
 
+- [ ] Προσθήκη σελίδας Πως λειτουργεί ο δανεισμός
 - [ ] Προσθήκη σελίδας Σχετικά με εμάς
 - [ ] Update dependencies for security
 - [ ] Υλοποίηση μεταφορών και φίλτρων
