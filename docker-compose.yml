@@ -2,7 +2,7 @@ version: '2'
 
 services:
   web:
-    restart: on-failure
+    restart: always
     build:
       context: .
       dockerfile: Dockerfile
@@ -15,6 +15,7 @@ services:
     volumes:
       - /code/node_modules
   db:
+    restart: always
     image: mariadb:10
     env_file:
       - ./.env
